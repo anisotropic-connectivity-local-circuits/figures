@@ -18,10 +18,10 @@ def cnct_dst_frq(g,nbin):
     return frq
 
 def get_L2_difference(eps_frac, gid, nbin):
-    gpath = '/home/lab/data/aniso-netw_N1000' +\
+    gpath = '/home/lab/comp/data/aniso-netw_N1000' +\
             '_w37.3_ed-l296_4GX7-{:s}.gt'.format(gid)
     g = gt.load_graph(gpath)
-    hpath = '/home/lab/data/rew-stat_aniso' +\
+    hpath = '/home/lab/comp/data/rew-stat_aniso' +\
             '_rf1.00_ef{:.2f}-{:s}.gt'.format(eps_frac,gid)
     h = gt.load_graph(hpath)
 
@@ -37,29 +37,30 @@ def get_L2_difference(eps_frac, gid, nbin):
     
 #     return len(rew_stat["fail_edges"])
 
-gids = ['9f2f']#, '2809', 'bc48']
-# efracs = [0.01,0.02,0.05,0.10,0.15,0.25]
-efracs = [0.05,0.5]
-# nfail_mu = []
-# nfail_sem = []
+gids = ['0bae', '1b20', '22df']
+efracs = [0.,0.01,0.02,0.05,0.10,0.15,0.25]
+#efracs = [0.05,0.5]
+
+L2_mu = []
+L2_sem = []
 
 # gid = '9f2f'
 
 for eps_frac in efracs:
-
+    L2s = []
     for gid in gids:
-        print eps_frac, get_L2_difference(eps_frac, gid, 10000)
-    # nfail_mu.append(np.mean(nfails))
-    # nfail_sem.append(scipy.stats.sem(nfails))
+        L2s.append(get_L2_difference(eps_frac, gid, 10000))
+    L2_mu.append(np.mean(L2s))
+    L2_sem.append(scipy.stats.sem(L2s))
 
     
-# fig = pl.figure()
-# ax = fig.add_subplot(111)
-# pl.errorbar(efracs, nfail_mu, yerr=nfail_sem)
-# pl.ylim(0,1200)
+fig = pl.figure()
+ax = fig.add_subplot(111)
+pl.errorbar(efracs, L2_mu, yerr=L2_sem)
+#pl.ylim(0,1200)
 
-# import os
-# fname = os.path.splitext(os.path.basename(__file__))[0]
+import os
+fname = os.path.splitext(os.path.basename(__file__))[0]
 
-# pl.savefig('../img/{:s}.png'.format(fname),
-#            dpi=300,  bbox_inches='tight')
+pl.savefig('{:s}.png'.format(fname),
+           dpi=300,  bbox_inches='tight')
