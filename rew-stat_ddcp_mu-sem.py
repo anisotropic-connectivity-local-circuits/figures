@@ -11,6 +11,20 @@ from comp.functions import ( get_ddcp )
 
 import pickle, scipy.stats
 
+from matplotlib import rc
+rc('text', usetex=True)
+pl.rcParams['text.latex.preamble'] = [
+    r'\usepackage{tgheros}',    # helvetica font
+    r'\usepackage{sansmath}',   # math-font matching helvetica
+#    r'\sfmath',
+    r'\sansmath'                # actually tell tex to use it!
+    r'\usepackage{siunitx}',    # micro symbols
+    r'\sisetup{detect-all}'    # force siunitx to use the fonts
+    r'\DeclareSymbolFont{greekletters}{OML}{arev}{m}{it}',
+    r'\DeclareMathSymbol{\varepsilon}{\mathord}{greekletters}{"22}'
+]
+
+
 gids = ['0bae', '1b20', '22df']#, '8ca5', 'b97d']
 efracs = [0.,0.01,0.02,0.05,0.10,0.15,0.25, 0.5]
 #efracs = [0.5]
@@ -36,6 +50,8 @@ for eps_frac in efracs:
 
     pl.clf()
     fig = pl.figure()
+    fig.set_size_inches(2.6,2.)
+    pl.title(r'$\varepsilon ='+'{:.2f}'.format(eps_frac)+'$')
     ax = fig.add_subplot(111)
 
     x = g_ctrs
@@ -43,21 +59,24 @@ for eps_frac in efracs:
     error = scipy.stats.sem(gP, 0)
     pl.plot(x, y, 'k', color='#1B2ACC', label='original')
     pl.fill_between(x, y-error, y+error, alpha=0.5, 
-                    edgecolor='#1B2ACC', facecolor='#FF9848')
+                    edgecolor='#1B2ACC', facecolor='#1B2ACC')
 
     x = h_ctrs
     y = np.mean(hP, 0)
     error = scipy.stats.sem(hP, 0)
     pl.plot(x, y, 'k', color='#CC4F1B',  label='rewired')
-    pl.fill_between(x, y-error, y+error, alpha=0.5,
-                    edgecolor='#CC4F1B', facecolor='#FF9848')
+    pl.fill_between(x, y-error, y+error, alpha=0.5, 
+                    edgecolor='#CC4F1B', facecolor='#CC4F1B')
 
     
-    pl.legend()
+    pl.legend(frameon=False)
     pl.ylim(0,0.525)
+    pl.subplots_adjust(left=0.15, right=0.85,
+                       top=0.85, bottom=0.15)
+    pl.xticks([0,100,200,300,400])
     
     import os
     fname = os.path.splitext(os.path.basename(__file__))[0]
 
     pl.savefig('{:s}_ef{:.2f}.png'.format(fname, eps_frac),
-               dpi=300,  bbox_inches='tight')
+               dpi=600)
