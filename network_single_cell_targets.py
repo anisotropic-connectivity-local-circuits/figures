@@ -8,6 +8,18 @@ import pylab as pl
 def plot_network_single_cell_targets(g, i, save_path,
                                      color = '#1f78b4'):
 
+    from matplotlib import rc
+    rc('text', usetex=True)
+    pl.rcParams['text.latex.preamble'] = [
+        r'\usepackage{tgheros}',    # helvetica font
+        r'\usepackage{textcomp}',
+        r'\usepackage{sansmath}',   # math-font matching helvetica
+        r'\sansmath'                # actually tell tex to use it!
+        r'\usepackage{siunitx}',    # micro symbols
+        r'\sisetup{detect-all}'    # force siunitx to use the fonts
+    ]
+
+    
     pl.clf()
     fig = pl.figure()
     fig.set_size_inches(3.,3.)
@@ -30,11 +42,20 @@ def plot_network_single_cell_targets(g, i, save_path,
     ax.plot(target_xs, target_ys, 'o', color='r',
             markerfacecolor= color, markeredgecolor= color,
             markersize = 3.)
-    ax.plot(xs[i],ys[i], color = 'k', marker = '*', markersize= 13)
+    marker = '^'
+    ax.plot(xs[i],ys[i], color = 'white', marker = marker, markersize= 11, markeredgewidth=2.)
+    # marker = r'$\bigtriangleup$'
+    # ax.plot(xs[i],ys[i], color = 'k', marker = marker, markersize= 13)
+ 
 
     ed_l = g.graph_properties["ed_l"]
     ax.set_xlim(0,ed_l)
     ax.set_ylim(0,ed_l)
+
+    ax.text(0.95, 0.01, r'\bfseries \textnumero$\,$24',
+            bbox={'facecolor':'white', 'edgecolor':'white', 'pad':1}, 
+        verticalalignment='bottom', horizontalalignment='right',
+        transform=ax.transAxes)#, fontsize=15)
 
     pl.xticks([])
     pl.yticks([])
@@ -47,6 +68,9 @@ def plot_network_single_cell_targets(g, i, save_path,
 
 
 import graph_tool as gt
-g = gt.load_graph('../data/N1000_w126_manual-rew.gt')
-plot_network_single_cell_targets(g, 0, '../img/new2.png',
-                                     color = '#1f78b4')
+g = gt.load_graph('../comp/data/N1000_w126_manual.gt')
+
+import os
+fname = os.path.splitext(os.path.basename(__file__))[0]
+
+plot_network_single_cell_targets(g, 0, fname, color = '#1f78b4')
