@@ -16,7 +16,6 @@ rc('text', usetex=True)
 pl.rcParams['text.latex.preamble'] = [
     r'\usepackage{tgheros}',    # helvetica font
     r'\usepackage{sansmath}',   # math-font matching helvetica
-#    r'\sfmath',
     r'\sansmath'                # actually tell tex to use it!
     r'\usepackage{siunitx}',    # micro symbols
     r'\sisetup{detect-all}'    # force siunitx to use the fonts
@@ -25,8 +24,9 @@ pl.rcParams['text.latex.preamble'] = [
 
 gids = ['0bae', '1b20', '22df', '8ca5', 'b97d']
 
-bins = np.linspace(0,296*np.sqrt(2),200)
+bins = np.linspace(0,296*np.sqrt(2),125)
 gP = []
+hP = []
 
 for gid in gids:
     gpath = '/home/lab/comp/data/aniso-netw_N1000' +\
@@ -34,6 +34,13 @@ for gid in gids:
     g = gt.load_graph(gpath)
     g_ctrs, g_ps = get_ddcp(g, bins)
     gP.append(g_ps)
+
+    hpath = '/home/lab/comp/data/rew-netw_rfrac1.00' +\
+            '_efrac{:.2f}_4FU2-{:s}.gt'.format(0.05,gid)
+    h = gt.load_graph(hpath)
+    h_ctrs, h_ps = get_ddcp(h, bins)
+    hP.append(h_ps)
+
 
 
 pl.clf()
@@ -48,6 +55,13 @@ error = scipy.stats.sem(gP, 0)
 pl.plot(x, y, 'k', color='#1f78b4', label='anisotropic')
 pl.fill_between(x, y-error, y+error, alpha=0.5, 
                 edgecolor='#1f78b4', facecolor='#1f78b4')
+
+x = g_ctrs
+y = np.mean(hP, 0)
+error = scipy.stats.sem(hP, 0)
+pl.plot(x, y, 'k', color='#33a02c', label='rewired')
+pl.fill_between(x, y-error, y+error, alpha=0.5, 
+                edgecolor='#33a02c', facecolor='#33a02c')
 
 
 ax.spines['right'].set_visible(False)
