@@ -9,11 +9,13 @@ import pickle, scipy.stats
 from matplotlib import rc
 rc('text', usetex=True)
 pl.rcParams['text.latex.preamble'] = [
-    r'\usepackage{tgheros}',    # helvetica font
-    r'\usepackage{siunitx}',    # micro symbols
-    r'\sisetup{detect-all}'    # force siunitx to use the fonts
-    r'\usepackage{sansmath}',   # math-font matching helvetica
-    r'\sansmath',                # actually tell tex to use it!
+    r'\usepackage{tgheros}',    
+    r'\usepackage{amsmath}',
+    r'\usepackage{bm}',    
+    r'\usepackage{sansmath}', 
+    r'\sansmath',
+    r'\usepackage{siunitx}',    
+    r'\sisetup{detect-all}'  # force siunitx to use set font
 ]
 
 
@@ -47,7 +49,8 @@ ax = fig.add_subplot(111)
 pl.errorbar(efracs, navail_mu, yerr=navail_std, linewidth=2.)
 pl.xlim(0,0.26)
 fs = 13.5
-pl.xlabel(r'relative rewiring margin $\varepsilon / E$', fontsize=fs)
+pl.xlabel(r'relative rewiring margin $\bm{\varepsilon} / E$',
+          fontsize=fs)
 pl.ylabel('rewiring \ntargets', fontsize=fs)
 pl.subplots_adjust(left=0.25, right=0.925,
                    top=0.925, bottom=0.30)

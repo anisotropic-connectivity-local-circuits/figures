@@ -16,12 +16,15 @@ from matplotlib import rc
 rc('text', usetex=True)
 pl.rcParams['text.latex.preamble'] = [
     r'\usepackage{tgheros}',    # helvetica font
+    r'\usepackage{amsmath}',
+    r'\usepackage{bm}',
     r'\usepackage{sansmath}',   # math-font matching helvetica
-    r'\sansmath'                # actually tell tex to use it!
-    r'\usepackage{siunitx}',    # micro symbols
-    r'\sisetup{detect-all}'    # force siunitx to use the fonts
-    r'\DeclareSymbolFont{greekletters}{OML}{arev}{m}{it}',
-    r'\DeclareMathSymbol{\varepsilon}{\mathord}{greekletters}{"22}'
+    r'\sansmath',                # actually tell tex to use it!
+    #r'\usepackage{bm}',
+    #r'\usepackage{siunitx}',    # micro symbols
+    #r'\sisetup{detect-all}'    # force siunitx to use the fonts
+    #r'\DeclareSymbolFont{greekletters}{OML}{arev}{m}{it}',
+    #r'\DeclareMathSymbol{\varepsilon}{\mathord}{greekletters}{"22}'
 ]
 
 
@@ -50,7 +53,7 @@ for eps_frac in efracs:
     pl.clf()
     fig = pl.figure()
     fig.set_size_inches(2.6,2.)
-    pl.title(r'$\varepsilon ='+'{:.2f}'.format(eps_frac)+'$')
+    pl.title(r'$\bm{\varepsilon} / E ='+'{:.2f}'.format(eps_frac)+'$')
     ax = fig.add_subplot(111)
 
     x = g_ctrs

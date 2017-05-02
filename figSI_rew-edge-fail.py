@@ -9,17 +9,13 @@ import pickle, scipy.stats
 from matplotlib import rc
 rc('text', usetex=True)
 pl.rcParams['text.latex.preamble'] = [
-    r'\usepackage{tgheros}',    # helvetica font
-    r'\usepackage{siunitx}',    # micro symbols
-    r'\sisetup{detect-all}'    # force siunitx to use the fonts
-    #r'\usepackage[utf8]{inputenc}',
-    #r'\usepackage[T1]{fontenc}',
-    #r'\usepackage{amsmath, amssymb}',
-    r'\usepackage{sansmath}',   # math-font matching helvetica
-    r'\sansmath',                # actually tell tex to use it!
-    #r'\DeclareSymbolFont{Greekletters}{OT1}{iwona}{m}{n}',
-    #r'\DeclareSymbolFont{greekletters}{OML}{arev}{m}{it}',
-    #r'\DeclareMathSymbol{\varepsilon}{\mathord}{greekletters}{"22}'
+    r'\usepackage{tgheros}',    
+    r'\usepackage{amsmath}',
+    r'\usepackage{bm}',    
+    r'\usepackage{sansmath}', 
+    r'\sansmath',
+    r'\usepackage{siunitx}',    
+    r'\sisetup{detect-all}'  # force siunitx to use set font
 ]
 
 
@@ -47,8 +43,10 @@ fig.set_size_inches(2.3*2.25*0.5/0.66,1.9)
 ax = fig.add_subplot(111)
 pl.errorbar(efracs, nfail_mu, yerr=nfail_sem, linewidth=2.)
 pl.ylim(0,1200)
+pl.xlim(0,0.26)
 fs = 13.5
-pl.xlabel(r'relative rewiring margin $\varepsilon / E$', fontsize=fs)
+pl.xlabel(r'relative rewiring margin $\bm{\varepsilon} / E$',
+          fontsize=fs)
 pl.ylabel('edges not in\n rewired graph', fontsize=fs)
 pl.subplots_adjust(left=0.25, right=0.925,
                    top=0.925, bottom=0.30)
