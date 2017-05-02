@@ -43,7 +43,8 @@ def plot_network_single_cell_targets(g, i, save_path,
             markerfacecolor= color, markeredgecolor= color,
             markersize = 3.)
     marker = '^'
-    ax.plot(xs[i],ys[i], color = 'white', marker = marker, markersize= 11, markeredgewidth=2.)
+    ax.plot(xs[i],ys[i], color = 'white', marker = marker,
+            markersize= 11, markeredgewidth=2.)
     # marker = r'$\bigtriangleup$'
     # ax.plot(xs[i],ys[i], color = 'k', marker = marker, markersize= 13)
  
@@ -52,10 +53,13 @@ def plot_network_single_cell_targets(g, i, save_path,
     ax.set_xlim(0,ed_l)
     ax.set_ylim(0,ed_l)
 
-    ax.text(0.95, 0.01, r'\bfseries \textnumero$\,$24',
-            bbox={'facecolor':'white', 'edgecolor':'white', 'pad':1}, 
-        verticalalignment='bottom', horizontalalignment='right',
-        transform=ax.transAxes)#, fontsize=15)
+    ax.text(0.95, 0.01,
+            r'\bfseries \textnumero$\,$'+'{:d}'.format(i),
+            bbox={'facecolor':'white', 'edgecolor':'white',
+                  'pad':1}, 
+            verticalalignment='bottom',
+            horizontalalignment='right',
+            transform=ax.transAxes)
 
     pl.xticks([])
     pl.yticks([])
@@ -67,10 +71,19 @@ def plot_network_single_cell_targets(g, i, save_path,
 
 
 
+from utils.colors import color
+
+    
 import graph_tool as gt
-g = gt.load_graph('../comp/data/N1000_w126_manual.gt')
+g_aniso = gt.load_graph('../comp/data/aniso-netw_N1000_w37.3_ed-l296_4GX7-0bae.gt')
+g_rew = gt.load_graph('../comp/data/rew-netw_rfrac1.00_efrac0.05_4FU2-0bae.gt')
+
 
 import os
 fname = os.path.splitext(os.path.basename(__file__))[0]
 
-plot_network_single_cell_targets(g, 0, fname, color = '#1f78b4')
+for i in [133]:
+
+    plot_network_single_cell_targets(g_aniso, i, fname+'{:d}a'.format(i), color['aniso'])
+
+    plot_network_single_cell_targets(g_rew, i, fname+'{:d}r'.format(i), color['rew'])
