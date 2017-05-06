@@ -77,6 +77,7 @@ from utils.colors import color
 import graph_tool as gt
 g_aniso = gt.load_graph('../comp/data/aniso-netw_N1000_w37.3_ed-l296_4GX7-0bae.gt')
 g_rew = gt.load_graph('../comp/data/rew-netw_rfrac1.00_efrac0.05_4FU2-0bae.gt')
+g_dist = gt.load_graph('../comp/data/dist-an-netw_N1000_w37.3_ed-l296_8CY2-0293.gt')
 
 
 import os
@@ -87,3 +88,9 @@ for i in [133]:
     plot_network_single_cell_targets(g_aniso, i, fname+'{:d}a'.format(i), color['aniso'])
 
     plot_network_single_cell_targets(g_rew, i, fname+'{:d}r'.format(i), color['rew'])
+
+for i in [91]:
+    
+    plot_network_single_cell_targets(g_dist, i, fname+'{:d}_dist'.format(i), color['dist'])
+
+    
