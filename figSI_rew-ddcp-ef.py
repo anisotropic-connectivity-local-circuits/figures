@@ -73,7 +73,10 @@ for eps_frac in efracs:
                     facecolor=color['rew'])
 
     
-    pl.legend(frameon=False)
+    leg = pl.legend(frameon=False)
+    for legobj in leg.legendHandles:
+        legobj.set_linewidth(2.5)
+    
     pl.ylim(0,0.525)
     pl.subplots_adjust(left=0.15, right=0.85,
                        top=0.85, bottom=0.15)

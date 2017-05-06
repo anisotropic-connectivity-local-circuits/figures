@@ -46,7 +46,11 @@ for eps_frac in efracs:
 fig = pl.figure()    
 fig.set_size_inches(2.3*2.25*0.5/0.66,1.9)
 ax = fig.add_subplot(111)
-pl.errorbar(efracs, navail_mu, yerr=navail_std, linewidth=2.)
+(_, caps, _) = pl.errorbar(efracs, navail_mu, yerr=navail_std,
+                           color = 'gray', ecolor='gray',
+                           linewidth=2., capsize=5, elinewidth=1.5)
+for cap in caps:
+     cap.set_markeredgewidth(1.5)
 pl.xlim(0,0.26)
 fs = 13.5
 pl.xlabel(r'relative rewiring margin $\bm{\varepsilon} / E$',
