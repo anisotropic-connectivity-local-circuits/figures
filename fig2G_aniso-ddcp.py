@@ -5,6 +5,8 @@ import pylab as pl
 import numpy as np
 import graph_tool as gt
 
+from utils.colors import color
+
 import sys
 sys.path.append("..")
 from comp.functions import ( get_ddcp )
@@ -41,6 +43,18 @@ for gid in gids:
     h_ctrs, h_ps = get_ddcp(h, bins)
     hP.append(h_ps)
 
+gids = ['0293', '625f', '696d', 'b6c5', 'd26f']
+kP = []
+
+for gid in gids:
+
+    kpath = '/home/lab/comp/data/dist-an-netw_N1000_w37.3' +\
+            '_ed-l296_8CY2-{:s}.gt'.format(gid)
+    k = gt.load_graph(kpath)
+    k_ctrs, k_ps = get_ddcp(k, bins)
+    kP.append(k_ps)
+
+
 
 
 pl.clf()
@@ -52,16 +66,23 @@ ax = fig.add_subplot(111)
 x = g_ctrs
 y = np.mean(gP, 0)
 error = scipy.stats.sem(gP, 0)
-pl.plot(x, y, 'k', color='#1f78b4', label='anisotropic')
+pl.plot(x, y, 'k', color=color['aniso'], label='anisotropic')
 pl.fill_between(x, y-error, y+error, alpha=0.5, 
-                edgecolor='#1f78b4', facecolor='#1f78b4')
+                edgecolor=color['aniso'], facecolor=color['aniso'])
 
 x = g_ctrs
 y = np.mean(hP, 0)
 error = scipy.stats.sem(hP, 0)
-pl.plot(x, y, 'k', color='#33a02c', label='rewired')
+pl.plot(x, y, 'k', color=color['rew'], label='rewired')
 pl.fill_between(x, y-error, y+error, alpha=0.5, 
-                edgecolor='#33a02c', facecolor='#33a02c')
+                edgecolor=color['rew'], facecolor=color['rew'])
+
+x = g_ctrs
+y = np.mean(kP, 0)
+error = scipy.stats.sem(hP, 0)
+pl.plot(x, y, 'k', color=color['dist'], label='dist.-dep.')
+pl.fill_between(x, y-error, y+error, alpha=0.5, 
+                edgecolor=color['dist'], facecolor=color['dist'])
 
 
 ax.spines['right'].set_visible(False)
