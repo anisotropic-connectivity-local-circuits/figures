@@ -4,8 +4,7 @@ mpl.use('Agg')
 import pylab as pl
 
 
-
-def plot_network_single_cell_targets(g, i, save_path,
+def plot_network_1cell_targets(g, i, save_path,
                                      color = '#1f78b4'):
 
     from matplotlib import rc
@@ -19,7 +18,7 @@ def plot_network_single_cell_targets(g, i, save_path,
         r'\sisetup{detect-all}'    # force siunitx to use the fonts
     ]
 
-    
+
     pl.clf()
     fig = pl.figure()
     fig.set_size_inches(3.,3.)
@@ -45,9 +44,6 @@ def plot_network_single_cell_targets(g, i, save_path,
     marker = '^'
     ax.plot(xs[i],ys[i], color = 'white', marker = marker,
             markersize= 11, markeredgewidth=2.)
-    # marker = r'$\bigtriangleup$'
-    # ax.plot(xs[i],ys[i], color = 'k', marker = marker, markersize= 13)
- 
 
     ed_l = g.graph_properties["ed_l"]
     ax.set_xlim(0,ed_l)
@@ -68,29 +64,3 @@ def plot_network_single_cell_targets(g, i, save_path,
     ax.yaxis.set_ticks_position('none')
    
     pl.savefig(save_path, dpi=300,  bbox_inches='tight')
-
-
-
-from utils.colors import color
-
-    
-import graph_tool as gt
-g_aniso = gt.load_graph('../comp/data/aniso-netw_N1000_w37.3_ed-l296_4GX7-0bae.gt')
-g_rew = gt.load_graph('../comp/data/rew-netw_rfrac1.00_efrac0.05_4FU2-0bae.gt')
-g_dist = gt.load_graph('../comp/data/dist-an-netw_N1000_w37.3_ed-l296_8CY2-0293.gt')
-
-
-import os
-fname = os.path.splitext(os.path.basename(__file__))[0]
-
-for i in [133]:
-
-    plot_network_single_cell_targets(g_aniso, i, fname+'{:d}a'.format(i), color['aniso'])
-
-    plot_network_single_cell_targets(g_rew, i, fname+'{:d}r'.format(i), color['rew'])
-
-for i in [91]:
-    
-    plot_network_single_cell_targets(g_dist, i, fname+'{:d}_dist'.format(i), color['dist'])
-
-    
