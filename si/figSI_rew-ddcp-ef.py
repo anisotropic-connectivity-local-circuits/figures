@@ -7,6 +7,7 @@ import graph_tool as gt
 
 import sys
 sys.path.append("..")
+sys.path.append("../..")
 from comp.functions import ( get_ddcp )
 from utils.colors import color
 
