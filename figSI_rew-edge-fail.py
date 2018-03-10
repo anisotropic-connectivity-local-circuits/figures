@@ -26,7 +26,7 @@ def load_data_point(eps_frac, gid):
         rew_stat = pickle.load(pfile)
     return len(rew_stat["fail_edges"])
 
-gids = ['0bae', '1b20', '22df']
+gids = ['00', '01', '02']
 efracs = [0.01,0.02,0.05,0.10,0.15,0.25]
 nfail_mu = []
 nfail_sem = []

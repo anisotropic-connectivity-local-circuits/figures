@@ -28,7 +28,7 @@ pl.rcParams['text.latex.preamble'] = [
 ]
 
 
-gids = ['0bae', '1b20', '22df']
+gids = ['00', '01', '02']
 efracs = [0.,0.01,0.02,0.05,0.10,0.15,0.25, 0.5]
 
 for eps_frac in efracs:

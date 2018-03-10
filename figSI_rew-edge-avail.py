@@ -26,7 +26,7 @@ def load_data_point(eps_frac, gid):
         rew_stat = pickle.load(pfile)
     return list(rew_stat["rew_stat"].values())
 
-gids = ['0bae', '1b20', '22df']
+gids = ['00', '01', '02']
 efracs = [0.01,0.02,0.05,0.10,0.15,0.25]
 navail_mu = []
 navail_sem = []
