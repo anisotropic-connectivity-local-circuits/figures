@@ -18,20 +18,15 @@ fpath = '/home/lab/comp/data/three_motif_counts_aniso_S300000.p'
 with open(fpath, 'rb') as pfile:
     aniso_data = pickle.load(pfile)
 
+fpath = '/home/lab/comp/data/three_motif_counts_rew_S300000.p'
 
-# pfile = open(sys.argv[2], "rb")
-# song_data_rew = pickle.load(pfile)
-# pfile.close()
+with open(fpath, 'rb') as pfile:
+    rew_data = pickle.load(pfile)
 
-# pfile = open(sys.argv[3], "rb")
-# song_data_dist_depend = pickle.load(pfile)
-# pfile.close()
+fpath = '/home/lab/comp/data/three_motif_counts_dist_S300000.p'
 
-# try:
-#     label = sys.argv[4]
-# except IndexError:
-#     label = img_label.labelstr
-
+with open(fpath, 'rb') as pfile:
+    dist_data = pickle.load(pfile)
 
 
 def counts_to_probabilities(df):
@@ -41,7 +36,8 @@ def counts_to_probabilities(df):
     for key,item in df.iteritems():
         data.append(item)
 
-    song_probs = np.array([np.array(counts)/float(sum(counts)) for counts in data])
+    song_probs = np.array([np.array(counts)/float(sum(counts)) \
+                           for counts in data])
 
     p_means = np.mean(song_probs, axis=0)
     p_errs = stats.sem(song_probs, axis=0)
@@ -110,8 +106,8 @@ def p_from_two_connections(up,s1,s2,rp):
     
 
 p_mean, p_err = counts_to_probabilities(aniso_data)
-# p_mean_dist, p_err_dist = counts_to_probabilities(song_data_dist_depend)
-# p_mean_rew, p_err_rew = counts_to_probabilities(song_data_rew)
+p_mean_dist, p_err_dist = counts_to_probabilities(dist_data)
+p_mean_rew, p_err_rew = counts_to_probabilities(rew_data)
 
 
 up = 0.791336
@@ -136,15 +132,23 @@ ps = p_from_two_connections(up,s1,s2,rp)
 
 print "\n\n", "---------- Absolute occurrence ----------- "
 
-def print_data_absolute(p_data, p_err, name):
+def print_data_absolute(df, name):
 
+    data = []
+    for key,item in df.iteritems():
+        data.append(item)
+    data = np.array(data)
+    
+    means = np.mean(data,axis=0)
+    sems = stats.sem(data, axis=0)
+        
     print "\n", name, ": "
-    for j,pp in enumerate(p_data):
-        print "  Motif ", j+1, "\t", "occurrence ", pp, "\t", "+- ", p_err[j]
+    for j,mean in enumerate(list(means)):
+        print "  Motif ", j+1, "\t", "occurrence ", mean, "\t", "+- ", sems[j]
 
-print_data_absolute(p_mean, p_err, "Anisotropic")
-# print_data_absolute(p_mean_dist, p_err_dist, "Distance-dependent")
-# print_data_absolute(p_mean_rew, p_err_rew, "Rewired")
+print_data_absolute(aniso_data, "Anisotropic")
+print_data_absolute(dist_data, "Distance-dependent")
+print_data_absolute(rew_data, "Rewired")
 print "\n"
 
 
@@ -158,8 +162,8 @@ def print_data_relative(p_data, p_err, norm_data, name):
 
 
 print_data_relative(p_mean, p_err, ps, "Anisotropic")
-# print_data_relative(p_mean_dist, p_err_dist,  ps, "Distance-dependent")
-# print_data_relative(p_mean_rew, p_err_rew, ps, "Rewired")
+print_data_relative(p_mean_dist, p_err_dist,  ps, "Distance-dependent")
+print_data_relative(p_mean_rew, p_err_rew, ps, "Rewired")
 print "\n"
 
 
@@ -192,11 +196,6 @@ def draw_motifs(i, ymin, ymax,  highlight = False):
     xpos = 1.
     ypos = -0.6
 
-    # import matplotlib.image as image
-
-    # img = image.imread('comp/img/arrow.png')
-    # fig.figimage(img,xpos,ypos)
-
     frac = 0.3
     alpha = np.arctan(ydist/xdist)
     add_x = np.cos(alpha)*frac*xdist
@@ -206,7 +205,9 @@ def draw_motifs(i, ymin, ymax,  highlight = False):
     height_rect = ydist+0.5*ydist
 
 
-    positions = [((i-1)+xpos-xdist, ypos),((i-1)+xpos+xdist, ypos),((i-1)+xpos, ypos+ydist)]
+    positions = [((i-1)+xpos-xdist, ypos),
+                 ((i-1)+xpos+xdist, ypos),
+                 ((i-1)+xpos, ypos+ydist)]
 
 
     if i==1: #Song 1
@@ -558,8 +559,6 @@ def draw_motifs(i, ymin, ymax,  highlight = False):
 
 
 
-
-
 lbl_fntsz = 10
 tick_fntsz = 9
 
@@ -614,51 +613,51 @@ opacity_aniso = 0.6
 bwidth = 0.5
 
 err_dict = dict(ecolor='red', lw=errlw, capsize=capsz, capthick=cpt, mew = mew)
-# err_dict_dist = dict(ecolor='k', lw=errlw, capsize=capsz, capthick=cpt, mew = mew)
-# err_dict_rew = dict(ecolor='k', lw=errlw, capsize=capsz, capthick=cpt, mew = mew)
+err_dict_dist = dict(ecolor='k', lw=errlw, capsize=capsz, capthick=cpt, mew = mew)
+err_dict_rew = dict(ecolor='k', lw=errlw, capsize=capsz, capthick=cpt, mew = mew)
 
-# # Motifs 15 and 16 get divided by 2 to bring them on 5 scale size
-# plot_vals_dist = (p_mean_dist/ps)-1
-# plot_vals_dist[-1] = plot_vals_dist[-1]/2.
-# plot_vals_dist[-2] = plot_vals_dist[-2]/2.
+# Motifs 15 and 16 get divided by 2 to bring them on 5 scale size
+plot_vals_dist = (p_mean_dist/ps)-1
+plot_vals_dist[-1] = plot_vals_dist[-1]/2.
+plot_vals_dist[-2] = plot_vals_dist[-2]/2.
 
-# p_err_vals_dist = p_err_dist/ps
-# p_err_vals_dist[-1] = p_err_vals_dist[-1]/2.
-# p_err_vals_dist[-2] = p_err_vals_dist[-2]/2.
+p_err_vals_dist = p_err_dist/ps
+p_err_vals_dist[-1] = p_err_vals_dist[-1]/2.
+p_err_vals_dist[-2] = p_err_vals_dist[-2]/2.
 
-# # hatch='///////'
+# hatch='///////'
 
-# xs_dist = np.array([k-0.00 for k in range(1,len(p_mean)+1)])
+xs_dist = np.array([k-0.00 for k in range(1,len(p_mean)+1)])
 
-# dist_patches = ax.bar(xs_dist, plot_vals_dist, bwidth, linewidth=lw, bottom = 1., edgecolor=color.dist, facecolor = 'white', zorder=1)
+dist_patches = ax.bar(xs_dist, plot_vals_dist, bwidth, linewidth=lw, bottom = 1., edgecolor=color['dist'], facecolor = 'white', zorder=1)
 
-# dist_fill = ax.bar(xs_dist, plot_vals_dist, bwidth, bottom = 1., edgecolor=color.dist, facecolor = color.dist, alpha=opacity,  zorder = 2)
+dist_fill = ax.bar(xs_dist, plot_vals_dist, bwidth, bottom = 1., edgecolor=color['dist'], facecolor = color['dist'], alpha=opacity,  zorder = 2)
 
-# _, caplines, _ = ax.errorbar(xs_dist + bwidth/2., plot_vals_dist+1, fmt='none', yerr = p_err_vals_dist, lw=errlw, capsize=capsz, capthick=cpt, mew = mew, zorder = 3, ecolor=color.dist)
+_, caplines, _ = ax.errorbar(xs_dist + bwidth/2., plot_vals_dist+1, fmt='none', yerr = p_err_vals_dist, lw=errlw, capsize=capsz, capthick=cpt, mew = mew, zorder = 3, ecolor=color['dist'])
 
-# for capline in caplines:
-#     capline.set_zorder(3)
+for capline in caplines:
+    capline.set_zorder(3)
 
 
-# # Motifs 15 and 16 get divided by 2 to bring them on 5 scale size
-# plot_vals_rew = (p_mean_rew/ps)-1
-# plot_vals_rew[-1] = plot_vals_rew[-1]/2.
-# plot_vals_rew[-2] = plot_vals_rew[-2]/2.
+# Motifs 15 and 16 get divided by 2 to bring them on 5 scale size
+plot_vals_rew = (p_mean_rew/ps)-1
+plot_vals_rew[-1] = plot_vals_rew[-1]/2.
+plot_vals_rew[-2] = plot_vals_rew[-2]/2.
 
-# p_err_vals_rew = p_err_rew/ps
-# p_err_vals_rew[-1] = p_err_vals_rew[-1]/2.
-# p_err_vals_rew[-2] = p_err_vals_rew[-2]/2.
+p_err_vals_rew = p_err_rew/ps
+p_err_vals_rew[-1] = p_err_vals_rew[-1]/2.
+p_err_vals_rew[-2] = p_err_vals_rew[-2]/2.
 
-# xs_rew = np.array([k-0.125 for k in range(1,len(p_mean)+1)])
+xs_rew = np.array([k-0.125 for k in range(1,len(p_mean)+1)])
 
-# rew_patches = ax.bar(xs_rew, plot_vals_rew, bwidth, linewidth=lw, bottom = 1., edgecolor=color.rew, facecolor = 'white', zorder=4)
+rew_patches = ax.bar(xs_rew, plot_vals_rew, bwidth, linewidth=lw, bottom = 1., edgecolor=color['rew'], facecolor = 'white', zorder=4)
 
-# rew_fill = ax.bar(xs_rew, plot_vals_rew, bwidth, bottom = 1., edgecolor=color.rew, facecolor = color.rew, alpha = opacity, zorder=5)
+rew_fill = ax.bar(xs_rew, plot_vals_rew, bwidth, bottom = 1., edgecolor=color['rew'], facecolor = color['rew'], alpha = opacity, zorder=5)
 
-# _, caplines, _ = ax.errorbar(xs_rew + bwidth/2., plot_vals_rew+1, fmt='none', yerr = p_err_vals_rew, lw=errlw, capsize=capsz, capthick=cpt, mew = mew, zorder = 6, ecolor = color.rew)
+_, caplines, _ = ax.errorbar(xs_rew + bwidth/2., plot_vals_rew+1, fmt='none', yerr = p_err_vals_rew, lw=errlw, capsize=capsz, capthick=cpt, mew = mew, zorder = 6, ecolor = color['rew'])
 
-# for capline in caplines:
-#     capline.set_zorder(6)
+for capline in caplines:
+    capline.set_zorder(6)
 
 
 # Motifs 15 and 16 get divided by 2 to bring them on 5 scale size
@@ -701,11 +700,11 @@ def correct_bar_sizes(xs, ys, patches):
 correct_bar_sizes(xs_aniso, plot_vals, aniso_patches)
 correct_bar_sizes(xs_aniso, plot_vals, aniso_fill)
 
-# correct_bar_sizes(xs_rew, plot_vals_rew, rew_patches)
-# correct_bar_sizes(xs_rew, plot_vals_rew, rew_fill)
+correct_bar_sizes(xs_rew, plot_vals_rew, rew_patches)
+correct_bar_sizes(xs_rew, plot_vals_rew, rew_fill)
 
-# correct_bar_sizes(xs_dist, plot_vals_dist, dist_patches)
-# correct_bar_sizes(xs_dist, plot_vals_dist, dist_fill)
+correct_bar_sizes(xs_dist, plot_vals_dist, dist_patches)
+correct_bar_sizes(xs_dist, plot_vals_dist, dist_fill)
 
 
 for i in range(1,17):
@@ -719,13 +718,13 @@ ax.add_patch(Rectangle((xrect,ystart), 0.75, 0.2, facecolor = 'white', edgecolor
 ax.add_patch(Rectangle((xrect,ystart), 0.75, 0.2, facecolor = color['aniso'], edgecolor = color['aniso'], alpha=opacity_aniso)) 
 fig.text(0.225,0.85, r'anisotropic', color = 'k', fontsize=lbl_fntsz)
 
-# ax.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2, facecolor = 'white', edgecolor=color.rew))
-# ax.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2, facecolor = color.rew, edgecolor=color.rew, alpha=opacity))
-# fig.text(0.225,0.75, r'rewired', color = 'black', fontsize=lbl_fntsz)
+ax.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2, facecolor = 'white', edgecolor=color['rew']))
+ax.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2, facecolor = color['rew'], edgecolor=color['rew'], alpha=opacity))
+fig.text(0.225,0.75, r'rewired', color = 'black', fontsize=lbl_fntsz)
 
-# ax.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2, facecolor = 'white', edgecolor=color.dist))
-# ax.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2, facecolor = color.dist, edgecolor=color.dist, alpha=opacity))
-# fig.text(0.225,0.65, r'distance-dependent', color = 'black', fontsize=lbl_fntsz)
+ax.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2, facecolor = 'white', edgecolor=color['dist']))
+ax.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2, facecolor = color['dist'], edgecolor=color['dist'], alpha=opacity))
+fig.text(0.225,0.65, r'distance-dependent', color = 'black', fontsize=lbl_fntsz)
 
 
 #pl.savefig(path, dpi=params.dpi, bbox_inches='tight')
@@ -772,7 +771,7 @@ pl.xticks(range(1,17))
 
 
 # path = os.path.join("data/", params.comp_label, label+params.extension)
-path='fig3.png'
+path='fig3.pdf'
 fig.savefig(path, dpi=300, bbox_inches='tight')
 
 #fig.savefig("/users/hoffmann/Downloads/"+label+params.extension, dpi=params.dpi, bbox_inches='tight')
