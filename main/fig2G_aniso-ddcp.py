@@ -5,10 +5,12 @@ import pylab as pl
 import numpy as np
 import graph_tool as gt
 
-from utils.colors import color
-
 import sys
 sys.path.append("..")
+sys.path.append("../..")
+
+from utils.colors import color
+
 from comp.functions import ( get_ddcp )
 
 import pickle, scipy.stats
@@ -24,32 +26,26 @@ pl.rcParams['text.latex.preamble'] = [
 ]
 
 
-gids = ['0bae', '1b20', '22df', '8ca5', 'b97d']
-
 bins = np.linspace(0,296*np.sqrt(2),125)
 gP = []
 hP = []
+kP = []
 
-for gid in gids:
+for gid in range(5):
     gpath = '/home/lab/comp/data/aniso-netw_N1000' +\
-            '_w37.3_ed-l296_4GX7-{:s}.gt'.format(gid)
+            '_w37.3_ed-l296_4GX7-{:02d}.gt'.format(gid)
     g = gt.load_graph(gpath)
     g_ctrs, g_ps = get_ddcp(g, bins)
     gP.append(g_ps)
 
     hpath = '/home/lab/comp/data/rew-netw_rfrac1.00' +\
-            '_efrac{:.2f}_4FU2-{:s}.gt'.format(0.05,gid)
+            '_efrac{:.2f}_4FU2-{:02d}.gt'.format(0.05,gid)
     h = gt.load_graph(hpath)
     h_ctrs, h_ps = get_ddcp(h, bins)
     hP.append(h_ps)
 
-gids = ['0293', '625f', '696d', 'b6c5', 'd26f']
-kP = []
-
-for gid in gids:
-
     kpath = '/home/lab/comp/data/dist-an-netw_N1000_w37.3' +\
-            '_ed-l296_8CY2-{:s}.gt'.format(gid)
+            '_ed-l296_8CY2-{:02d}.gt'.format(gid)
     k = gt.load_graph(kpath)
     k_ctrs, k_ps = get_ddcp(k, bins)
     kP.append(k_ps)
