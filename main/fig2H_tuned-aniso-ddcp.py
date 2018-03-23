@@ -5,10 +5,11 @@ import pylab as pl
 import numpy as np
 import graph_tool as gt
 
-from utils.colors import color
-
 import sys
 sys.path.append("..")
+sys.path.append("../..")
+
+from utils.colors import color
 from comp.functions import ( get_ddcp )
 
 import pickle, scipy.stats
@@ -36,15 +37,14 @@ def ddcp_Perin(x):
         return  a/(b+pow(x,c)) + Offset
 
 
-gids = ['0433','513d','9c24','d0b2','f4d7']
 
 bins = np.linspace(0,296*np.sqrt(2),125)
 tP = []
 
 
-for gid in gids:
+for gid in range(4):
     tpath = '/home/lab/comp/data/tuned-an-netw' +\
-            '_N1000_ed-l296_XY51-{:s}.gt'.format(gid)
+            '_N1000_ed-l296_XY51-{:02d}.gt'.format(gid)
     t = gt.load_graph(tpath)
     t_ctrs, t_ps = get_ddcp(t, bins)
     tP.append(t_ps)
