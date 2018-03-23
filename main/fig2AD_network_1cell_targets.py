@@ -22,7 +22,7 @@ g_tuned = gt.load_graph('/home/lab/comp/data/tuned-an-netw_N1000_ed-l296_XY51-00
 import os
 fname = os.path.splitext(os.path.basename(__file__))[0]
 
-for i in range([329]):
+for i in [158]:
 
     plot_network_1cell_targets(g_aniso, i,
                                fname+'_{:d}-aniso'.format(i),
@@ -35,7 +35,7 @@ for i in [14]:
                                fname+'_{:d}-dist'.format(i),
                                color['dist'])
 
-for i in [222]: 
+for i in [144]: 
     plot_network_1cell_targets(g_tuned, i,
                                fname+'_{:d}-tuned'.format(i),
                                color['tuned'])
