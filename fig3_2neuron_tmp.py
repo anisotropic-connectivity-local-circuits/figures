@@ -72,15 +72,14 @@ y_err = [scipy_sem(rl_uc), scipy_sem(rl_sp), scipy_sem(rl_rc)]
 #y = [uc_dist/uc_rew-1., sc_dist/sc_rew-1., rc_dist/rc_rew-1.]
 
 ax.bar(xbar, y, 1., bottom = 1., facecolor='black', #edgecolor = 'gray' ,
-       yerr=y_err, error_kw=dict(ecolor='red', lw=2, capsize=10, capthick=10, mew = 2
-                                 ))
+       yerr=y_err, error_kw=dict(ecolor='red', lw=2, capsize=5, capthick=1, mew = 2))
 
 
 
 #pl.errorbar([x+0.5 for x in xbar],[yval+1 for yval in y], yerr=y_err, color = 'r', fmt='.')
 #ax.set_xlabel("unconnected - single connections - reciprocal connections")
 #ax.set_ylabel("Counts relative to random")
-ax.set_title(r'relative to random')
+#ax.set_title(r'relative to random')
 
 
 
@@ -101,11 +100,11 @@ from matplotlib.patches import Circle
 # fig.gca().add_artist(Circle((90,30),5., color = 'red', transform=None))
 ypos = 0.65
 ndist = 0.6
-msize = 10
+msize = 8
 start = 0.2
 left_in = 0.2
 right_in = 0.2
-mew_set = 1.5
+mew_set = 1.2
 awidth = 0.001
 hwidth = 0.05
 yoffset = 0.025
@@ -130,6 +129,7 @@ ax.plot(start+left_in+ndist, ypos, 'bo', markersize=msize, color = 'white', mew=
 ax.arrow(start+left_in,ypos+yoffset, ndist-0.2, 0, head_width=hwidth, head_length=0.1, fc='k', ec='k')
 ax.arrow(start+left_in+ +ndist ,ypos-yoffset, -ndist+0.2, 0, head_width=hwidth, head_length=0.1, fc='k', ec='k')
 
+ax.set_ylabel(r'counts in aniso.~net.'+'\n'+r'relative to random')
 
 # fig.text(0.41,0.625, "anisotropic", color = 'b')
 # fig.text(0.35,0.24, "distance-dependent", color = 'r')
