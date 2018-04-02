@@ -63,6 +63,7 @@ ax.xaxis.set_ticks_position('bottom')
 ax.yaxis.set_ticks_position('left')
 
 ax.xaxis.set_ticks([])
+ax.yaxis.set_ticks([1.0,1.5,2.0])
 
 xbar = [0.2,1.4,2.6]
 y = [np.mean(rl_uc)-1, np.mean(rl_sp)-1, np.mean(rl_rc)-1]
