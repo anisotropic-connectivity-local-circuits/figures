@@ -3,36 +3,43 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as pl
 
-import numpy as np
-import graph_tool as gt
-from scipy.stats import sem as scipy_sem
-
 import sys
 sys.path.append("..")
 sys.path.append("../..")
 
-from comp.functions import get_2neuron_p, eval_connectivity
+from core.neuronpair_counts import get_2neuron_counts_rel_random
 
 from utils.colors import color
 
-cp = np.zeros(5)
-ps = np.zeros((5,3))
 
-for gid in range(5):
-    gpath = '/home/lab/comp/data/aniso-netw_N1000' +\
-            '_w37.3_ed-l296_4GX7-{:02d}.gt'.format(gid)
-    g = gt.load_graph(gpath)
-    cp[gid] += eval_connectivity(g)
-    ps[gid,:] += get_2neuron_p(g)
+gpath_base = '/home/lab/comp/data/aniso-netw_N1000' +\
+             '_w37.3_ed-l296_4GX7'
+
+y_aniso, y_aniso_err = get_2neuron_counts_rel_random(gpath_base)
 
 
-# # print "Unconnected: ", (1-p)**2
-# # print "Single:      ", 2*p*(1-p)
-# # print "Recip:       ", p**2
+gpath_base = '/home/lab/comp/data/tuned-an-netw_N1000' +\
+             '_ed-l296_XY51'
 
-rl_uc = ps[:,0]/((1-cp)**2)
-rl_sp = ps[:,1]/(2*cp*(1-cp))
-rl_rc = ps[:,2]/(cp**2)
+y_tuned, y_tuned_err = get_2neuron_counts_rel_random(gpath_base)
+
+
+# cp = np.zeros(5)
+# ps = np.zeros((5,3))
+
+# for gid in range(5):
+#     # gpath = '/home/lab/comp/data/aniso-netw_N1000' +\
+#     #         '_w37.3_ed-l296_4GX7-{:02d}.gt'.format(gid)
+#     gpath = '/home/lab/comp/data/tuned-an-netw_N1000' +\
+#             '_ed-l296_XY51-{:02d}.gt'.format(gid)
+#     g = gt.load_graph(gpath)
+#     cp[gid] += eval_connectivity(g)
+#     ps[gid,:] += get_2neuron_p(g)
+
+
+# y = [np.mean(rl_uc)-1, np.mean(rl_sp)-1, np.mean(rl_rc)-1]
+# y_err = [scipy_sem(rl_uc), scipy_sem(rl_sp), scipy_sem(rl_rc)]
+
 
 
 matplotlib.rc('text', usetex=True)
@@ -52,7 +59,7 @@ ax = fig.add_subplot(111) #aspect = 'equal')
 #ax.grid(True)     
 
 ax.set_xlim(0.,3.8)
-ax.set_ylim(0.5,2.25) #1.75
+ax.set_ylim(0.5,2.15) #1.75
 #ax.set_ylim(0.9,1.1)
 
 
@@ -65,15 +72,46 @@ ax.yaxis.set_ticks_position('left')
 ax.xaxis.set_ticks([])
 ax.yaxis.set_ticks([1.0,1.5,2.0])
 
-xbar = [0.2,1.4,2.6]
-y = [np.mean(rl_uc)-1, np.mean(rl_sp)-1, np.mean(rl_rc)-1]
-y_err = [scipy_sem(rl_uc), scipy_sem(rl_sp), scipy_sem(rl_rc)]
+x_aniso = [0.2,1.4,2.6]
+x_tuned = [x+0.5 for x in x_aniso]
 #y = [uc_org/uc_dist-1., sc_org/sc_dist-1., rc_org/rc_dist-1.]
 #y = [uc_org/uc_rew-1., sc_org/sc_rew-1., rc_org/rc_rew-1.]
 #y = [uc_dist/uc_rew-1., sc_dist/sc_rew-1., rc_dist/rc_rew-1.]
 
-ax.bar(xbar, y, 1., bottom = 1., facecolor='black', #edgecolor = 'gray' ,
-       yerr=y_err, error_kw=dict(ecolor='red', lw=2, capsize=5, capthick=1, mew = 2))
+# ax.bar(xbar, y, 1., bottom = 1., facecolor='black', #edgecolor = 'gray' ,
+#        yerr=y_err, error_kw=dict(ecolor='red', lw=2, capsize=5, capthick=1, mew = 2))
+
+
+lw = 4.
+opacity = 0.6
+bwidth = 0.45
+
+aniso_patches = ax.bar(x_aniso, y_aniso-1, bwidth, linewidth=lw, bottom = 1., edgecolor=color['aniso'], facecolor = 'white', zorder=1)
+
+aniso_fill = ax.bar(x_aniso, y_aniso-1, bwidth, bottom = 1., edgecolor=color['aniso'], facecolor = color['aniso'], alpha=opacity,  zorder = 2)
+
+tuned_patches = ax.bar(x_tuned, y_tuned-1, bwidth, linewidth=lw, bottom = 1., edgecolor=color['tuned'], facecolor = 'white', zorder=1)
+
+tuned_fill = ax.bar(x_tuned, y_tuned-1, bwidth, bottom = 1., edgecolor=color['tuned'], facecolor = color['tuned'], alpha=opacity,  zorder = 2)
+
+
+
+def correct_bar_sizes(xs, ys, patches):
+
+    clip_boxes = [pl.Rectangle([x,0], bwidth, y,) for x,y in zip(xs,ys)]
+
+    for clip_box,bar in zip(clip_boxes,patches):
+        bar.set_clip_path(clip_box.get_path(), bar.get_transform())
+
+
+correct_bar_sizes(x_aniso, y_aniso-1, aniso_patches)
+correct_bar_sizes(x_aniso, y_aniso-1, aniso_fill)
+
+correct_bar_sizes(x_tuned, y_tuned-1, tuned_patches)
+correct_bar_sizes(x_tuned, y_tuned-1, tuned_fill)
+
+
+
 
 
 
