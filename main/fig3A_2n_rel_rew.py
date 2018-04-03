@@ -59,7 +59,7 @@ ax = fig.add_subplot(111) #aspect = 'equal')
 #ax.grid(True)     
 
 ax.set_xlim(0.,3.8)
-ax.set_ylim(0.5,2.15) #1.75
+ax.set_ylim(0.825,2.15) #1.75
 #ax.set_ylim(0.9,1.1)
 
 
@@ -134,13 +134,19 @@ fig.set_size_inches(2.3*4./3,2.25)
 fig.tight_layout()
 
 
-from matplotlib.patches import Circle
-# fig.gca().add_artist(Circle((50,30),5., color = 'red', transform=None))
-# fig.gca().add_artist(Circle((90,30),5., color = 'red', transform=None))
+
+
+# ---------------- arrow markers as xlabels -------------------
+# see http://stackoverflow.com/a/22244714/692634,
+# http://matplotlib.org/examples/pylab_examples/arrow_simple_demo.html
+#
+# mew = markeredgewith
+#
+# clip_on=False allows plotting outside the x- and y-axis
+
 ypos = 0.65
 ndist = 0.6
 msize = 8
-start = 0.2
 left_in = 0.2
 right_in = 0.2
 mew_set = 1.2
@@ -148,26 +154,36 @@ awidth = 0.001
 hwidth = 0.05
 yoffset = 0.025
 
-#http://stackoverflow.com/a/22244714/692634
 
-ax.plot(start+left_in,ypos,'o',markersize=msize, color = 'white', mew=mew_set) #mew = markeredgewith!!x
-ax.plot(start+left_in+ndist, ypos, 'bo', markersize=msize, color = 'white', mew=mew_set)
+#  0    O 
+start = 0.2
+ax.plot(start+left_in,ypos,'o',markersize=msize, color = 'white',
+        mew=mew_set, clip_on=False)
+ax.plot(start+left_in+ndist, ypos, 'bo', markersize=msize,
+        color='white', mew=mew_set, clip_on=False)
 
+#  0--->O 
 start = 1.4
-ax.plot(start+left_in,ypos,'bo',markersize=msize, color = 'white', mew=mew_set)
-ax.plot(start+left_in+ndist, ypos, 'bo', markersize=msize, color = 'white', mew=mew_set)
+ax.plot(start+left_in,ypos,'bo',markersize=msize,
+        color='white', mew=mew_set, clip_on=False)
+ax.plot(start+left_in+ndist, ypos, 'bo', markersize=msize,
+        color='white', mew=mew_set, clip_on=False)
+ax.arrow(start+left_in,ypos, ndist-0.2, 0, width=awidth, fc='k', ec='k',
+         head_width=hwidth, head_length=0.1, clip_on=False)
 
-#http://matplotlib.org/examples/pylab_examples/arrow_simple_demo.html
-ax.arrow(start+left_in,ypos, ndist-0.2, 0, 
-         width = awidth, head_width=hwidth, head_length=0.1, fc='k', ec='k')
-
+#  0<-->O 
 start = 2.6
-ax.plot(start+left_in,ypos,'o', markersize=msize, color = 'white', mew=mew_set)
-ax.plot(start+left_in+ndist, ypos, 'bo', markersize=msize, color = 'white', mew=mew_set)
+ax.plot(start+left_in,ypos,'o', markersize=msize, color='white',
+        mew=mew_set, clip_on=False)
+ax.plot(start+left_in+ndist, ypos, 'bo', markersize=msize,
+        color='white', mew=mew_set, clip_on=False)
+ax.arrow(start+left_in,ypos+yoffset, ndist-0.2, 0, head_width=hwidth,
+         head_length=0.1, fc='k', ec='k', clip_on=False)
+ax.arrow(start+left_in+ +ndist ,ypos-yoffset, -ndist+0.2, 0,
+         head_width=hwidth, head_length=0.1, fc='k', ec='k', clip_on=False)
 
-ax.arrow(start+left_in,ypos+yoffset, ndist-0.2, 0, head_width=hwidth, head_length=0.1, fc='k', ec='k')
-ax.arrow(start+left_in+ +ndist ,ypos-yoffset, -ndist+0.2, 0, head_width=hwidth, head_length=0.1, fc='k', ec='k')
 
+        
 ax.set_ylabel(r'counts in aniso.~net.'+'\n'+r'relative to random')
 
 # fig.text(0.41,0.625, "anisotropic", color = 'b')
