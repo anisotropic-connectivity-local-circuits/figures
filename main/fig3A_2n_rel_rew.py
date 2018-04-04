@@ -55,13 +55,11 @@ pl.rcParams['text.latex.preamble'] = [
 pl.rcParams['xtick.major.pad']='45'
 
 fig = pl.figure(facecolor="white")
-ax = fig.add_subplot(111) #aspect = 'equal')
-#ax.grid(True)     
+fig.set_size_inches(2.3*4./3,2.25)
+ax = fig.add_subplot(111) 
 
 ax.set_xlim(0.,3.8)
-ax.set_ylim(0.825,2.15) #1.75
-#ax.set_ylim(0.9,1.1)
-
+ax.set_ylim(0.825,2.15)
 
 ax.spines['bottom'].set_position(('data',1))
 ax.spines['right'].set_color('none')
@@ -74,23 +72,22 @@ ax.yaxis.set_ticks([1.0,1.5,2.0])
 
 x_aniso = [0.2,1.4,2.6]
 x_tuned = [x+0.5 for x in x_aniso]
-#y = [uc_org/uc_dist-1., sc_org/sc_dist-1., rc_org/rc_dist-1.]
-#y = [uc_org/uc_rew-1., sc_org/sc_rew-1., rc_org/rc_rew-1.]
-#y = [uc_dist/uc_rew-1., sc_dist/sc_rew-1., rc_dist/rc_rew-1.]
-
-# ax.bar(xbar, y, 1., bottom = 1., facecolor='black', #edgecolor = 'gray' ,
-#        yerr=y_err, error_kw=dict(ecolor='red', lw=2, capsize=5, capthick=1, mew = 2))
-
 
 lw = 4.
 opacity = 0.6
 bwidth = 0.45
 
-aniso_patches = ax.bar(x_aniso, y_aniso-1, bwidth, linewidth=lw, bottom = 1., edgecolor=color['aniso'], facecolor = 'white', zorder=1)
+aniso_patches = ax.bar(x_aniso, y_aniso-1, bwidth, linewidth=lw,
+                       bottom = 1., edgecolor=color['aniso'],
+                       facecolor = 'white', zorder=1, yerr=y_aniso_err,
+                       error_kw=dict(ecolor=color['aniso'], lw=3,
+                                     capsize=5, capthick=1, mew = 2))
 
 aniso_fill = ax.bar(x_aniso, y_aniso-1, bwidth, bottom = 1., edgecolor=color['aniso'], facecolor = color['aniso'], alpha=opacity,  zorder = 2)
 
-tuned_patches = ax.bar(x_tuned, y_tuned-1, bwidth, linewidth=lw, bottom = 1., edgecolor=color['tuned'], facecolor = 'white', zorder=1)
+tuned_patches = ax.bar(x_tuned, y_tuned-1, bwidth, linewidth=lw, bottom = 1., edgecolor=color['tuned'], facecolor = 'white', zorder=1, yerr=y_tuned_err,
+                       error_kw=dict(ecolor=color['tuned'], lw=3,
+                                     capsize=5, capthick=1, mew = 2))
 
 tuned_fill = ax.bar(x_tuned, y_tuned-1, bwidth, bottom = 1., edgecolor=color['tuned'], facecolor = color['tuned'], alpha=opacity,  zorder = 2)
 
@@ -115,22 +112,7 @@ correct_bar_sizes(x_tuned, y_tuned-1, tuned_fill)
 
 
 
-#pl.errorbar([x+0.5 for x in xbar],[yval+1 for yval in y], yerr=y_err, color = 'r', fmt='.')
-#ax.set_xlabel("unconnected - single connections - reciprocal connections")
-#ax.set_ylabel("Counts relative to random")
-#ax.set_title(r'relative to random')
 
-
-
-#pl.xlim(-0.025,1.025)
-#pl.yticks(np.arange(1.92,2.02,0.03))
-
-#pl.xlabel("rewiring fraction", labelpad = 8.)
-#pl.ylabel("average path length", labelpad = 14.)
-#pl.title(r'\textbf{average path length}',  y=1.05, fontdict = {'size':17, 'weight':'bold'})
-
-fig = pl.gcf()
-fig.set_size_inches(2.3*4./3,2.25)
 fig.tight_layout()
 
 
@@ -153,7 +135,6 @@ mew_set = 1.2
 awidth = 0.001
 hwidth = 0.05
 yoffset = 0.025
-
 
 #  0    O 
 start = 0.2

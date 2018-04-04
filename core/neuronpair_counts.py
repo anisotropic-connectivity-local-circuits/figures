@@ -8,10 +8,12 @@ from comp.functions import get_2neuron_p, eval_connectivity
 
 def get_2neuron_counts_rel_random(gpath_base):
 
-    cp = np.zeros(5)
-    ps = np.zeros((5,3))
+    n_graphs = 5
 
-    for gid in range(5):
+    cp = np.zeros(n_graphs)
+    ps = np.zeros((n_graphs,3))
+
+    for gid in range(n_graphs):
         gpath = gpath_base+'-{:02d}.gt'.format(gid)
         g = gt.load_graph(gpath)
         cp[gid] += eval_connectivity(g)
