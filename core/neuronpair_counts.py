@@ -32,3 +32,29 @@ def get_2neuron_counts_rel_random(gpath_base):
     y_err = [scipy_sem(rl_uc), scipy_sem(rl_sp), scipy_sem(rl_rc)]
 
     return np.array(y), np.array(y_err)
+
+
+def get_2neuron_counts_rel_rew(gpath_base, rew_gpath_base):
+
+    n_graphs = 5
+
+    ps_org = np.zeros((n_graphs,3))
+    ps_rew = np.zeros((n_graphs,3))
+
+    for gid in range(n_graphs):
+        gpath = gpath_base+'-{:02d}.gt'.format(gid)
+        g = gt.load_graph(gpath)
+        ps_org[gid,:] += get_2neuron_p(g)
+
+        hpath = rew_gpath_base+'-{:02d}.gt'.format(gid)
+        h = gt.load_graph(hpath)
+        ps_rew[gid,:] += get_2neuron_p(h)
+
+    rl_uc = ps_org[:,0]/ps_rew[:,0]
+    rl_sp = ps_org[:,1]/ps_rew[:,1]
+    rl_rc = ps_org[:,2]/ps_rew[:,2]
+
+    y = [np.mean(rl_uc), np.mean(rl_sp), np.mean(rl_rc)]
+    y_err = [scipy_sem(rl_uc), scipy_sem(rl_sp), scipy_sem(rl_rc)]
+
+    return np.array(y), np.array(y_err)
