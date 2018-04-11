@@ -7,7 +7,7 @@ import sys
 sys.path.append("..")
 sys.path.append("../..")
 
-from core.neuronpair_counts import get_2neuron_counts_rel_random
+from core.neuronpair_counts import get_2neuron_counts_rel_random, get_2neuron_counts_rel_rew
 
 from utils.colors import color
 
@@ -22,23 +22,6 @@ gpath_base = '/home/lab/comp/data/tuned-an-netw_N1000' +\
              '_ed-l296_XY51'
 
 y_tuned, y_tuned_err = get_2neuron_counts_rel_random(gpath_base)
-
-
-# cp = np.zeros(5)
-# ps = np.zeros((5,3))
-
-# for gid in range(5):
-#     # gpath = '/home/lab/comp/data/aniso-netw_N1000' +\
-#     #         '_w37.3_ed-l296_4GX7-{:02d}.gt'.format(gid)
-#     gpath = '/home/lab/comp/data/tuned-an-netw_N1000' +\
-#             '_ed-l296_XY51-{:02d}.gt'.format(gid)
-#     g = gt.load_graph(gpath)
-#     cp[gid] += eval_connectivity(g)
-#     ps[gid,:] += get_2neuron_p(g)
-
-
-# y = [np.mean(rl_uc)-1, np.mean(rl_sp)-1, np.mean(rl_rc)-1]
-# y_err = [scipy_sem(rl_uc), scipy_sem(rl_sp), scipy_sem(rl_rc)]
 
 
 
@@ -110,10 +93,28 @@ correct_bar_sizes(x_tuned, y_tuned-1, tuned_fill)
 
 
 
+# ---------------- custom legend -------------------
+#
+# for aniso. and tuned networks
+#
 
+from matplotlib.patches import Rectangle
 
+xrect = 0.35
+yrect1 = 1.96
+rect_w = 0.06
+rect_len = 0.4
 
-fig.tight_layout()
+yrect2 = 1.79
+
+ax.add_patch(Rectangle((xrect,yrect1), rect_len, rect_w, edgecolor = color['tuned'], facecolor='white', lw=1.25)) 
+ax.add_patch(Rectangle((xrect,yrect1), rect_len, rect_w, edgecolor = color['tuned'], facecolor=color['tuned'], alpha=opacity))
+fig.text(0.315,0.78, r'tuned anisotropic', color = 'black', fontsize=11) 
+
+ax.add_patch(Rectangle((xrect,yrect2), rect_len, rect_w, facecolor = 'white', edgecolor=color['aniso'], lw=1.25))
+ax.add_patch(Rectangle((xrect,yrect2), rect_len, rect_w, facecolor = color['aniso'], edgecolor=color['aniso'], alpha=opacity))
+fig.text(0.315,0.68, r'anisotropic', color = 'black', fontsize=11)
+
 
 
 
@@ -163,13 +164,11 @@ ax.arrow(start+left_in,ypos+yoffset, ndist-0.2, 0, head_width=hwidth,
 ax.arrow(start+left_in+ +ndist ,ypos-yoffset, -ndist+0.2, 0,
          head_width=hwidth, head_length=0.1, fc='k', ec='k', clip_on=False)
 
-
         
 ax.set_ylabel(r'counts in aniso.~net.'+'\n'+r'relative to random')
 
-# fig.text(0.41,0.625, "anisotropic", color = 'b')
-# fig.text(0.35,0.24, "distance-dependent", color = 'r')
 
-path = "fig3_2n.png"
+
+path = "fig3A_2n_rel_rand.png"
 pl.savefig(path, dpi=300, bbox_inches='tight')
 pl.close('all')
