@@ -240,6 +240,6 @@ ax1.set_yticks([0.,0.2,0.4,0.6,0.8])
 
 pl.tight_layout()
 
-path = "fig3B_2n_abs_counts.png"
+path = "fig3B_2n_rel_occurrence.png"
 pl.savefig(path, dpi=300, bbox_inches='tight')
 pl.close('all')
