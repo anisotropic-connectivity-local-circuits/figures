@@ -144,12 +144,12 @@ for k,ax in enumerate(axs):
 
 from matplotlib.patches import Rectangle
 
-xrect = .95
-yrect1 = 0.020
-rect_w = 0.006
-rect_len = 0.4
+xrect = 1.125
+yrect1 = 0.02225
+rect_w = 0.0015
+rect_len = 0.325
 
-yrect2 = 1.79
+ydist = 0.005
 
 xtext = 1.075
 ytext_start = 0.78
@@ -158,16 +158,20 @@ ytext_sep = 0.15
 ax3.add_patch(Rectangle((xrect,yrect1), rect_len, rect_w, edgecolor = color['aniso'], facecolor='white', lw=1.25, clip_on=False)) 
 ax3.add_patch(Rectangle((xrect,yrect1), rect_len, rect_w, edgecolor = color['aniso'], facecolor=color['aniso'], alpha=opacity, clip_on=False))
 
+ax3.add_patch(Rectangle((xrect,yrect1-1*ydist), rect_len, rect_w, edgecolor = color['rew'], facecolor='white', lw=1.25, clip_on=False)) 
+ax3.add_patch(Rectangle((xrect,yrect1-1*ydist), rect_len, rect_w, edgecolor = color['rew'], facecolor=color['rew'], alpha=opacity, clip_on=False))
+
+ax3.add_patch(Rectangle((xrect,yrect1-2*ydist), rect_len, rect_w, edgecolor = color['dist'], facecolor='white', lw=1.25, clip_on=False)) 
+ax3.add_patch(Rectangle((xrect,yrect1-2*ydist), rect_len, rect_w, edgecolor = color['dist'], facecolor=color['dist'], alpha=opacity, clip_on=False))
+
+ax3.add_patch(Rectangle((xrect,yrect1-3*ydist), rect_len, rect_w, edgecolor = color['rnd'], facecolor='white', lw=1.25, clip_on=False)) 
+ax3.add_patch(Rectangle((xrect,yrect1-3*ydist), rect_len, rect_w, edgecolor = color['rnd'], facecolor=color['rnd'], alpha=opacity, clip_on=False))
+
+
 fig.text(xtext,ytext_start, r'aniso.', color = 'black', fontsize=11)
 fig.text(xtext,ytext_start-ytext_sep, r'rewired', color = 'black', fontsize=11)
 fig.text(xtext,ytext_start-2*ytext_sep, r'dist.~depend.', color = 'black', fontsize=11) 
 fig.text(xtext,ytext_start-3*ytext_sep, r'random', color = 'black', fontsize=11) 
-
-
-ax3.add_patch(Rectangle((xrect,yrect2), rect_len, rect_w, facecolor = 'white', edgecolor=color['aniso'], lw=1.25))
-ax3.add_patch(Rectangle((xrect,yrect2), rect_len, rect_w, facecolor = color['aniso'], edgecolor=color['aniso'], alpha=opacity))
-
-
 
 
 
