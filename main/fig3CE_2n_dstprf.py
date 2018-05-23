@@ -114,7 +114,22 @@ ax.xaxis.set_ticks_position('bottom')
 pl.ylabel("probability", fontsize=12, labelpad=11.5)
 pl.xlabel(r'distance in \SI{}{\micro\meter}', fontsize=12, labelpad=8)
 
-pl.savefig('fig3_EF_tmp.png', dpi=300, bbox_inches='tight')
+pl.savefig('fig3C_2n_dstprf.png', dpi=300, bbox_inches='tight')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # #numerical profile
