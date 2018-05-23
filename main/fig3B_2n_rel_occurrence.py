@@ -56,15 +56,6 @@ for ax in axs:
     ax.set_ylim(bottom=0.)
 
 
-# ax.set_xlim(0.,3.8)
-# ax.set_ylim(0.825,2.15)
-
-# ax.xaxis.set_ticks([])
-# ax.yaxis.set_ticks([1.0,1.5,2.0])
-
-
-# x_tuned = [x+0.5 for x in x_aniso]
-
 lw = 3.
 opacity = 0.6
 
@@ -79,7 +70,7 @@ for k,ax in enumerate(axs):
                          facecolor = 'white', zorder=1,
                          yerr=scipy_sem(p_aniso, axis=0)[k],
                          error_kw=dict(ecolor=color['aniso'], lw=3,
-                                       capsize=5, capthick=1, mew = 2))
+                                       capsize=3, capthick=1, mew = 2))
 
     aniso_fill = ax.bar(xlocs[0], np.mean(p_aniso, axis=0)[k],
                         bwidth, edgecolor=color['aniso'],
@@ -91,7 +82,7 @@ for k,ax in enumerate(axs):
                          facecolor = 'white', zorder=1,
                          yerr=scipy_sem(p_rew, axis=0)[k],
                          error_kw=dict(ecolor=color['rew'], lw=3,
-                                       capsize=5, capthick=1, mew = 2))
+                                       capsize=3, capthick=1, mew = 2))
 
     rew_fill = ax.bar(xlocs[1], np.mean(p_rew, axis=0)[k],
                         bwidth, edgecolor=color['rew'],
@@ -103,7 +94,7 @@ for k,ax in enumerate(axs):
                          facecolor = 'white', zorder=1,
                          yerr=scipy_sem(p_dist, axis=0)[k],
                          error_kw=dict(ecolor=color['dist'], lw=3,
-                                       capsize=5, capthick=1, mew = 2))
+                                       capsize=3, capthick=1, mew = 2))
 
     dist_fill = ax.bar(xlocs[2], np.mean(p_dist, axis=0)[k],
                         bwidth, edgecolor=color['dist'],
@@ -116,7 +107,7 @@ for k,ax in enumerate(axs):
                          facecolor = 'white', zorder=1,
                          yerr=scipy_sem(p_rnd, axis=0)[k],
                          error_kw=dict(ecolor=color['rnd'], lw=3,
-                                       capsize=5, capthick=1, mew = 2))
+                                       capsize=3, capthick=1, mew = 2))
 
     rnd_fill = ax.bar(xlocs[3], np.mean(p_rnd, axis=0)[k],
                         bwidth, edgecolor=color['rnd'],
