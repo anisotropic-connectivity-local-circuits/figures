@@ -1,6 +1,5 @@
 
-import os,pickle
-import itertools
+import os,pickle, itertools
 
 import matplotlib
 matplotlib.use('Agg')
@@ -17,17 +16,14 @@ from utils.colors import color
 
 
 fpath = '/home/lab/comp/data/three_motif_counts_aniso_S300000.p'
-
 with open(fpath, 'rb') as pfile:
     aniso_data = pickle.load(pfile)
 
 fpath = '/home/lab/comp/data/three_motif_counts_rew_S300000.p'
-
 with open(fpath, 'rb') as pfile:
     rew_data = pickle.load(pfile)
 
 fpath = '/home/lab/comp/data/three_motif_counts_dist_S300000.p'
-
 with open(fpath, 'rb') as pfile:
     dist_data = pickle.load(pfile)
 
@@ -212,37 +208,52 @@ def draw_motifs(i, ymin, ymax,  highlight = False):
                  ((i-1)+xpos+xdist, ypos),
                  ((i-1)+xpos, ypos+ydist)]
 
+    arrow_properties = {'length_includes_head': True,
+                        'width': awidth,
+                        'head_length': 0.1}
 
-    if i==1: #Song 1
-        if not highlight:
-            # downleft
-            ax.arrow(positions[2][0]-add_x,positions[2][1]-add_y,-xdist+2*add_x,-ydist+2*add_y,
-                     width = g_awidth, head_width=0, head_length=0.1, 
-                     fc=a_gray, ec=a_gray, length_includes_head= True)
-            #upleft
-            ax.arrow(positions[1][0]-add_x,positions[1][1]+add_y,-xdist+2*add_x,ydist-2*add_y,
-                     width = g_awidth, head_width=0, head_length=0.1, 
-                     fc=a_gray, ec=a_gray, length_includes_head= True)
-            # ->
-            ax.arrow(frac*xdist+positions[0][0],positions[0][1],2*xdist-2*frac*xdist,0,
-                 width = g_awidth, head_width=0, head_length=0.1, 
-                     fc=a_gray, ec=a_gray, length_includes_head= True)
+    bar_gray =         {'head_width': 0,
+                        'fc': a_gray,
+                        'ec': a_gray}
+
+    arrow_black =      {'head_width': hwidth,
+                        'fc': 'k',
+                        'ec': 'k'}
+
+    bar_gray.update(arrow_properties)
+    arrow_black.update(arrow_properties)
+
+    if i==1: 
+        
+        # downleft
+        ax.arrow(positions[2][0]-add_x, positions[2][1]-add_y,
+                 -xdist+2*add_x, -ydist+2*add_y,
+                 **bar_gray)
+        #upleft
+        ax.arrow(positions[1][0]-add_x, positions[1][1]+add_y,
+                 -xdist+2*add_x,ydist-2*add_y,
+                 **bar_gray)
+        # ->
+        ax.arrow(frac*xdist+positions[0][0], positions[0][1],
+                 2*xdist-2*frac*xdist, 0,
+                 **bar_gray)
 
 
-    if i==2: #Song 2
-        if not highlight:
-            # downleft
-            ax.arrow(positions[2][0]-add_x,positions[2][1]-add_y,-xdist+2*add_x,-ydist+2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-            #upleft
-            ax.arrow(positions[1][0]-add_x,positions[1][1]+add_y,-xdist+2*add_x,ydist-2*add_y,
-                     width = g_awidth, head_width=0, head_length=0.1, 
-                     fc=a_gray, ec=a_gray, length_includes_head= True)
-            # ->
-            ax.arrow(frac*xdist+positions[0][0],positions[0][1],2*xdist-2*frac*xdist,0,
-                 width = g_awidth, head_width=0, head_length=0.1, 
-                     fc=a_gray, ec=a_gray, length_includes_head= True)
+    if i==2:
+
+        # downleft
+        ax.arrow(positions[2][0]-add_x, positions[2][1]-add_y,
+                 -xdist+2*add_x, -ydist+2*add_y,
+                 **arrow_black)
+
+        #upleft
+        ax.arrow(positions[1][0]-add_x, positions[1][1]+add_y,
+                 -xdist+2*add_x, ydist-2*add_y,
+                 **bar_gray)
+        # ->
+        ax.arrow(frac*xdist+positions[0][0], positions[0][1],
+                 2*xdist-2*frac*xdist, 0,
+                 **bar_gray)
 
     if i==3: #Song 3
         if not highlight:
