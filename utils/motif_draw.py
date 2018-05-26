@@ -237,156 +237,146 @@ def draw_motifs(ax, i, ymin, ymax,  highlight = False):
                  **arrow_black)
 
         
-    if i==11: #Song 11
-        if not highlight:
-            # downleft
-            ax.arrow(positions[2][0]-add_x,positions[2][1]-add_y,-xdist+2*add_x,-ydist+2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-            #upleft
-            ax.arrow(positions[1][0]-add_x,positions[1][1]+add_y,-xdist+2*add_x,ydist-2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-            # ->
-            ax.arrow(frac*xdist+positions[0][0],positions[0][1],2*xdist-2*frac*xdist,0,
-                 width = awidth, head_width=hwidth, head_length=0.1, 
-                 fc='k', ec='k', length_includes_head= True)
+    if i==11: 
 
-    if i == 12: #Song 12
-
-        if highlight:
-            ax.add_patch(Rectangle((positions[0][0]+xdist - width_rect/2., 
-                                    positions[0][1]+ydist/2. - height_rect/2.), 
-                                   width_rect, height_rect, 
-                                   facecolor = 'white', edgecolor = 'red'))
-        else:
-
-            #  upright
-            ax.arrow(positions[0][0]+add_x,positions[0][1]+add_y,xdist-2*add_x,ydist-2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-            #upleft
-            ax.arrow(positions[1][0]-add_x,positions[1][1]+add_y,-xdist+2*add_x,ydist-2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-            #downright
-            ax.arrow(positions[2][0]+add_x,positions[2][1]-add_y,+xdist-2*add_x,-ydist+2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)        # ->
-            ax.arrow(frac*xdist+positions[0][0],positions[0][1],2*xdist-2*frac*xdist,0,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-
-    if i == 13: #Song 13
-        if not highlight:
-            # downleft
-            ax.arrow(positions[2][0]-add_x,positions[2][1]-add_y,-xdist+2*add_x,-ydist+2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-            #upleft
-            ax.arrow(positions[1][0]-add_x,positions[1][1]+add_y,-xdist+2*add_x,ydist-2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-            #downright
-            ax.arrow(positions[2][0]+add_x,positions[2][1]-add_y,+xdist-2*add_x,-ydist+2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)        # ->
-            ax.arrow(frac*xdist+positions[0][0],positions[0][1],2*xdist-2*frac*xdist,0,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-
-    if i == 14: #Song 14
-
-        if highlight:
-            ax.add_patch(Rectangle((positions[0][0]+xdist - width_rect/2., 
-                                    positions[0][1]+ydist/2. - height_rect/2.), 
-                                   width_rect, height_rect, 
-                                   facecolor = 'white', edgecolor = 'red'))
-
-        else:
-            # downleft
-            ax.arrow(positions[2][0]-add_x,positions[2][1]-add_y,-xdist+2*add_x,-ydist+2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-            #upleft
-            ax.arrow(positions[1][0]-add_x,positions[1][1]+add_y,-xdist+2*add_x,ydist-2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-            #downright
-            ax.arrow(positions[2][0]+add_x,positions[2][1]-add_y,+xdist-2*add_x,-ydist+2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-            # <-
-            ax.arrow(-frac*xdist+positions[1][0],positions[1][1],-2*xdist+2*frac*xdist,0,
-                 width = awidth, head_width=hwidth, head_length=0.1, 
-                 fc='k', ec='k', length_includes_head= True)
+        ax.arrow(positions[2][0]-add_x, positions[2][1]-add_y,
+                 -xdist+2*add_x, -ydist+2*add_y,
+                 **arrow_black)
+        #upleft
+        ax.arrow(positions[1][0]-add_x, positions[1][1]+add_y,
+                 -xdist+2*add_x, ydist-2*add_y,
+                 **arrow_black)
+        # ->
+        ax.arrow(frac*xdist+positions[0][0], positions[0][1], 
+                 2*xdist-2*frac*xdist, 0,
+                 **arrow_black)
 
 
-    if i == 15: #Song 15
+    if i == 12:
 
-        if highlight:
-            ax.add_patch(Rectangle((positions[0][0]+xdist - width_rect/2., 
-                                    positions[0][1]+ydist/2. - height_rect/2.), 
-                                   width_rect, height_rect, 
-                                   facecolor = 'white', edgecolor = 'red'))
+        #  upright
+        ax.arrow(positions[0][0]+add_x, positions[0][1]+add_y, 
+                 xdist-2*add_x, ydist-2*add_y,
+                 **arrow_black)
 
-        else:
-            # downleft
-            ax.arrow(positions[2][0]-add_x,positions[2][1]-add_y,-xdist+2*add_x,-ydist+2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-            #upleft
-            ax.arrow(positions[1][0]-add_x,positions[1][1]+add_y,-xdist+2*add_x,ydist-2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-            #downright
-            ax.arrow(positions[2][0]+add_x,positions[2][1]-add_y,+xdist-2*add_x,-ydist+2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-            #  upright
-            ax.arrow(positions[0][0]+add_x,positions[0][1]+add_y,xdist-2*add_x,ydist-2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
+        #upleft
+        ax.arrow(positions[1][0]-add_x, positions[1][1]+add_y,
+                 -xdist+2*add_x, ydist-2*add_y,
+                 **arrow_black)
 
-            # ->
-            ax.arrow(frac*xdist+positions[0][0],positions[0][1],2*xdist-2*frac*xdist,0,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
+        #downright
+        ax.arrow(positions[2][0]+add_x, positions[2][1]-add_y,
+                 xdist-2*add_x, -ydist+2*add_y,
+                 **arrow_black)
+
+        # ->
+        ax.arrow(frac*xdist+positions[0][0], positions[0][1],
+                 2*xdist-2*frac*xdist, 0,
+                 **arrow_black)
+
+
+    if i == 13: 
+
+        # downleft
+        ax.arrow(positions[2][0]-add_x, positions[2][1]-add_y,
+                 -xdist+2*add_x, -ydist+2*add_y,
+                 **arrow_black)
+        
+        #upleft
+        ax.arrow(positions[1][0]-add_x, positions[1][1]+add_y,
+                 -xdist+2*add_x, ydist-2*add_y,
+                 **arrow_black)
+        
+        #downright
+        ax.arrow(positions[2][0]+add_x, positions[2][1]-add_y,
+                 +xdist-2*add_x, -ydist+2*add_y,
+                 **arrow_black)
+
+        # ->
+        ax.arrow(frac*xdist+positions[0][0], positions[0][1],
+                 2*xdist-2*frac*xdist, 0,
+                 **arrow_black)
+
+        
+    if i == 14:
+        
+        # downleft
+        ax.arrow(positions[2][0]-add_x, positions[2][1]-add_y,
+                 -xdist+2*add_x, -ydist+2*add_y,
+                 **arrow_black)
+
+        #upleft
+        ax.arrow(positions[1][0]-add_x, positions[1][1]+add_y,
+                 -xdist+2*add_x, ydist-2*add_y,
+                 **arrow_black)
+
+        #downright
+        ax.arrow(positions[2][0]+add_x, positions[2][1]-add_y,
+                 xdist-2*add_x, -ydist+2*add_y,
+                 **arrow_black)
+
+        # <-
+        ax.arrow(-frac*xdist+positions[1][0], positions[1][1],
+                 -2*xdist+2*frac*xdist, 0,
+                 **arrow_black)
+
+
+    if i == 15: 
+
+        # downleft
+        ax.arrow(positions[2][0]-add_x, positions[2][1]-add_y,
+                 -xdist+2*add_x, -ydist+2*add_y,
+                 **arrow_black)
+
+        #upleft
+        ax.arrow(positions[1][0]-add_x, positions[1][1]+add_y,
+                 -xdist+2*add_x, ydist-2*add_y,
+                 **arrow_black)
+
+        #downright
+        ax.arrow(positions[2][0]+add_x, positions[2][1]-add_y,
+                 xdist-2*add_x, -ydist+2*add_y,
+                 **arrow_black)
+
+        #  upright
+        ax.arrow(positions[0][0]+add_x, positions[0][1]+add_y,
+                 xdist-2*add_x, ydist-2*add_y,
+                 **arrow_black)
+
+        # ->
+        ax.arrow(frac*xdist+positions[0][0], positions[0][1],
+                 2*xdist-2*frac*xdist, 0,
+                 **arrow_black)
 
 
     if i == 16: #Song 16
 
-        if highlight:
-            ax.add_patch(Rectangle((positions[0][0]+xdist - width_rect/2., 
-                                    positions[0][1]+ydist/2. - height_rect/2.), 
-                                   width_rect, height_rect, 
-                                   facecolor = 'white', edgecolor = 'red'))
+        # downleft
+        ax.arrow(positions[2][0]-add_x, positions[2][1]-add_y,
+                 -xdist+2*add_x, -ydist+2*add_y,
+                 **arrow_black)
 
-        else:
-            # downleft
-            ax.arrow(positions[2][0]-add_x,positions[2][1]-add_y,-xdist+2*add_x,-ydist+2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-            #upleft
-            ax.arrow(positions[1][0]-add_x,positions[1][1]+add_y,-xdist+2*add_x,ydist-2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-            #downright
-            ax.arrow(positions[2][0]+add_x,positions[2][1]-add_y,+xdist-2*add_x,-ydist+2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-            #  upright
-            ax.arrow(positions[0][0]+add_x,positions[0][1]+add_y,xdist-2*add_x,ydist-2*add_y,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
-
-            # <-
-            ax.arrow(-frac*xdist+positions[1][0],positions[1][1],-2*xdist+2*frac*xdist,0,
-                 width = awidth, head_width=hwidth, head_length=0.1, 
-                 fc='k', ec='k', length_includes_head= True)
-            # ->
-            ax.arrow(frac*xdist+positions[0][0],positions[0][1],2*xdist-2*frac*xdist,0,
-                     width = awidth, head_width=hwidth, head_length=0.1, 
-                     fc='k', ec='k', length_includes_head= True)
+        #upleft
+        ax.arrow(positions[1][0]-add_x, positions[1][1]+add_y,
+                 -xdist+2*add_x, ydist-2*add_y,
+                 **arrow_black)
+        
+        #downright
+        ax.arrow(positions[2][0]+add_x, positions[2][1]-add_y,
+                 xdist-2*add_x, -ydist+2*add_y,
+                 **arrow_black)
+        
+        #  upright
+        ax.arrow(positions[0][0]+add_x, positions[0][1]+add_y,
+                 xdist-2*add_x, ydist-2*add_y,
+                 **arrow_black)
+        # <-
+        ax.arrow(-frac*xdist+positions[1][0], positions[1][1],
+                 -2*xdist+2*frac*xdist, 0,
+                 **arrow_black)
+        # ->
+        ax.arrow(frac*xdist+positions[0][0], positions[0][1],
+                 2*xdist-2*frac*xdist, 0,
+                 **arrow_black)
 
 
