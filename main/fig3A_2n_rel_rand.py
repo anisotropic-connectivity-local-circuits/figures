@@ -7,7 +7,8 @@ import sys
 sys.path.append("..")
 sys.path.append("../..")
 
-from core.neuronpair_counts import get_2neuron_counts_rel_random, get_2neuron_counts_rel_rew
+from core.neuronpair_counts import get_2neuron_counts_rel_random,\
+                                   get_2neuron_counts_rel_rew
 
 from utils.colors import color
 

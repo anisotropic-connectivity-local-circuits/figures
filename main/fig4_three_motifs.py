@@ -1,6 +1,7 @@
 
 import sys, pickle, itertools
 sys.path.append("..")
+sys.path.append("../../comp/functions/")
 
 import matplotlib
 matplotlib.use('Agg')
@@ -13,6 +14,7 @@ from scipy import stats
 from utils.colors import color
 from utils.motif_draw import draw_motifs
 
+from network_eval import get_2neuron_p
 
 fpath = '/home/lab/comp/data/three_motif_counts_aniso_S300000.p'
 with open(fpath, 'rb') as pfile:
@@ -130,7 +132,11 @@ p_mean_rew, p_err_rew = counts_to_relfreq(rew_data)
 
 up = 0.791336
 sp = 0.184151
-rp = 0.024513  #from mathematica 
+rp = 0.024513  #from mathematica
+
+print(up, sp, rp)
+print(get_2neuron_p(
+
 
 # These are the probabilities computed in from the geometric
 # considerations in the distance-dependent networks. It was shown (see
@@ -148,41 +154,43 @@ s2 = sp/2.
 ps = p_from_two_connections(up,s1,s2,rp)
 
 
-print "\n\n", "---------- Absolute occurrence ----------- "
 
-def print_data_absolute(df, name):
 
-    data = []
-    for key,item in df.iteritems():
-        data.append(item)
-    data = np.array(data)
+# print "\n\n", "---------- Absolute occurrence ----------- "
+
+# def print_data_absolute(df, name):
+
+#     data = []
+#     for key,item in df.iteritems():
+#         data.append(item)
+#     data = np.array(data)
     
-    means = np.mean(data,axis=0)
-    sems = stats.sem(data, axis=0)
+#     means = np.mean(data,axis=0)
+#     sems = stats.sem(data, axis=0)
         
-    print "\n", name, ": "
-    for j,mean in enumerate(list(means)):
-        print "  Motif ", j+1, "\t", "occurrence ", mean, "\t", "+- ", sems[j]
+#     print "\n", name, ": "
+#     for j,mean in enumerate(list(means)):
+#         print "  Motif ", j+1, "\t", "occurrence ", mean, "\t", "+- ", sems[j]
 
-print_data_absolute(aniso_data, "Anisotropic")
-print_data_absolute(dist_data, "Distance-dependent")
-print_data_absolute(rew_data, "Rewired")
-print "\n"
-
-
-print "---------- Relative occurrence ----------- "
-
-def print_data_relative(p_data, p_err, norm_data, name):
-
-    print "\n", name, ": "
-    for j,pp in enumerate(p_data/norm_data):
-        print "  Motif ", j+1, "\t", "rel count: ", pp, "\t", "+- ", p_err[j]/norm_data[j]
+# print_data_absolute(aniso_data, "Anisotropic")
+# print_data_absolute(dist_data, "Distance-dependent")
+# print_data_absolute(rew_data, "Rewired")
+# print "\n"
 
 
-print_data_relative(p_mean, p_err, ps, "Anisotropic")
-print_data_relative(p_mean_dist, p_err_dist,  ps, "Distance-dependent")
-print_data_relative(p_mean_rew, p_err_rew, ps, "Rewired")
-print "\n"
+# print "---------- Relative occurrence ----------- "
+
+# def print_data_relative(p_data, p_err, norm_data, name):
+
+#     print "\n", name, ": "
+#     for j,pp in enumerate(p_data/norm_data):
+#         print "  Motif ", j+1, "\t", "rel count: ", pp, "\t", "+- ", p_err[j]/norm_data[j]
+
+
+# print_data_relative(p_mean, p_err, ps, "Anisotropic")
+# print_data_relative(p_mean_dist, p_err_dist,  ps, "Distance-dependent")
+# print_data_relative(p_mean_rew, p_err_rew, ps, "Rewired")
+# print "\n"
 
 
 
@@ -226,17 +234,12 @@ ax.spines['top'].set_color('none')
 ax.xaxis.set_ticks_position('none')
 #ax.yaxis.set_ticks_position('left')
 
-pl.ylabel('relative counts', size=lbl_fntsz)
+ax.set_ylabel('relative counts', size=lbl_fntsz)
 
 capsz = 3.25
 cpt = 1.5
 errlw = 1.5
 mew = 1.5
-
-# capsz = 0
-# cpt = 0
-# errlw = 0
-# mew = 0
 
 lw = 3.
 opacity = 0.25
