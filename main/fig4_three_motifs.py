@@ -1,13 +1,11 @@
 
-import os,pickle, itertools
+import sys, pickle, itertools
+sys.path.append("..")
 
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as pl
 from matplotlib.patches import Rectangle
-
-import sys
-sys.path.append("..")
 
 import numpy as np
 from scipy import stats
@@ -29,11 +27,31 @@ with open(fpath, 'rb') as pfile:
     dist_data = pickle.load(pfile)
 
 
-def counts_to_probabilities(df):
+    
+def counts_to_relfreq(three_motif_counts):
+    ''' 
+    converts the sampled counts of three motifs from
+    multiple networks and computes the relative frequency
+    of occurrence 
+    
+    ARGUMENTS
+  
+      three_motif_counts: 
 
-    # from dict to array
+        {'00': [1506.0, 1036.0, ..., 38.0],
+         '01': [1500.0, 1038.0, ..., 32.0],
+          ...
+         '04': [1494.0, 1043.0, ..., 38.0]}
+
+    RETURNS
+    
+     p_means: average probability for the occurrence of motifs 1-16
+     p_errs : SEM from sample of probability for motifs 1-16        
+
+    '''
+
     data = []
-    for key,item in df.iteritems():
+    for key,item in three_motif_counts.iteritems():
         data.append(item)
 
     song_probs = np.array([np.array(counts)/float(sum(counts)) \
@@ -46,11 +64,10 @@ def counts_to_probabilities(df):
 
 
 
-
 def p_from_two_connections(up,s1,s2,rp):
     ''' 
     computes occurrences of three-neuron motifs from 
-    neuro pair connection probabilities:
+    neuro pair connection probabilities
 
       up   probability for an unconnected pair
       s1   probability for pair with single connection x to y
@@ -64,6 +81,7 @@ def p_from_two_connections(up,s1,s2,rp):
 
     # motifs probabilities below were calculated 
     # from basic combinatorics considerations
+    # also see supporting information
 
     assert s1 == s2
     sp = s1 
@@ -105,9 +123,9 @@ def p_from_two_connections(up,s1,s2,rp):
 
     
 
-p_mean, p_err = counts_to_probabilities(aniso_data)
-p_mean_dist, p_err_dist = counts_to_probabilities(dist_data)
-p_mean_rew, p_err_rew = counts_to_probabilities(rew_data)
+p_mean, p_err = counts_to_relfreq(aniso_data)
+p_mean_dist, p_err_dist = counts_to_relfreq(dist_data)
+p_mean_rew, p_err_rew = counts_to_relfreq(rew_data)
 
 
 up = 0.791336
@@ -384,7 +402,7 @@ pl.xticks(range(1,17))
 #ax.xaxis.set_ticks(range(1,14),[str(i) for i in range(4,17)])
 
 
-# path = os.path.join("data/", params.comp_label, label+params.extension)
+
 path='fig4_three_motifs.png'
 fig.savefig(path, dpi=300, bbox_inches='tight')
 
