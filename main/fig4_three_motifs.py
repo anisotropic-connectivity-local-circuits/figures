@@ -433,6 +433,12 @@ pl.xticks(range(1,17))
 #ax.xaxis.set_ticks(range(1,14),[str(i) for i in range(4,17)])
 
 
+ax.spines['bottom'].set_visible(False)
+ax2.spines['bottom'].set_visible(False)
+
+ax.axhline(1,0,0.7, zorder=39, color='k')
+ax.axhline(1,0.8,1., zorder=39, color='k')
+
 
 path='fig4_three_motifs.png'
 fig.savefig(path, dpi=300, bbox_inches='tight')
