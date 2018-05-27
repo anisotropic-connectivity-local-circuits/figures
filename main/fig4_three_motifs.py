@@ -1,6 +1,7 @@
 
 import sys, pickle, itertools
 sys.path.append("..")
+sys.path.append("../../")
 sys.path.append("../../comp/functions/")
 
 import matplotlib
@@ -29,6 +30,17 @@ with open(fpath, 'rb') as pfile:
     dist_data = pickle.load(pfile)
 
 
+
+def count_dict_to_array(count_dict):
+    data = []
+    for key,item in count_dict.iteritems():
+        data.append(item)
+
+    p_array = np.array([np.array(counts)/float(sum(counts)) \
+                           for counts in data])
+
+    return p_array
+    
     
 def counts_to_relfreq(three_motif_counts):
     ''' 
@@ -66,7 +78,7 @@ def counts_to_relfreq(three_motif_counts):
 
 
 
-def p_from_two_connections(up,s1,s2,rp):
+def p_from_two_connections(up,sp,rp):
     ''' 
     computes occurrences of three-neuron motifs from 
     neuro pair connection probabilities
@@ -85,8 +97,7 @@ def p_from_two_connections(up,s1,s2,rp):
     # from basic combinatorics considerations
     # also see supporting information
 
-    assert s1 == s2
-    sp = s1 
+    sp = sp/2.
 
     fact[1], ps[1]    =   1, up**3 
     fact[2], ps[2]    =   6, up*up*sp
@@ -125,6 +136,22 @@ def p_from_two_connections(up,s1,s2,rp):
 
     
 
+fpath = '/home/lab/comp/data/two_motif_counts_aniso.p'
+with open(fpath, 'rb') as pfile:
+    aniso_data_2 = pickle.load(pfile)
+
+x3=count_dict_to_array(aniso_data)
+x2=count_dict_to_array(aniso_data_2)
+
+ld=[]
+for j,x23 in enumerate(x2):
+    print(sum(x23))
+    print(p_from_two_connections(*x23))
+    ld.append(x3[j]/p_from_two_connections(*x23))
+
+ld = np.array(ld)
+
+
 p_mean, p_err = counts_to_relfreq(aniso_data)
 p_mean_dist, p_err_dist = counts_to_relfreq(dist_data)
 p_mean_rew, p_err_rew = counts_to_relfreq(rew_data)
@@ -133,9 +160,6 @@ p_mean_rew, p_err_rew = counts_to_relfreq(rew_data)
 up = 0.791336
 sp = 0.184151
 rp = 0.024513  #from mathematica
-
-print(up, sp, rp)
-print(get_2neuron_p(
 
 
 # These are the probabilities computed in from the geometric
@@ -148,10 +172,10 @@ print(get_2neuron_p(
 # valid as a reference for computation of expected three motifs in ALL
 # three networks.
 
-s1 = sp/2.
-s2 = sp/2.
+# s1 = sp/2.
+# s2 = sp/2.
 
-ps = p_from_two_connections(up,s1,s2,rp)
+ps = p_from_two_connections(up,sp,rp)
 
 
 
@@ -296,7 +320,9 @@ for capline in caplines:
 
 
 # Motifs 15 and 16 get divided by 2 to bring them on 5 scale size
-plot_vals = (p_mean/ps)-1
+#plot_vals = (p_mean/ps)-1
+print("Using temp")
+plot_vals = np.mean(ld, axis=0) -1
 
 # for j,val in enumerate(plot_vals):
 #     print j+1, "%.2f" %val
@@ -306,7 +332,9 @@ plot_vals = (p_mean/ps)-1
 plot_vals[-1] = plot_vals[-1]/2.
 plot_vals[-2] = plot_vals[-2]/2.
 
-p_err_vals = p_err/ps
+#p_err_vals = p_err/ps
+print("Using error temp")
+p_err_vals = stats.sem(ld, axis=0)
 p_err_vals[-1] = p_err_vals[-1]/2.
 p_err_vals[-2] = p_err_vals[-2]/2.
 
