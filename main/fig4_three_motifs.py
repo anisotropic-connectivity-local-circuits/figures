@@ -17,64 +17,78 @@ from utils.motif_draw import draw_motifs
 
 from network_eval import get_2neuron_p
 
-fpath = '/home/lab/comp/data/three_motif_counts_aniso_S300000.p'
-with open(fpath, 'rb') as pfile:
-    aniso_data = pickle.load(pfile)
-
-fpath = '/home/lab/comp/data/three_motif_counts_rew_S300000.p'
-with open(fpath, 'rb') as pfile:
-    rew_data = pickle.load(pfile)
-
-fpath = '/home/lab/comp/data/three_motif_counts_dist_S300000.p'
-with open(fpath, 'rb') as pfile:
-    dist_data = pickle.load(pfile)
 
 
-
-def count_dict_to_array(count_dict):
-    data = []
-    for key,item in count_dict.iteritems():
-        data.append(item)
-
-    p_array = np.array([np.array(counts)/float(sum(counts)) \
-                           for counts in data])
-
-    return p_array
-    
-    
-def counts_to_relfreq(three_motif_counts):
+def motif_count_dict_to_array(motif_count_dict):
     ''' 
-    converts the sampled counts of three motifs from
-    multiple networks and computes the relative frequency
-    of occurrence 
-    
-    ARGUMENTS
-  
-      three_motif_counts: 
+    converts the sampled counts of two or three 
+    motifs from  multiple networks and shapes 
+    in to array
+    ---------------------------------------------
+    arguments
 
-        {'00': [1506.0, 1036.0, ..., 38.0],
-         '01': [1500.0, 1038.0, ..., 32.0],
-          ...
-         '04': [1494.0, 1043.0, ..., 38.0]}
+        motif_count_dict:       
 
-    RETURNS
-    
-     p_means: average probability for the occurrence of motifs 1-16
-     p_errs : SEM from sample of probability for motifs 1-16        
+            {'00': [1506.0, 1036.0, ..., 38.0],
+             '01': [1500.0, 1038.0, ..., 32.0],
+              ...
+             '04': [1494.0, 1043.0, ..., 38.0]}
 
+    returns
+
+       count_array:
+
+            [[1506.0, 1036.0, ..., 38.0],
+             [1500.0, 1038.0, ..., 32.0],
+              ...
+             [1494.0, 1043.0, ..., 38.0]]
     '''
 
-    data = []
-    for key,item in three_motif_counts.iteritems():
-        data.append(item)
+    count_array = []
+    for key,item in motif_count_dict.iteritems():
+        count_array.append(item)
 
-    song_probs = np.array([np.array(counts)/float(sum(counts)) \
-                           for counts in data])
-
-    p_means = np.mean(song_probs, axis=0)
-    p_errs = stats.sem(song_probs, axis=0)
+    return np.array(count_array)
     
-    return p_means, p_errs
+
+
+def count_array_to_p_array(count_array):
+    ''' 
+    converts array of motif counts to array
+    of relative probabilities of occurrence
+    --------------------------------------------
+    arguments
+
+       count_array:
+
+            [[1506.0, 1036.0, ..., 38.0],
+             [1500.0, 1038.0, ..., 32.0],
+              ...
+             [1494.0, 1043.0, ..., 38.0]]
+
+    returns
+
+       p_array:
+
+            [[0.512, 0.342, ..., 0.023],
+             [0.505, 0.344, ..., 0.023],
+              ... 
+             [0.498, 0.348, ..., 0.024]]
+
+    '''
+    
+    p_array = np.array([np.array(counts)/float(sum(counts)) \
+                           for counts in count_array])
+
+    return p_array
+
+
+def motif_count_dict_to_p_array(motif_count_dict):
+
+    p_array = count_array_to_p_array(
+                motif_count_dict_to_array(motif_count_dict))
+
+    return p_array
 
 
 
@@ -134,11 +148,41 @@ def p_from_two_connections(up,sp,rp):
     return p
 
 
-    
+
+
+# loads the the two neuron and three neuron motif counts
+# for aniso, rew and dist networks
 
 fpath = '/home/lab/comp/data/two_motif_counts_aniso.p'
 with open(fpath, 'rb') as pfile:
-    aniso_data_2 = pickle.load(pfile)
+    aniso_2motifs = pickle.load(pfile)
+
+fpath = '/home/lab/comp/data/two_motif_counts_rew.p'
+with open(fpath, 'rb') as pfile:
+    rew_2motifs = pickle.load(pfile)
+
+fpath = '/home/lab/comp/data/two_motif_counts_dist.p'
+with open(fpath, 'rb') as pfile:
+    dist_2motifs = pickle.load(pfile)
+
+
+fpath = '/home/lab/comp/data/three_motif_counts_aniso_S300000.p'
+with open(fpath, 'rb') as pfile:
+    aniso_3motifs = pickle.load(pfile)
+
+fpath = '/home/lab/comp/data/three_motif_counts_rew_S300000.p'
+with open(fpath, 'rb') as pfile:
+    rew_3motifs = pickle.load(pfile)
+
+fpath = '/home/lab/comp/data/three_motif_counts_dist_S300000.p'
+with open(fpath, 'rb') as pfile:
+    dist_3motifs = pickle.load(pfile)
+
+
+
+# fpath = '/home/lab/comp/data/two_motif_counts_aniso.p'
+# with open(fpath, 'rb') as pfile:
+#     aniso_data_2 = pickle.load(pfile)
 
 x3=count_dict_to_array(aniso_data)
 x2=count_dict_to_array(aniso_data_2)
