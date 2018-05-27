@@ -15,143 +15,13 @@ from scipy import stats
 from utils.colors import color
 from utils.motif_draw import draw_motifs
 
-from network_eval import get_2neuron_p
+from core.motif_methods import motif_count_dict_to_p_array, \
+                               expected_3motif_p_from_2motif_p
 
 
 
-def motif_count_dict_to_array(motif_count_dict):
-    ''' 
-    converts the sampled counts of two or three 
-    motifs from  multiple networks and shapes 
-    in to array
-    ---------------------------------------------
-    arguments
-
-        motif_count_dict:       
-
-            {'00': [1506.0, 1036.0, ..., 38.0],
-             '01': [1500.0, 1038.0, ..., 32.0],
-              ...
-             '04': [1494.0, 1043.0, ..., 38.0]}
-
-    returns
-
-       count_array:
-
-            [[1506.0, 1036.0, ..., 38.0],
-             [1500.0, 1038.0, ..., 32.0],
-              ...
-             [1494.0, 1043.0, ..., 38.0]]
-    '''
-
-    count_array = []
-    for key,item in motif_count_dict.iteritems():
-        count_array.append(item)
-
-    return np.array(count_array)
-    
-
-
-def count_array_to_p_array(count_array):
-    ''' 
-    converts array of motif counts to array
-    of relative probabilities of occurrence
-    --------------------------------------------
-    arguments
-
-       count_array:
-
-            [[1506.0, 1036.0, ..., 38.0],
-             [1500.0, 1038.0, ..., 32.0],
-              ...
-             [1494.0, 1043.0, ..., 38.0]]
-
-    returns
-
-       p_array:
-
-            [[0.512, 0.342, ..., 0.023],
-             [0.505, 0.344, ..., 0.023],
-              ... 
-             [0.498, 0.348, ..., 0.024]]
-
-    '''
-    
-    p_array = np.array([np.array(counts)/float(sum(counts)) \
-                           for counts in count_array])
-
-    return p_array
-
-
-def motif_count_dict_to_p_array(motif_count_dict):
-
-    p_array = count_array_to_p_array(
-                motif_count_dict_to_array(motif_count_dict))
-
-    return p_array
-
-
-
-def p_from_two_connections(up,sp,rp):
-    ''' 
-    computes occurrences of three-neuron motifs from 
-    neuro pair connection probabilities
-
-      up   probability for an unconnected pair
-      s1   probability for pair with single connection x to y
-      s2   probability for pair with single connetion y to x
-      rp   probability for reciprocally connected pair 
-
-    '''
-
-    fact = range(17)
-    ps = range(17)
-
-    # motifs probabilities below were calculated 
-    # from basic combinatorics considerations
-    # also see supporting information
-
-    sp = sp/2.
-
-    fact[1], ps[1]    =   1, up**3 
-    fact[2], ps[2]    =   6, up*up*sp
-    fact[3], ps[3]    =   3, up*up*rp
-    fact[4], ps[4]    =   3, sp*sp*up
-    fact[5], ps[5]    =   3, sp*sp*up
-    fact[6], ps[6]    =   6, sp*sp*up
-    fact[7], ps[7]    =   6, sp*up*rp
-    fact[8], ps[8]    =   6, sp*up*rp
-    fact[9], ps[9]    =   3, rp*rp*up
-    fact[10],ps[10]   =   6, sp**3   
-    fact[11],ps[11]   =   2, sp**3    
-    fact[12],ps[12]   =   3, sp*sp*rp
-    fact[13],ps[13]   =   6, sp*sp*rp
-    fact[14],ps[14]   =   3, sp*sp*rp
-    fact[15],ps[15]   =   6, sp*rp*rp
-    fact[16],ps[16]   =   1, rp**3     
-
-    del fact[0],ps[0] 
-
-    p = np.array([fact[i]*ps[i] for i in range(len(ps))])
-
-    # Factors should add up to 4^3 = 64 
-    # (up, s1, s2 or rp for each of the 3 pairings)
-    # and p should add up to 1
-
-    assert sum(fact) == 64
-    np.testing.assert_almost_equal(sum(p),1.0, decimal = 10,
-                                   err_msg= 'Failed: sum(p) neq 1')
-
-    print "Test: Sum of factors: ", sum(fact), " (Expected: 64)"
-    print "Test: Sum of p: ", sum(p), " (Expected: 1.0)"
-    
-    return p
-
-
-
-
-# loads the the two neuron and three neuron motif counts
-# for aniso, rew and dist networks
+# loads the the 2-neuron and 3-neuron motif
+# counts  for aniso, rew and dist networks
 
 fpath = '/home/lab/comp/data/two_motif_counts_aniso.p'
 with open(fpath, 'rb') as pfile:
@@ -180,46 +50,56 @@ with open(fpath, 'rb') as pfile:
 
 
 
+def rel_counts_from_data(net_2motifs, net_3motifs):
+    '''
+    get the occurrence of three motifs relative to
+    expected three motifs from two motif occurrence
+    '''
+    net_2motif_p = motif_count_dict_to_p_array(net_2motifs)
+    
+    exp_3motif_p = []
+    for up,sp,rp in net_2motif_p:
+        p_3motif = expected_3motif_p_from_2motif_p(up, sp, rp)
+        exp_3motif_p.append(p_3motif)
+        
+    net_3motif_p = motif_count_dict_to_p_array(net_3motifs)
+
+    rel_counts = net_3_motif_p/np.array(exp_3_motif_p)
+
+    return np.mean(rel_counts,axis=0), stats.sem(rel_counts, axis=0)
+                   
+
+rlc_aniso, errs_aniso = rel_counts_from_data(aniso_2motifs, aniso_3motifs)
+rlc_rew, errs_rew = rel_counts_from_data(rew_2motifs, rew_3motifs)
+rlc_dist, errs_dist = rel_counts_from_data(dist_2motifs, dist_3motifs)
+
+    
 # fpath = '/home/lab/comp/data/two_motif_counts_aniso.p'
 # with open(fpath, 'rb') as pfile:
 #     aniso_data_2 = pickle.load(pfile)
 
-x3=count_dict_to_array(aniso_data)
-x2=count_dict_to_array(aniso_data_2)
+# x3=count_dict_to_array(aniso_data)
+# x2=count_dict_to_array(aniso_data_2)
 
-ld=[]
-for j,x23 in enumerate(x2):
-    print(sum(x23))
-    print(p_from_two_connections(*x23))
-    ld.append(x3[j]/p_from_two_connections(*x23))
+# ld=[]
+# for j,x23 in enumerate(x2):
+#     print(sum(x23))
+#     print(p_from_two_connections(*x23))
+#     ld.append(x3[j]/p_from_two_connections(*x23))
 
-ld = np.array(ld)
-
-
-p_mean, p_err = counts_to_relfreq(aniso_data)
-p_mean_dist, p_err_dist = counts_to_relfreq(dist_data)
-p_mean_rew, p_err_rew = counts_to_relfreq(rew_data)
+# ld = np.array(ld)
 
 
-up = 0.791336
-sp = 0.184151
-rp = 0.024513  #from mathematica
+# p_mean, p_err = counts_to_relfreq(aniso_data)
+# p_mean_dist, p_err_dist = counts_to_relfreq(dist_data)
+# p_mean_rew, p_err_rew = counts_to_relfreq(rew_data)
 
 
-# These are the probabilities computed in from the geometric
-# considerations in the distance-dependent networks. It was shown (see
-# e.g. thesis, but article) that these values are matched in the
-# anisotropic networks. Finally, two neuron connection probabilities
-# do not change from rewiring.
-#
-# Taken together, this explains with these values up,sp and rp are
-# valid as a reference for computation of expected three motifs in ALL
-# three networks.
 
 # s1 = sp/2.
 # s2 = sp/2.
 
-ps = p_from_two_connections(up,sp,rp)
+
 
 
 
