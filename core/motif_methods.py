@@ -93,7 +93,7 @@ def expected_3motif_p_from_2motif_p(up,sp,rp):
 
     '''
 
-    np.testing.assert_equal(up+sp+rp, 1.)
+    np.testing.assert_almost_equal(up+sp+rp, 1., decimal = 10)
     
     # for the calculation of expected motif occurence the
     # probability to have an edge from vertex 1 TO
