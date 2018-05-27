@@ -42,11 +42,13 @@ def draw_motifs(ax, i, ymin, ymax,  highlight = False):
 
     bar_gray =         {'head_width': 0,
                         'fc': a_gray,
-                        'ec': a_gray}
+                        'ec': a_gray,
+                        'clip_on': False}
 
     arrow_black =      {'head_width': hwidth,
                         'fc': 'k',
-                        'ec': 'k'}
+                        'ec': 'k',
+                        'clip_on': False}
 
     bar_gray.update(arrow_properties)
     arrow_black.update(arrow_properties)
