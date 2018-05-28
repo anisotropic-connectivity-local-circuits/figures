@@ -89,7 +89,7 @@ pl.rcParams['text.latex.preamble'] = [
 pl.rcParams['xtick.major.pad']=+45
 
 fig = pl.figure(facecolor="white")
-fig.set_size_inches(7.2,2.25)
+fig.set_size_inches(7.2,2.15)
 
 # motifs 1-14 drawn on yscale of ax1
 # motifs 15-16 drawn on yscale of ax2
@@ -177,20 +177,32 @@ tick_fntsz = 9
 
 
 xrect=0.9225
-ystart=4.655
-ydist=0.745
+ystart=4.685
+ydist=0.605
 
-ax1.add_patch(Rectangle((xrect,ystart), 0.75, 0.2, facecolor = 'white', edgecolor = color['aniso'])) 
-ax1.add_patch(Rectangle((xrect,ystart), 0.75, 0.2, facecolor = color['aniso'], edgecolor = color['aniso'], alpha=opacity_aniso)) 
-fig.text(0.225,0.85, r'anisotropic', color = 'k', fontsize=lbl_fntsz)
+ax1.add_patch(Rectangle((xrect,ystart), 0.75, 0.2,
+                        facecolor='white', edgecolor=color['aniso'])) 
+ax1.add_patch(Rectangle((xrect,ystart), 0.75, 0.2,
+                        facecolor=color['aniso'], edgecolor=color['aniso'],
+                        alpha=opacity_aniso)) 
+fig.text(0.225,0.85, r'anisotropic', color = 'k',
+         fontsize=lbl_fntsz)
 
-ax1.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2, facecolor = 'white', edgecolor=color['rew']))
-ax1.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2, facecolor = color['rew'], edgecolor=color['rew'], alpha=opacity))
-fig.text(0.225,0.75, r'rewired', color = 'black', fontsize=lbl_fntsz)
+ax1.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2,
+                        facecolor='white', edgecolor=color['rew']))
+ax1.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2,
+                        facecolor=color['rew'], edgecolor=color['rew'],
+                        alpha=opacity))
+fig.text(0.225,0.75, r'rewired', color = 'black',
+         fontsize=lbl_fntsz)
 
-ax1.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2, facecolor = 'white', edgecolor=color['dist']))
-ax1.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2, facecolor = color['dist'], edgecolor=color['dist'], alpha=opacity))
-fig.text(0.225,0.65, r'distance-dependent', color = 'black', fontsize=lbl_fntsz)
+ax1.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2,
+                        facecolor='white', edgecolor=color['dist']))
+ax1.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2,
+                        facecolor=color['dist'], edgecolor=color['dist'],
+                        alpha=opacity))
+fig.text(0.225,0.65, r'distance-dependent', color = 'black',
+         fontsize=lbl_fntsz)
 
 
 
@@ -221,7 +233,7 @@ ax1.set_ylabel('relative counts', size=lbl_fntsz)
 for tick_label in ax2.get_yticklabels():
     tick_label.set_fontsize(tick_fntsz)
 
-ax2.set_ylim(top=9) #!!
+ax2.set_ylim(top=10) #!!
 
 
 
