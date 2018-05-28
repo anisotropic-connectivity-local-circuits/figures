@@ -213,9 +213,11 @@ pl.xticks(range(1,18), range(1,15)+['',15,16])
 ax1.spines['bottom'].set_visible(False)
 ax2.spines['bottom'].set_visible(False)
 
-ax1.axhline(1,0,0.785, zorder=39, color='k')
-ax1.axhline(1,0.86,1., zorder=39, color='k')
+ax1.axhline(1,0,0.8025, zorder=39, color='k')
+ax1.axhline(1,0.855,1., zorder=39, color='k')
 
+ax1.axvline(15.18, 0.025,0.92, color='k',
+            linestyle='dashed', linewidth=1.5, dashes=(5, 2.5))
 
 ax1.tick_params(axis='both', which='major', labelsize=tick_fntsz)
 
