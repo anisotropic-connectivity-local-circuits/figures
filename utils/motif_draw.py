@@ -322,8 +322,10 @@ def draw_motifs(ax, i, ymin, ymax,  highlight = False):
                  -2*xdist+2*frac*xdist, 0,
                  **arrow_black)
 
-
-    if i == 15: 
+    if i == 15:
+        pass
+        
+    if i == 16: #Song 15 
 
         # downleft
         ax.arrow(positions[2][0]-add_x, positions[2][1]-add_y,
@@ -351,7 +353,7 @@ def draw_motifs(ax, i, ymin, ymax,  highlight = False):
                  **arrow_black)
 
 
-    if i == 16: #Song 16
+    if i == 17: #Song 16
 
         # downleft
         ax.arrow(positions[2][0]-add_x, positions[2][1]-add_y,
