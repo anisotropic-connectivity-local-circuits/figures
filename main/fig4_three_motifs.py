@@ -14,10 +14,10 @@ from scipy import stats
 
 from utils.colors import color
 from utils.motif_draw import draw_motifs
+from utils.other import correct_bars, align_yaxis
 
 from core.motif_methods import motif_count_dict_to_p_array, \
                                expected_3motif_p_from_2motif_p
-
 
 
 # loads the the 2-neuron and 3-neuron motif
@@ -48,7 +48,7 @@ fpath = '/home/lab/comp/data/three_motif_counts_dist_S300000.p'
 with open(fpath, 'rb') as pfile:
     dist_3motifs = pickle.load(pfile)
 
-
+    
 
 def rel_counts_from_data(net_2motifs, net_3motifs):
     '''
@@ -73,7 +73,7 @@ rlc_aniso, errs_aniso = rel_counts_from_data(aniso_2motifs, aniso_3motifs)
 rlc_rew, errs_rew = rel_counts_from_data(rew_2motifs, rew_3motifs)
 rlc_dist, errs_dist = rel_counts_from_data(dist_2motifs, dist_3motifs)
 
-   
+
 
 from matplotlib import rc
  
@@ -87,67 +87,14 @@ pl.rcParams['text.latex.preamble'] = [
 ]  
 
 pl.rcParams['xtick.major.pad']=+45
-lbl_fntsz = 10
-tick_fntsz = 9
-
 
 fig = pl.figure(facecolor="white")
-fig.set_size_inches(7,2.25)
-ax = fig.add_subplot(111)
+fig.set_size_inches(7.2,2.25)
 
-ax2 = ax.twinx()
-
-for tl in ax2.get_yticklabels():
-    tl.set_color('k')
-    tl.set_fontsize(tick_fntsz)
-
-# Math:
-# left axis: -1 to 1 and 1 to 5
-# right axis: -x to 1 and 1 to 9
-# 2/4 = (x+1)/8 => x=3
-
-ax2.set_ylim(-3,9)
-ymin = 0
-ymax = 5
-ax.set_ylim(ymin, ymax)
-
-ax2.yaxis.set_ticks(range(0,10,2))
-
-ax2.spines['bottom'].set_position(('data',1))
-ax2.spines['left'].set_color('none')
-ax2.spines['top'].set_color('none')
-ax2.xaxis.set_ticks_position('none')
-
-
-## Testing the double axis set-up
-## Motifs 15 and 16 get divided by 6 to bring them on 5 scale size
-#plot_vals = (p_mean/ps)-1
-
-#ax2.bar([k-0.350 for k in range(1,len(p_mean)+1)], plot_vals, 0.5, bottom = 1., edgecolor = 'g', facecolor = 'g', yerr = p_err/ps, error_kw=dict(ecolor='red', lw=1.5, capsize=5, capthick=10, mew = 1.5))
-
-
-pl.xticks(range(1,17))
-#ax.xaxis.set_ticks(range(1,14),[str(i) for i in range(4,17)])
-
-
-ax.spines['bottom'].set_visible(False)
-ax2.spines['bottom'].set_visible(False)
-
-ax.axhline(1,0,0.7, zorder=39, color='k')
-ax.axhline(1,0.8,1., zorder=39, color='k')
-
-
-ax.tick_params(axis='both', which='major', labelsize=tick_fntsz)
-
-ax.set_xlim(0.,16+1.25)
-
-ax.spines['bottom'].set_position(('data',1))
-ax.spines['right'].set_color('none')
-ax.spines['top'].set_color('none')
-ax.xaxis.set_ticks_position('none')
-#ax.yaxis.set_ticks_position('left')
-
-ax.set_ylabel('relative counts', size=lbl_fntsz)
+# motifs 1-14 drawn on yscale of ax1
+# motifs 15-16 drawn on yscale of ax2
+ax1 = fig.add_subplot(111)
+ax2 = ax1.twinx()
 
 capsz = 3.25
 cpt = 1.5
@@ -174,20 +121,23 @@ err_dict   = dict(fmt='none', lw=errlw, capsize=capsz,
 
 # # hatch='///////'
 
-# xs_dist = np.array([k-0.00 for k in range(1,len(p_mean)+1)])
+xs_dist_ax1 = np.array([k-0.00 for k in range(1,15)])
 
-# dist_patches = ax.bar(xs_dist, plot_vals_dist,
-#                       edgecolor=color['dist'], facecolor='white',
-#                       zorder=1, **patch_dict)
+dist_patches_ax1 = ax1.bar(xs_dist_ax1, rlc_dist[:14]-1,
+                           edgecolor=color['dist'], facecolor='white',
+                           zorder=1, **patch_dict)
 
-# dist_fill = ax.bar(xs_dist, plot_vals_dist,
-#                    edgecolor=color['dist'], facecolor=color['dist'],
-#                    zorder = 2, **fill_dict)
+dist_fill_ax1   = ax1.bar(xs_dist_ax1, rlc_dist[:14]-1,
+                          edgecolor=color['dist'], facecolor=color['dist'],
+                          zorder = 2, **fill_dict)
 
-# _, caplines, _ = ax.errorbar(xs_dist + bwidth/2., plot_vals_dist+1, yerr = p_err_vals_dist, zorder = 3, ecolor=color['dist'], **err_dict)
+_, caplines, _ = ax1.errorbar(xs_dist_ax1 + bwidth/2.,
+                              rlc_dist[:14],
+                              yerr = errs_dist[:14],
+                              zorder = 3, ecolor=color['dist'], **err_dict)
 
-# for capline in caplines:
-#     capline.set_zorder(3)
+for capline in caplines:
+    capline.set_zorder(3)
 
 
 # # Motifs 15 and 16 get divided by 2 to bring them on 5 scale size
@@ -258,27 +208,27 @@ err_dict   = dict(fmt='none', lw=errlw, capsize=capsz,
 # correct_bar_sizes(xs_rew, plot_vals_rew, rew_patches)
 # correct_bar_sizes(xs_rew, plot_vals_rew, rew_fill)
 
-# correct_bar_sizes(xs_dist, plot_vals_dist, dist_patches)
-# correct_bar_sizes(xs_dist, plot_vals_dist, dist_fill)
+correct_bars(xs_dist_ax1, rlc_aniso[:14]-1, dist_patches_ax1, bwidth)
+correct_bars(xs_dist_ax1, rlc_aniso[:14]-1, dist_fill_ax1, bwidth)
 
+lbl_fntsz = 10
+tick_fntsz = 9
 
-for i in range(1,17):
-    draw_motifs(ax, i, ymin, ymax, highlight=False)
 
 xrect=0.9225
 ystart=4.655
 ydist=0.745
 
-ax.add_patch(Rectangle((xrect,ystart), 0.75, 0.2, facecolor = 'white', edgecolor = color['aniso'])) 
-ax.add_patch(Rectangle((xrect,ystart), 0.75, 0.2, facecolor = color['aniso'], edgecolor = color['aniso'], alpha=opacity_aniso)) 
+ax1.add_patch(Rectangle((xrect,ystart), 0.75, 0.2, facecolor = 'white', edgecolor = color['aniso'])) 
+ax1.add_patch(Rectangle((xrect,ystart), 0.75, 0.2, facecolor = color['aniso'], edgecolor = color['aniso'], alpha=opacity_aniso)) 
 fig.text(0.225,0.85, r'anisotropic', color = 'k', fontsize=lbl_fntsz)
 
-ax.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2, facecolor = 'white', edgecolor=color['rew']))
-ax.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2, facecolor = color['rew'], edgecolor=color['rew'], alpha=opacity))
+ax1.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2, facecolor = 'white', edgecolor=color['rew']))
+ax1.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2, facecolor = color['rew'], edgecolor=color['rew'], alpha=opacity))
 fig.text(0.225,0.75, r'rewired', color = 'black', fontsize=lbl_fntsz)
 
-ax.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2, facecolor = 'white', edgecolor=color['dist']))
-ax.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2, facecolor = color['dist'], edgecolor=color['dist'], alpha=opacity))
+ax1.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2, facecolor = 'white', edgecolor=color['dist']))
+ax1.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2, facecolor = color['dist'], edgecolor=color['dist'], alpha=opacity))
 fig.text(0.225,0.65, r'distance-dependent', color = 'black', fontsize=lbl_fntsz)
 
 
@@ -290,21 +240,60 @@ fig.text(0.225,0.65, r'distance-dependent', color = 'black', fontsize=lbl_fntsz)
 
 
 
-def align_yaxis(ax1, v1, ax2, v2):
-    '''
-    adjust ax2 ylimit so that v2 in ax2 
-    is aligned to v1 in ax1
+## Testing the double axis set-up
+## Motifs 15 and 16 get divided by 6 to bring them on 5 scale size
+#plot_vals = (p_mean/ps)-1
 
-    taken from https://stackoverflow.com/a/10482477/692634
-    '''
-    _, y1 = ax1.transData.transform((0, v1))
-    _, y2 = ax2.transData.transform((0, v2))
-    inv = ax2.transData.inverted()
-    _, dy = inv.transform((0, 0)) - inv.transform((0, y1-y2))
-    miny, maxy = ax2.get_ylim()
-    ax2.set_ylim(miny+dy, maxy+dy)
+#ax2.bar([k-0.350 for k in range(1,len(p_mean)+1)], plot_vals, 0.5, bottom = 1., edgecolor = 'g', facecolor = 'g', yerr = p_err/ps, error_kw=dict(ecolor='red', lw=1.5, capsize=5, capthick=10, mew = 1.5))
 
-align_yaxis(ax, 1, ax2, 1)
+
+pl.xticks(range(1,18), range(1,15)+['',15,16])
+#ax.xaxis.set_ticks(range(1,14),[str(i) for i in range(4,17)])
+
+
+ax1.spines['bottom'].set_visible(False)
+ax2.spines['bottom'].set_visible(False)
+
+ax1.axhline(1,0,0.785, zorder=39, color='k')
+ax1.axhline(1,0.86,1., zorder=39, color='k')
+
+
+ax1.tick_params(axis='both', which='major', labelsize=tick_fntsz)
+
+ax1.set_xlim(0.,17+1.25)
+
+ax1.spines['bottom'].set_position(('data',1))
+ax1.spines['right'].set_color('none')
+ax1.spines['top'].set_color('none')
+ax1.xaxis.set_ticks_position('none')
+#ax.yaxis.set_ticks_position('left')
+
+ax1.set_ylabel('relative counts', size=lbl_fntsz)
+
+
+for tick_label in ax2.get_yticklabels():
+    tick_label.set_fontsize(tick_fntsz)
+
+ax2.set_ylim(top=9) #!!
+
+
+
+ymin = 0
+ymax = 5
+ax1.set_ylim(ymin, ymax)
+
+ax2.yaxis.set_ticks(range(0,10,2))
+
+ax2.spines['bottom'].set_position(('data',1))
+ax2.spines['left'].set_color('none')
+ax2.spines['top'].set_color('none')
+ax2.xaxis.set_ticks_position('none')
+
+align_yaxis(ax1, 1, ax2, 1)
+
+for i in range(1,18):
+    draw_motifs(ax1, i, ymin, ymax, highlight=False)
+
 
 path='fig4_three_motifs.png'
 fig.savefig(path, dpi=300, bbox_inches='tight')
