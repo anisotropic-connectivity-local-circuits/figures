@@ -105,114 +105,72 @@ opacity = 0.25
 opacity_aniso = 0.6
 bwidth = 0.5
 
-patch_dict = dict(width=bwidth, linewidth=lw, bottom = 1.)
-fill_dict  = dict(width=bwidth, alpha=opacity, bottom = 1. )
-err_dict   = dict(fmt='none', lw=errlw, capsize=capsz,
-                  capthick=cpt, mew = mew)
 
 
-xs_dist_ax1 = np.array([k-0.00 for k in range(1,15)])
+def plot_data(rlcs, errs, color, xshift, z_init, opacity=opacity):
+    '''
+    two bars to create bars with different inner and frame opactiy
+    '''
 
-dist_patches_ax1 = ax1.bar(xs_dist_ax1, rlc_dist[:14]-1,
-                           edgecolor=color['dist'], facecolor='white',
-                           zorder=1, **patch_dict)
-
-dist_fill_ax1   = ax1.bar(xs_dist_ax1, rlc_dist[:14]-1,
-                          edgecolor=color['dist'], facecolor=color['dist'],
-                          zorder = 2, **fill_dict)
-
-_, caplines, _ = ax1.errorbar(xs_dist_ax1 + bwidth/2.,
-                              rlc_dist[:14],
-                              yerr = errs_dist[:14],
-                              zorder = 3, ecolor=color['dist'], **err_dict)
-
-for capline in caplines:
-    capline.set_zorder(3)
+    patch_dict = dict(width=bwidth, linewidth=lw, bottom = 1.)
+    fill_dict  = dict(width=bwidth, alpha=opacity, bottom = 1. )
+    err_dict   = dict(fmt='none', lw=errlw, capsize=capsz,
+                      capthick=cpt, mew = mew)
 
 
-xs_dist_ax2 = np.array([k+1.00+0.00 for k in [15,16]])
+    # plot valus in the left part of the figure, motifs 1-14
+    xs_ax1 = np.array([k-xshift for k in range(1,15)])
+
+    patches_ax1 = ax1.bar(xs_ax1, rlcs[:14]-1,
+                          edgecolor=color, facecolor='white',
+                          zorder=z_init+1, **patch_dict)
+
+    fill_ax1    = ax1.bar(xs_ax1, rlcs[:14]-1,
+                          edgecolor=color, facecolor=color,
+                          zorder=z_init+2, **fill_dict)
+
+    _, caps, _  = ax1.errorbar(xs_ax1 + bwidth/2.,
+                               rlcs[:14],
+                               yerr=errs[:14],
+                               zorder=z_init+3, ecolor=color, **err_dict)
+
+    correct_bars(xs_ax1, rlcs[:14]-1, patches_ax1, bwidth)
+    correct_bars(xs_ax1, rlcs[:14]-1, fill_ax1, bwidth)
 
 
-dist_patches_ax2 = ax2.bar(xs_dist_ax2, rlc_dist[14:]-1,
-                           edgecolor=color['dist'], facecolor='white',
-                           zorder=1, **patch_dict)
+    # plot valus in the right part of the figure, motifs 15-16
+    xs_ax2 = np.array([k+1.00-xshift for k in [15,16]])
 
-dist_fill_ax2   = ax2.bar(xs_dist_ax2, rlc_dist[14:]-1,
-                          edgecolor=color['dist'], facecolor=color['dist'],
-                          zorder = 2, **fill_dict)
+    patches_ax2 = ax2.bar(xs_ax2, rlcs[14:]-1,
+                          edgecolor=color, facecolor='white',
+                          zorder=z_init+1, **patch_dict)
 
-_, caplines, _ = ax2.errorbar(xs_dist_ax2 + bwidth/2.,
-                              rlc_dist[14:],
-                              yerr = errs_dist[14:],
-                              zorder = 3, ecolor=color['dist'], **err_dict)
+    fill_ax2   = ax2.bar(xs_ax2, rlcs[14:]-1,
+                              edgecolor=color, facecolor=color,
+                              zorder= z_init+2, **fill_dict)
 
-for capline in caplines:
-    capline.set_zorder(3)
+    _, caps, _ = ax2.errorbar(xs_ax2 + bwidth/2.,
+                                  rlcs[14:],
+                                  yerr=errs[14:],
+                                  zorder=z_init+3, ecolor=color, **err_dict)
 
-# xs_rew = np.array([k-0.125 for k in range(1,len(p_mean)+1)])
-
-# rew_patches = ax.bar(xs_rew, plot_vals_rew, bwidth, linewidth=lw, bottom = 1., edgecolor=color['rew'], facecolor = 'white', zorder=4)
-
-# rew_fill = ax.bar(xs_rew, plot_vals_rew, bwidth, bottom = 1., edgecolor=color['rew'], facecolor = color['rew'], alpha = opacity, zorder=5)
-
-# _, caplines, _ = ax.errorbar(xs_rew + bwidth/2., plot_vals_rew+1, fmt='none', yerr = p_err_vals_rew, lw=errlw, capsize=capsz, capthick=cpt, mew = mew, zorder = 6, ecolor = color['rew'])
-
-# for capline in caplines:
-#     capline.set_zorder(6)
+    correct_bars(xs_ax2, rlcs[14:]-1, patches_ax2, bwidth)
+    correct_bars(xs_ax2, rlcs[14:]-1, fill_ax2, bwidth)
 
 
-# # Motifs 15 and 16 get divided by 2 to bring them on 5 scale size
-# #plot_vals = (p_mean/ps)-1
-# print("Using temp")
-# plot_vals = np.mean(ld, axis=0) -1
 
-# # for j,val in enumerate(plot_vals):
-# #     print j+1, "%.2f" %val
+plot_data(rlc_aniso, errs_aniso, color['aniso'],
+          xshift=0.250, z_init=12,
+          opacity=opacity_aniso)
 
-# # print "\n"
+plot_data(rlc_rew, errs_rew, color['rew'],
+          xshift=0.125, z_init=6)    
 
-# plot_vals[-1] = plot_vals[-1]/2.
-# plot_vals[-2] = plot_vals[-2]/2.
-
-# #p_err_vals = p_err/ps
-# print("Using error temp")
-# p_err_vals = stats.sem(ld, axis=0)
-# p_err_vals[-1] = p_err_vals[-1]/2.
-# p_err_vals[-2] = p_err_vals[-2]/2.
-
-# # for j,val in enumerate(plot_vals):
-# #     print j+1, "%.2f" %val
-
-# xs_aniso = np.array([k-0.250 for k in range(1,len(p_mean)+1)])
-
-# aniso_patches = ax.bar(xs_aniso, plot_vals, bwidth, bottom = 1., edgecolor = color['aniso'], facecolor = 'white', linewidth=lw, zorder=7)
-
-# aniso_fill = ax.bar(xs_aniso, plot_vals, bwidth, bottom = 1., edgecolor = color['aniso'], facecolor = color['aniso'], alpha=opacity_aniso, zorder=8)
-
-# _, caplines, _ = ax.errorbar(xs_aniso+bwidth/2., plot_vals+1, fmt='none', yerr = p_err_vals, lw=errlw, capsize=capsz, capthick=cpt, mew = mew, zorder = 9, ecolor = color['aniso'])
-
-# for capline in caplines:
-#     capline.set_zorder(9)
-
-# def correct_bar_sizes(xs, ys, patches):
-
-#     clip_boxes = [pl.Rectangle([x,0], bwidth, y,) for x,y in zip(xs,ys)]
-
-#     for clip_box,bar in zip(clip_boxes,patches):
-#         bar.set_clip_path(clip_box.get_path(), bar.get_transform())
+plot_data(rlc_dist, errs_dist, color['dist'],
+          xshift=0, z_init=0)
 
 
-# correct_bar_sizes(xs_aniso, plot_vals, aniso_patches)
-# correct_bar_sizes(xs_aniso, plot_vals, aniso_fill)
 
-# correct_bar_sizes(xs_rew, plot_vals_rew, rew_patches)
-# correct_bar_sizes(xs_rew, plot_vals_rew, rew_fill)
-
-correct_bars(xs_dist_ax1, rlc_aniso[:14]-1, dist_patches_ax1, bwidth)
-correct_bars(xs_dist_ax1, rlc_aniso[:14]-1, dist_fill_ax1, bwidth)
-
-correct_bars(xs_dist_ax2, rlc_aniso[14:]-1, dist_patches_ax2, bwidth)
-correct_bars(xs_dist_ax2, rlc_aniso[14:]-1, dist_fill_ax2, bwidth)
 
 lbl_fntsz = 10
 tick_fntsz = 9
@@ -234,20 +192,6 @@ ax1.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2, facecolor = 'white', 
 ax1.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2, facecolor = color['dist'], edgecolor=color['dist'], alpha=opacity))
 fig.text(0.225,0.65, r'distance-dependent', color = 'black', fontsize=lbl_fntsz)
 
-
-#pl.savefig(path, dpi=params.dpi, bbox_inches='tight')
-
-# for i in range(13):
-#     draw_motifs(i, ymin, ymax, highlight=True)
-
-
-
-
-## Testing the double axis set-up
-## Motifs 15 and 16 get divided by 6 to bring them on 5 scale size
-#plot_vals = (p_mean/ps)-1
-
-#ax2.bar([k-0.350 for k in range(1,len(p_mean)+1)], plot_vals, 0.5, bottom = 1., edgecolor = 'g', facecolor = 'g', yerr = p_err/ps, error_kw=dict(ecolor='red', lw=1.5, capsize=5, capthick=10, mew = 1.5))
 
 
 pl.xticks(range(1,18), range(1,15)+['',15,16])
