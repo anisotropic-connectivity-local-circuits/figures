@@ -110,16 +110,6 @@ fill_dict  = dict(width=bwidth, alpha=opacity, bottom = 1. )
 err_dict   = dict(fmt='none', lw=errlw, capsize=capsz,
                   capthick=cpt, mew = mew)
 
-# # Motifs 15 and 16 get divided by 2 to bring them on 5 scale size
-# plot_vals_dist = (p_mean_dist/ps)-1
-# plot_vals_dist[-1] = plot_vals_dist[-1]/2.
-# plot_vals_dist[-2] = plot_vals_dist[-2]/2.
-
-# p_err_vals_dist = p_err_dist/ps
-# p_err_vals_dist[-1] = p_err_vals_dist[-1]/2.
-# p_err_vals_dist[-2] = p_err_vals_dist[-2]/2.
-
-# # hatch='///////'
 
 xs_dist_ax1 = np.array([k-0.00 for k in range(1,15)])
 
@@ -140,14 +130,24 @@ for capline in caplines:
     capline.set_zorder(3)
 
 
-# # Motifs 15 and 16 get divided by 2 to bring them on 5 scale size
-# plot_vals_rew = (p_mean_rew/ps)-1
-# plot_vals_rew[-1] = plot_vals_rew[-1]/2.
-# plot_vals_rew[-2] = plot_vals_rew[-2]/2.
+xs_dist_ax2 = np.array([k+1.00+0.00 for k in [15,16]])
 
-# p_err_vals_rew = p_err_rew/ps
-# p_err_vals_rew[-1] = p_err_vals_rew[-1]/2.
-# p_err_vals_rew[-2] = p_err_vals_rew[-2]/2.
+
+dist_patches_ax2 = ax2.bar(xs_dist_ax2, rlc_dist[14:]-1,
+                           edgecolor=color['dist'], facecolor='white',
+                           zorder=1, **patch_dict)
+
+dist_fill_ax2   = ax2.bar(xs_dist_ax2, rlc_dist[14:]-1,
+                          edgecolor=color['dist'], facecolor=color['dist'],
+                          zorder = 2, **fill_dict)
+
+_, caplines, _ = ax2.errorbar(xs_dist_ax2 + bwidth/2.,
+                              rlc_dist[14:],
+                              yerr = errs_dist[14:],
+                              zorder = 3, ecolor=color['dist'], **err_dict)
+
+for capline in caplines:
+    capline.set_zorder(3)
 
 # xs_rew = np.array([k-0.125 for k in range(1,len(p_mean)+1)])
 
@@ -210,6 +210,9 @@ for capline in caplines:
 
 correct_bars(xs_dist_ax1, rlc_aniso[:14]-1, dist_patches_ax1, bwidth)
 correct_bars(xs_dist_ax1, rlc_aniso[:14]-1, dist_fill_ax1, bwidth)
+
+correct_bars(xs_dist_ax2, rlc_aniso[14:]-1, dist_patches_ax2, bwidth)
+correct_bars(xs_dist_ax2, rlc_aniso[14:]-1, dist_fill_ax2, bwidth)
 
 lbl_fntsz = 10
 tick_fntsz = 9
