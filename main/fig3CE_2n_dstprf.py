@@ -12,6 +12,19 @@ sys.path.append("../..")
 from utils.colors import color
 from comp.functions import Tuned_netw_dist_profile
 
+from data.extract_overall_p import xvals_data as Perin2011_x
+from data.extract_overall_p import yvals_data as Perin2011_y
+
+
+Tuned_netw_dist_profile = Tuned_netw_dist_profile()
+
+
+xs = np.arange(0,418.6,0.01)
+ddcp = np.array([Tuned_netw_dist_profile.ddcp(x) for x in xs])
+
+
+
+
 matplotlib.rc('text', usetex=True)
 pl.rcParams['text.latex.preamble'] = [
     r'\usepackage{tgheros}',    
@@ -21,63 +34,13 @@ pl.rcParams['text.latex.preamble'] = [
     r'\sisetup{detect-all}',    
 ]  
 
-Dist_profile = Tuned_netw_dist_profile()
-p_fit = Dist_profile.ddcp
+fig = pl.figure()
+fig.set_size_inches(3.5, 1.95)
 
+ax = fig.add_subplot(111)
 
-# def p_fit(x):
-
-#     '''Fitting the curve from Perin 2011'''
-
-#     a = -1.4186123229540666E-03
-#     b = 2.7630272296832398E-03
-#     c = -9.4484523305731971E-01
-#     Offset = 2.3078566917566815E-01
-
-#     return  a/(b+pow(x,c)) + Offset
-
-
-def ps_fit(x):
-
-    temp = 0.0
-
-    a = 2.1265459489379471E-01
-    b = -8.2607817023473132E+01
-    c = 2.6606485052456827E+02
-    d = 2.5216202564579659E+00
-
-    temp = a * math.exp(-0.5 * math.pow((x-b) / c, d))
-
-    return temp
-
-
-def pr_fit(x):
-
-    temp = 0.0
-
-    a = -1.2451623637345335E-01
-    b = 9.2442483915416082E-03
-    c = 1.1041322663714865E+00
-    Offset = 1.2326119868850784E-01
-
-    temp = a * math.pow(1.0 - math.exp(-1.0 * b * x), c)
-    temp += Offset
-
-    return temp
-
-
-xs = np.arange(0,418.6,0.01)
-p_array = np.array([p_fit(x) for x in xs])
-ps_array = np.array([ps_fit(x) for x in xs])
-pr_array = np.array([pr_fit(x) for x in xs])
-
-
-
-
-
-
-
-pl.plot(xs, p_array, color='red')
+ax.plot(xs, ddcp, color='red')
+ax.plot(Perin2011_x, Perin2011_y, '.')
 
 ymin, ymax = 0, 0.25
 pl.ylim(ymin,ymax)
@@ -86,9 +49,7 @@ pl.xlim(0,418.6)
 pl.xticks([0,100,200,300,400])
 
 pl.tight_layout()
-#set figure size
-fig = pl.gcf()
-fig.set_size_inches(4./1.7, 2.25/1.7)
+
 
 
 mew_set = 1.2
@@ -99,12 +60,13 @@ hwidth = 0.01
 fontsize = 12
 
 ax = pl.gca()
-ax.text(290,ypos-0.002,r'$\mathbf{v_1}$', size = fontsize, fontweight='bold', va='center', ha='center', clip_on=True) #mew = markeredgewith!!x
-ax.text(374,ypos-0.002,r'$\mathbf{v_2}$', size = fontsize, fontweight='bold', va='center', ha='center', clip_on=True)
-ax.text(330,ypos+0.02,r'\textbf{?}', size = fontsize, fontweight='bold', va='center', ha='center', clip_on=True)
+ax.text(290,ypos-0.002,r'$\mathbf{v_1}$', size = fontsize, fontweight='bold', va='center', ha='center', clip_on=False) #mew = markeredgewith!!x
+ax.text(374,ypos-0.002,r'$\mathbf{v_2}$', size = fontsize, fontweight='bold', va='center', ha='center', clip_on=False)
+ax.text(330,ypos+0.02,r'\textbf{?}', size = fontsize, fontweight='bold', va='center', ha='center', clip_on=False)
 ax.arrow(307.5,ypos, 52-17.5, 0, 
          width = awidth, head_width=hwidth, head_length=10, fc='k', ec='k')
 
+ax.text(480, 0.2, 'this text needs longer', clip_on=False)
 
 ax.spines['right'].set_visible(False)
 ax.spines['top'].set_visible(False)
@@ -296,4 +258,42 @@ pl.savefig('fig3C_2n_dstprf.png', dpi=300, bbox_inches='tight')
 # pl.savefig(path, dpi=params.dpi, bbox_inches='tight')
 # pl.close('all')
 
+
+
+
+
+# def p_fit(x):
+
+#     '''Fitting the curve from Perin 2011'''
+
+#     a = -1.4186123229540666E-03
+#     b = 2.7630272296832398E-03
+#     c = -9.4484523305731971E-01
+#     Offset = 2.3078566917566815E-01
+
+#     return  a/(b+pow(x,c)) + Offset
+
+
+# def ps_fit(x):
+
+#     temp = 0.0
+
+#     a = 2.1265459489379471E-01
+#     b = -8.2607817023473132E+01
+#     c = 2.6606485052456827E+02
+#     d = 2.5216202564579659E+00
+
+#     temp = a * math.exp(-0.5 * math.pow((x-b) / c, d))
+
+#     return temp
+
+
+# def pr_fit(x):
+
+#     a = -1.2451623637345335E-01
+#     b = 9.2442483915416082E-03
+#     c = 1.1041322663714865E+00
+#     offset = 1.2326119868850784E-01
+
+#     return a * math.pow(1.0 - math.exp(-1.0 * b * x), c) + offset
 
