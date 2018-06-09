@@ -4,26 +4,38 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as pl
 
 import numpy as np
+import scipy.stats as stats
+import graph_tool as gt
 
 import sys, math
 sys.path.append("..")
 sys.path.append("../..")
 
 from utils.colors import color
-from comp.functions import Tuned_netw_dist_profile
+from comp.functions import Tuned_netw_dist_profile, get_ddcp
 
 from data.extract_overall_p import xvals_data as Perin2011_x
 from data.extract_overall_p import yvals_data as Perin2011_y
+from data.extract_overall_p import yerrs_data as Perin2011_yerr
 
 
 Tuned_netw_dist_profile = Tuned_netw_dist_profile()
-
 
 xs = np.arange(0,418.6,0.01)
 ddcp = np.array([Tuned_netw_dist_profile.ddcp(x) for x in xs])
 
 
+bins = np.linspace(0,296*np.sqrt(2),8)
+tP = []
 
+for gid in range(3):
+    tpath = '/home/lab/comp/data/tuned-an-netw' +\
+            '_N1000_ed-l296_XY51-{:02d}.gt'.format(gid)
+    t = gt.load_graph(tpath)
+    t_ctrs, t_ps = get_ddcp(t, bins)
+    tP.append(t_ps)
+
+print(np.mean(tP, axis=0))
 
 matplotlib.rc('text', usetex=True)
 pl.rcParams['text.latex.preamble'] = [
@@ -40,15 +52,18 @@ fig.set_size_inches(3.5, 1.95)
 ax = fig.add_subplot(111)
 
 ax.plot(xs, ddcp, color='red')
-ax.plot(Perin2011_x, Perin2011_y, '.')
+ax.errorbar(Perin2011_x, Perin2011_y, yerr=Perin2011_yerr,
+            fmt='.')
+ax.errorbar(t_ctrs, np.mean(tP, axis=0), yerr=stats.sem(tP, axis=0),
+            fmt='.')
 
 ymin, ymax = 0, 0.25
-pl.ylim(ymin,ymax)
-pl.xlim(0,418.6)
+ax.set_ylim(ymin,ymax)
+ax.set_xlim(0,418.6)
 
-pl.xticks([0,100,200,300,400])
+ax.set_xticks([0,100,200,300,400])
 
-pl.tight_layout()
+fig.tight_layout()
 
 
 
@@ -66,7 +81,12 @@ ax.text(330,ypos+0.02,r'\textbf{?}', size = fontsize, fontweight='bold', va='cen
 ax.arrow(307.5,ypos, 52-17.5, 0, 
          width = awidth, head_width=hwidth, head_length=10, fc='k', ec='k')
 
-ax.text(480, 0.2, 'this text needs longer', clip_on=False)
+ax.text(480, 0.2,  'somatosensory cortex', clip_on=False)
+ax.text(480, 0.15, 'from Perin et al.~(2011)', clip_on=False)
+
+ax.text(480, 0.075,  'fit to exp.~data $p(x)$', clip_on=False)
+
+ax.text(480, 0.,     'tuned anisotropic', clip_on=False)
 
 ax.spines['right'].set_visible(False)
 ax.spines['top'].set_visible(False)
