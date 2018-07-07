@@ -96,7 +96,7 @@ ax.arrow(307.5,ypos, 52-17.5, 0, width=awidth,
 # custom legend
 #
 x_in, fontsize = 530, 11
-y_start, y_lb, y_pb = 0.22, 0.0375, 0.06
+y_start, y_lb, y_pb = 0.24, 0.0375, 0.055
 
 
 errs = ax.errorbar([480], [y_start+0.01], yerr=[0.0225],
