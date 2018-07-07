@@ -25,3 +25,22 @@ def align_yaxis(ax1, v1, ax2, v2):
     _, dy = inv.transform((0, 0)) - inv.transform((0, y1-y2))
     miny, maxy = ax2.get_ylim()
     ax2.set_ylim(miny+dy, maxy+dy)
+
+
+
+def errorbars_clip_false(ax, errs):
+    '''
+    sets clip_on=False for ALL ax.errborbar()
+    elements, as the function argument only 
+    sets clip_on=False for markers
+    see https://stackoverflow.com/questions/2842123
+
+    ax   : axes element
+    errs : return of ax.errorbar()
+    '''
+
+    for lines in errs[1:]:
+        for l in lines:
+            l.set_clip_on(False)
+
+    

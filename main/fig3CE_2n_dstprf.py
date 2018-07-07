@@ -11,7 +11,7 @@ import sys, math
 sys.path.append("..")
 sys.path.append("../..")
 
-from utils.colors import color
+from utils import color, errorbars_clip_false
 from comp.functions import Tuned_netw_dist_profile, get_ddcp
 
 from data.extract_overall_p import xvals_data as Perin2011_x
@@ -47,15 +47,16 @@ pl.rcParams['text.latex.preamble'] = [
 ]  
 
 fig = pl.figure()
-fig.set_size_inches(3.5, 1.95)
+fig.set_size_inches(2.8, 1.95)
 
 ax = fig.add_subplot(111)
 
 ax.plot(xs, ddcp, color='red')
 ax.errorbar(Perin2011_x, Perin2011_y, yerr=Perin2011_yerr,
-            fmt='.')
+            fmt='.', color='grey')
 ax.errorbar(t_ctrs, np.mean(tP, axis=0), yerr=stats.sem(tP, axis=0),
-            fmt='.')
+            fmt='.', color=color['tuned'])
+
 
 ymin, ymax = 0, 0.25
 ax.set_ylim(ymin,ymax)
@@ -74,26 +75,52 @@ awidth = 0.001
 hwidth = 0.01
 fontsize = 12
 
-ax = pl.gca()
-ax.text(290,ypos-0.002,r'$\mathbf{v_1}$', size = fontsize, fontweight='bold', va='center', ha='center', clip_on=False) #mew = markeredgewith!!x
-ax.text(374,ypos-0.002,r'$\mathbf{v_2}$', size = fontsize, fontweight='bold', va='center', ha='center', clip_on=False)
-ax.text(330,ypos+0.02,r'\textbf{?}', size = fontsize, fontweight='bold', va='center', ha='center', clip_on=False)
-ax.arrow(307.5,ypos, 52-17.5, 0, 
-         width = awidth, head_width=hwidth, head_length=10, fc='k', ec='k')
 
-ax.text(480, 0.2,  'somatosensory cortex', clip_on=False)
-ax.text(480, 0.15, 'from Perin et al.~(2011)', clip_on=False)
 
-ax.text(480, 0.075,  'fit to exp.~data $p(x)$', clip_on=False)
+#          ?
+#    v_1 ----> v_2
+#
+ax.text(290,ypos-0.002,r'$\mathbf{v_1}$', size=fontsize,
+        fontweight='bold', va='center', ha='center', clip_on=False) 
+ax.text(374,ypos-0.002,r'$\mathbf{v_2}$', size=fontsize,
+        fontweight='bold', va='center', ha='center', clip_on=False)
+ax.text(330,ypos+0.02,r'\textbf{?}', size=fontsize,
+        fontweight='bold', va='center', ha='center', clip_on=False)
+ax.arrow(307.5,ypos, 52-17.5, 0, width=awidth,
+         head_width=hwidth, head_length=10, fc='k', ec='k')
 
-ax.text(480, 0.,     'tuned anisotropic', clip_on=False)
+
+#
+# custom legend
+#
+x_in, fontsize = 530, 11
+y_start, y_lb, y_pb = 0.2, 0.05, 0.075
+
+
+errs = ax.errorbar([480,490], [0.2,0.2], yerr=[0.05,0.05],
+                   clip_on=False, fmt='.', color=color['tuned'])
+errorbars_clip_false(ax,errs)
+
+ax.text(x_in, y_start, 'somatosensory cortex',
+        size=fontsize, clip_on=False)
+ax.text(x_in, y_start-y_lb, 'from Perin et al.~(2011)',
+        size=fontsize, clip_on=False)
+ax.text(x_in, y_start-y_lb-y_pb, 'fit to cortex data $p(x)$',
+        size=fontsize, clip_on=False)
+ax.text(x_in, y_start-y_lb-2*y_pb, 'tuned anisotropic',
+        size=fontsize, clip_on=False)
+
+
+
+
+ax.axvline(850, 0, 1, clip_on=False)
 
 ax.spines['right'].set_visible(False)
 ax.spines['top'].set_visible(False)
 ax.yaxis.set_ticks_position('left')
 ax.xaxis.set_ticks_position('bottom')
 
-pl.ylabel("probability", fontsize=12, labelpad=11.5)
+pl.ylabel("connection probability", fontsize=12, labelpad=11.5)
 pl.xlabel(r'distance in \SI{}{\micro\meter}', fontsize=12, labelpad=8)
 
 pl.savefig('fig3C_2n_dstprf.png', dpi=300, bbox_inches='tight')
