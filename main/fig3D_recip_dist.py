@@ -151,7 +151,7 @@ ax.yaxis.set_ticks_position('left')
 ax.xaxis.set_ticks_position('bottom')
 
 pl.ylabel("connection probability", fontsize=12, labelpad=11.5)
-pl.xlabel(r'distance in \SI{}{\micro\meter}', fontsize=12, labelpad=8)
+pl.xlabel(r'distance [\SI{}{\micro\meter}]', fontsize=12, labelpad=8)
 
 pl.savefig('fig3D_recip_dist.png', dpi=300, bbox_inches='tight')
 
