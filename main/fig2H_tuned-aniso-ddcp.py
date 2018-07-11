@@ -72,7 +72,7 @@ ax.spines['top'].set_visible(False)
 ax.yaxis.set_ticks_position('left')
 ax.xaxis.set_ticks_position('bottom')
 
-ax.set_xlabel('distance')
+ax.set_xlabel('distance [\SI{}{\micro\meter}]')
     
 pl.ylim(0,0.55)
 pl.xlim(0,400)
