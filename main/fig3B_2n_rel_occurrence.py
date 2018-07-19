@@ -175,14 +175,15 @@ fig.text(xtext,ytext_start-3*ytext_sep, r'random', color = 'black', fontsize=11)
 #
 # clip_on=False allows plotting outside the x- and y-axis
 
-ypos = -0.35
+ypos = -0.15
 ndist = 0.45
-msize = 10.5
+msize = 8.5
 left_in = 0.1
 right_in = 0.1
-mew_set = 1.6
+mew_set = 1.3
 awidth = 0.001
 hwidth = 0.01
+hlength = 0.08
 yoffset = 0.00065
 
 f3A_ymax=1.325
@@ -210,18 +211,18 @@ ax2.plot(start+left_in,y2pos,'bo',markersize=msize,
         color='white', mew=mew_set, clip_on=False)
 ax2.plot(start+left_in+ndist, y2pos, 'bo', markersize=msize,
         color='white', mew=mew_set, clip_on=False)
-ax2.arrow(start+left_in,y2pos, ndist-0.2, 0, width=awidth2, fc='k', ec='k',
-         head_width=hwidth, head_length=0.1, clip_on=False)
+ax2.arrow(start+left_in,y2pos, ndist-0.15, 0, width=awidth2, fc='k', ec='k',
+         head_width=hwidth, head_length=hlength, clip_on=False)
 
 #  0<-->O 
 ax.plot(start+left_in,y3pos,'o', markersize=msize, color='white',
         mew=mew_set, clip_on=False)
 ax.plot(start+left_in+ndist, y3pos, 'bo', markersize=msize,
         color='white', mew=mew_set, clip_on=False)
-ax.arrow(start+left_in,y3pos+yoffset, ndist-0.2, 0, head_width=hwidth/10.,
-         head_length=0.1, fc='k', ec='k', clip_on=False, width=awidth3)
-ax.arrow(start+left_in+ ndist ,y3pos-yoffset, -ndist+0.2, 0,
-         head_width=hwidth/10., head_length=0.1, fc='k', ec='k', clip_on=False,
+ax.arrow(start+left_in,y3pos+yoffset, ndist-0.15, 0, head_width=hwidth/10.,
+         head_length=hlength, fc='k', ec='k', clip_on=False, width=awidth3)
+ax.arrow(start+left_in+ ndist ,y3pos-yoffset, -ndist+0.15, 0,
+         head_width=hwidth/10., head_length=hlength, fc='k', ec='k', clip_on=False,
          width=awidth3)
 
 

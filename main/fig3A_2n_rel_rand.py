@@ -128,7 +128,7 @@ fig.text(0.315,0.68, r'anisotropic', color = 'black', fontsize=11)
 #
 # clip_on=False allows plotting outside the x- and y-axis
 
-ypos = 0.65
+ypos = 0.73
 ndist = 0.6
 msize = 8
 left_in = 0.2
