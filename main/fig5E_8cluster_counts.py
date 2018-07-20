@@ -7,15 +7,12 @@ import sys, pickle, itertools
 sys.path.append("..")
 sys.path.append("../..")
 
-import numpy as np
-
 from utils.colors import color
 
 from core.ecounts_process import process_ecounts
 
 
 dpath = '/home/lab/comp/data/'
-#dpath = '/home/fh/sci/lab/aniso_netw/ploscb_18/comp/data/'
 
 with open(dpath+'nmotif_ecounts_aniso_n8_S2500K.p', 'rb') as pfile:
     aniso_data = pickle.load(pfile)
@@ -32,84 +29,87 @@ with open(dpath+'nmotif_ecounts_rew-tuned_n8_S2500K.p', 'rb') as pfile:
     
 
 max_ecount = 22
-aniso_means, aniso_SEM = process_ecounts(aniso_data, 
-                                         aniso_rew_data, max_ecount)
-tuned_means, tuned_SEM = process_ecounts(tuned_data, 
-                                           tuned_rew_data, max_ecount)
+aniso_means, aniso_SEM = process_ecounts(aniso_data, aniso_rew_data,
+                                         max_ecount)
+tuned_means, tuned_SEM = process_ecounts(tuned_data, tuned_rew_data,
+                                         max_ecount)
 
 
-ymin, ymax = -0.5,4.1
-xmin, xmax = 0, max_ecount+1
 
-
-from matplotlib import rc
-rc('text', usetex=True)
+matplotlib.rc('text', usetex=True)
 pl.rcParams['text.latex.preamble'] = [
-       r'\usepackage{siunitx}',   # micro symbols
-       r'\sisetup{detect-all}',   # force siunitx to actually use the fonts
-       r'\usepackage{tgheros}',    # normal font here
-       r'\usepackage{sansmath}',  # sansmath to match helvet
-       r'\sansmath'               # actually tell tex to use it!
+    r'\usepackage{tgheros}',    
+    r'\usepackage[eulergreek]{sansmath}',   
+    r'\sansmath',
+    r'\usepackage{siunitx}',    
+    r'\sisetup{detect-all}'
 ]  
 
-
-
 pl.tick_params(axis='both', which='major', labelsize=11)
-pl.rcParams['xtick.major.pad']=+27.5
+pl.rcParams['xtick.major.pad']=+25
+
 
 fig = pl.figure(facecolor="white")
+fig.set_size_inches(6.46, 2.8*0.9)
+
 ax = fig.add_subplot(111)
 
-ax.spines['bottom'].set_position(('data',0))
-ax.spines['right'].set_color('none')
-ax.spines['top'].set_color('none')
-ax.xaxis.set_ticks_position('none')
-ax.yaxis.set_ticks_position('left')
+xmin, xmax = 0, max_ecount+1
+ymin, ymax = -0.5,4.1
+
 
 ax.set_ylim(ymin,ymax)
 ax.set_yticks([0,1,2,3,4])
 
-
-ax.set_ylabel(r'\LARGE$\frac{\mathrm{counts} - \mathrm{rewired}\,\, \mathrm{counts}}{\mathrm{rewired}\,\,\mathrm{counts}}$', labelpad=8.)
-
-
-xlength = max_ecount+1
-ax.set_xticks([i+0.5 for i in range(0,xlength,1)], [str(i) for i in range(0,xlength,1)])
+ax.set_xticks([i+0.55 for i in range(0,xmax,2)])
+ax.set_xticklabels([str(i) for i in range(0,xmax,2)])
 ax.set_xlim(xmin,xmax)
 
-# ax.bar([i+0.15+0.225 for i in range(xlength)], aniso_means, width=0.6, yerr = aniso_SEM, edgecolor=color['aniso'], color = color['aniso'], error_kw=dict(ecolor='k', lw=1.5, capsize=3., capthick=10, mew = 1.5))
+ax.set_ylabel(r'\LARGE$\frac{\mathrm{counts} - \mathrm{rewired}' +\
+               '\,\, \mathrm{counts}}{\mathrm{rewired}' +\
+               '\,\,\mathrm{counts}}$', labelpad=8.)
 
-# ax.bar([i+0.15 for i in range(xlength)], tuned_means, width = 0.6, yerr=tuned_SEM, edgecolor=color['tuned'], color = color['tuned'], error_kw=dict(ecolor='k', lw=1.5, capsize=3., capthick=10, mew = 1.5))
 
 
-# for opacity bars
 opacity = 0.6
 lw = 2.5
 
-# for testing!
-#ax.bar([i+0.15+0.225 for i in range(xlength)], aniso_means, width = 0.6, edgecolor='k', facecolor='white', zorder = 1)
 
-aniso_patches = ax.bar([i+0.15+0.225 for i in range(xlength)], aniso_means, width=0.6, edgecolor=color['aniso'], facecolor = 'white', linewidth = lw, zorder = 1 )
+aniso_patches = ax.bar([i+0.15+0.225 for i in range(xmax)], aniso_means,
+                       width=0.6, edgecolor=color['aniso'],
+                       facecolor='white', linewidth=lw, zorder=1)
 
-aniso_fill = ax.bar([i+0.15+0.225 for i in range(xlength)], aniso_means, width=0.6, edgecolor=color['aniso'], color = color['aniso'], alpha = opacity, zorder = 2)
+aniso_fill = ax.bar([i+0.15+0.225 for i in range(xmax)], aniso_means,
+                    width=0.6, edgecolor=color['aniso'], 
+                    color=color['aniso'], alpha=opacity, zorder=2)
 
-_, caplines, _ = ax.errorbar([i+0.15+0.225+0.3 for i in range(xlength)], aniso_means, fmt='none', yerr = aniso_SEM, ecolor=color['aniso'], lw=1.5, capsize=4., mew = 1.5, zorder=3)
+_, caplines, _ = ax.errorbar([i+0.15+0.225+0.3 for i in range(xmax)],
+                             aniso_means, fmt='none', yerr=aniso_SEM,
+                             ecolor=color['aniso'], lw=1.5, capsize=2.75,
+                             mew = 1.5, zorder=3)
 
-# for testing!
-#ax.bar([i+0.15 for i in range(xlength)], tuned_means, width = 0.6, edgecolor='k', facecolor='white', zorder = 4)
 
-tuned_patches = ax.bar([i+0.15 for i in range(xlength)], tuned_means, width = 0.6, edgecolor=color['tuned'], facecolor = 'white', linewidth=lw, zorder=5)
+tuned_patches = ax.bar([i+0.15 for i in range(xmax)], tuned_means,
+                       width=0.6, edgecolor=color['tuned'],
+                       facecolor='white', linewidth=lw, zorder=5)
 
-tuned_fill = ax.bar([i+0.15 for i in range(xlength)], tuned_means, width = 0.6, edgecolor=color['tuned'], facecolor = color['tuned'], alpha = opacity, zorder = 6)
+tuned_fill = ax.bar([i+0.15 for i in range(xmax)], tuned_means,
+                    width=0.6, edgecolor=color['tuned'],
+                    facecolor=color['tuned'], alpha = opacity, zorder = 6)
 
-ax.errorbar([i+0.15+0.3 for i in range(xlength)], tuned_means, fmt='none', yerr = tuned_SEM, ecolor=color['tuned'], lw=1.5, capsize=4., mew = 1.5, zorder=7)
+ax.errorbar([i+0.15+0.3 for i in range(xmax)], tuned_means,
+            fmt='none', yerr=tuned_SEM, ecolor=color['tuned'],
+            lw=1.5, capsize=2.75, mew = 1.5, zorder=7)
+
 
 for capline in caplines:
     capline.set_zorder(4)
 
 ax.spines['bottom'].set_zorder(10)
 
-clip_boxes = [pl.Rectangle([x+0.15+0.225,0], 0.6, y,) for x,y in zip(range(xlength),aniso_means)]
+
+clip_boxes = [pl.Rectangle([x+0.15+0.225,0], 0.6, y,) \
+              for x,y in zip(range(xmax),aniso_means)]
 
 for clip_box,bar in zip(clip_boxes,aniso_patches):
     bar.set_clip_path(clip_box.get_path(), bar.get_transform())
@@ -117,7 +117,8 @@ for clip_box,bar in zip(clip_boxes,aniso_patches):
 for clip_box,bar in zip(clip_boxes,aniso_fill):
     bar.set_clip_path(clip_box.get_path(), bar.get_transform())
 
-clip_boxes = [pl.Rectangle([x+0.15,0], 0.6, y,) for x,y in zip(range(xlength),tuned_means)]
+clip_boxes = [pl.Rectangle([x+0.15,0], 0.6, y,) \
+              for x,y in zip(range(xmax),tuned_means)]
 
 for clip_box,bar in zip(clip_boxes,tuned_patches):
     bar.set_clip_path(clip_box.get_path(), bar.get_transform())
@@ -140,26 +141,32 @@ xtext = 0.275/xscale*(xmax-xmin)
 ytext1 = 0.8/yscale*(ymax-ymin)
 ytext2 = 0.7/yscale*(ymax-ymin)
 
+
 from matplotlib.patches import Rectangle
 
-fig.text(0.2, 0.74, r'\textbf{3 neuron cluster}', color = 'black', fontsize=13)
+fig.text(0.2, 0.74, r'\textbf{8 neuron cluster}', color='black', fontsize=13)
 
-ax.add_patch(Rectangle((xrect,yrect1), rect_len, rect_w, edgecolor = color['tuned'], facecolor='white', lw=1.25)) 
-ax.add_patch(Rectangle((xrect,yrect1), rect_len, rect_w, edgecolor = color['tuned'], facecolor=color['tuned'], alpha=opacity))
+ax.add_patch(Rectangle((xrect,yrect1), rect_len, rect_w, lw=1.25,
+                       edgecolor=color['tuned'], facecolor='white')) 
+ax.add_patch(Rectangle((xrect,yrect1), rect_len, rect_w, alpha=opacity,
+                       edgecolor=color['tuned'], facecolor=color['tuned']))
 fig.text(0.275,0.62, r'tuned anisotropic', color = 'black', fontsize=13) 
 
-ax.add_patch(Rectangle((xrect,yrect2), rect_len, rect_w, facecolor = 'white', edgecolor=color['aniso'], lw=1.25))
-ax.add_patch(Rectangle((xrect,yrect2), rect_len, rect_w, facecolor = color['aniso'], edgecolor=color['aniso'], alpha=opacity))
+ax.add_patch(Rectangle((xrect,yrect2), rect_len, rect_w, lw=1.25,
+                       facecolor='white', edgecolor=color['aniso']))
+ax.add_patch(Rectangle((xrect,yrect2), rect_len, rect_w, alpha=opacity,
+                       facecolor = color['aniso'], edgecolor=color['aniso']))
 fig.text(0.275,0.52, r'anisotropic', color = 'black', fontsize=13)
 
 
-
-xfigsize = 6.46
-yfigsize = 2.8*0.9
-fig.set_size_inches(xfigsize, yfigsize)
+ax.spines['bottom'].set_position(('data',0))
+ax.spines['right'].set_color('none')
+ax.spines['top'].set_color('none')
+ax.xaxis.set_ticks_position('none')
+ax.yaxis.set_ticks_position('left')
 
 
 import os
 fname = os.path.splitext(os.path.basename(__file__))[0]
 
-pl.savefig('{:s}.png'.format(fname), dpi=600)
+pl.savefig('{:s}.png'.format(fname), dpi=600, bbox_inches='tight')
