@@ -14,21 +14,21 @@ from core.ecounts_process import process_ecounts
 
 dpath = '/home/lab/comp/data/'
 
-with open(dpath+'nmotif_ecounts_aniso_n8_S2500K.p', 'rb') as pfile:
+with open(dpath+'nmotif_ecounts_aniso_n12_S2500K.p', 'rb') as pfile:
     aniso_data = pickle.load(pfile)
 
-with open(dpath+'nmotif_ecounts_rew_n8_S2500K.p', 'rb') as pfile:
+with open(dpath+'nmotif_ecounts_rew_n12_S2500K.p', 'rb') as pfile:
     aniso_rew_data = pickle.load(pfile)
 
-with open(dpath+'nmotif_ecounts_tuned_n8_S2500K.p', 'rb') as pfile:
+with open(dpath+'nmotif_ecounts_tuned_n12_S2500K.p', 'rb') as pfile:
     tuned_data = pickle.load(pfile)
 
-with open(dpath+'nmotif_ecounts_rew-tuned_n8_S2500K.p', 'rb') as pfile:
+with open(dpath+'nmotif_ecounts_rew-tuned_n12_S2500K.p', 'rb') as pfile:
     tuned_rew_data = pickle.load(pfile)
 
     
 
-max_ecount = 22
+max_ecount = 40
 aniso_means, aniso_SEM = process_ecounts(aniso_data, aniso_rew_data,
                                          max_ecount)
 tuned_means, tuned_SEM = process_ecounts(tuned_data, tuned_rew_data,
@@ -46,28 +46,28 @@ pl.rcParams['text.latex.preamble'] = [
 ]  
 
 pl.tick_params(axis='both', which='major', labelsize=11)
-pl.rcParams['xtick.major.pad']=+25
+pl.rcParams['xtick.major.pad']=+28.5
 
 
 fig = pl.figure(facecolor="white")
-fig.set_size_inches(6.46, 2.8*0.9)
+fig.set_size_inches(6.46*1.5+(6.46*0.09/(3.4+1.7)), 2.8*0.9)
 
 ax = fig.add_subplot(111)
 
 xmin, xmax = 0, max_ecount+1
-ymin, ymax = -0.5,4.75
+ymin, ymax = -1,6.5
 
 
 ax.set_ylim(ymin,ymax)
-ax.set_yticks([0,1,2,3,4])
+ax.set_yticks([-1,0,1,2,3,4,5,6])
 
 ax.set_xticks([i+0.55 for i in range(0,xmax,2)])
 ax.set_xticklabels([str(i) for i in range(0,xmax,2)])
 ax.set_xlim(xmin,xmax)
 
-ax.set_ylabel(r'\LARGE$\frac{\mathrm{counts} - \mathrm{rewired}' +\
+ax.set_ylabel(r'$\frac{\mathrm{counts} - \mathrm{rewired}' +\
                '\,\, \mathrm{counts}}{\mathrm{rewired}' +\
-               '\,\,\mathrm{counts}}$', labelpad=8.)
+               '\,\,\mathrm{counts}}$', size=16, labelpad=-2)
 
 
 
@@ -85,7 +85,7 @@ aniso_fill = ax.bar([i+0.15+0.225 for i in range(xmax)], aniso_means,
 
 _, caplines, _ = ax.errorbar([i+0.15+0.225+0.3 for i in range(xmax)],
                              aniso_means, fmt='none', yerr=aniso_SEM,
-                             ecolor=color['aniso'], lw=1.5, capsize=2.75,
+                             ecolor=color['aniso'], lw=1.5, capsize=1.85,
                              mew = 1.5, zorder=3)
 
 
@@ -99,7 +99,7 @@ tuned_fill = ax.bar([i+0.15 for i in range(xmax)], tuned_means,
 
 ax.errorbar([i+0.15+0.3 for i in range(xmax)], tuned_means,
             fmt='none', yerr=tuned_SEM, ecolor=color['tuned'],
-            lw=1.5, capsize=2.75, mew = 1.5, zorder=7)
+            lw=1.5, capsize=1.85, mew = 1.5, zorder=7)
 
 
 for capline in caplines:
@@ -128,7 +128,7 @@ for clip_box,bar in zip(clip_boxes,tuned_fill):
 
 
 
-xscale = 23
+xscale = 23*1.5
 yscale = 4.5
 
 xrect = (1.425-0.15)/xscale*(xmax-xmin) +0.15
@@ -137,6 +137,7 @@ yrect2 =  1.89/yscale*(ymax-ymin)              #2.875/yscale*(ymax-ymin)
 rect_len = 2./xscale*(xmax-xmin)
 rect_w = 0.2/yscale*(ymax-ymin)
 
+
 xtext = 0.275/xscale*(xmax-xmin)
 ytext1 = 0.8/yscale*(ymax-ymin)
 ytext2 = 0.7/yscale*(ymax-ymin)
@@ -144,19 +145,19 @@ ytext2 = 0.7/yscale*(ymax-ymin)
 
 from matplotlib.patches import Rectangle
 
-fig.text(0.2, 0.735, r'8 neuron cluster', size=13)
+fig.text(0.17, 0.76, r'12 neuron cluster', size=13)
 
 ax.add_patch(Rectangle((xrect,yrect1), rect_len, rect_w, lw=1.25,
                        edgecolor=color['tuned'], facecolor='white')) 
 ax.add_patch(Rectangle((xrect,yrect1), rect_len, rect_w, alpha=opacity,
                        edgecolor=color['tuned'], facecolor=color['tuned']))
-fig.text(0.275,0.61, r'tuned anisotropic', color = 'black', fontsize=13) 
+fig.text(0.225,0.64, r'tuned anisotropic', color = 'black', fontsize=13) 
 
 ax.add_patch(Rectangle((xrect,yrect2), rect_len, rect_w, lw=1.25,
                        facecolor='white', edgecolor=color['aniso']))
 ax.add_patch(Rectangle((xrect,yrect2), rect_len, rect_w, alpha=opacity,
                        facecolor = color['aniso'], edgecolor=color['aniso']))
-fig.text(0.275,0.51, r'anisotropic', color = 'black', fontsize=13)
+fig.text(0.225,0.5385, r'anisotropic', color = 'black', fontsize=13)
 
 
 ax.spines['bottom'].set_position(('data',0))

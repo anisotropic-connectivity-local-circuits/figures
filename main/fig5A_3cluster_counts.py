@@ -14,21 +14,21 @@ from core.ecounts_process import process_ecounts
 
 dpath = '/home/lab/comp/data/'
 
-with open(dpath+'nmotif_ecounts_aniso_n8_S2500K.p', 'rb') as pfile:
+with open(dpath+'nmotif_ecounts_aniso_n3_S2500K.p', 'rb') as pfile:
     aniso_data = pickle.load(pfile)
 
-with open(dpath+'nmotif_ecounts_rew_n8_S2500K.p', 'rb') as pfile:
+with open(dpath+'nmotif_ecounts_rew_n3_S2500K.p', 'rb') as pfile:
     aniso_rew_data = pickle.load(pfile)
 
-with open(dpath+'nmotif_ecounts_tuned_n8_S2500K.p', 'rb') as pfile:
+with open(dpath+'nmotif_ecounts_tuned_n3_S2500K.p', 'rb') as pfile:
     tuned_data = pickle.load(pfile)
 
-with open(dpath+'nmotif_ecounts_rew-tuned_n8_S2500K.p', 'rb') as pfile:
+with open(dpath+'nmotif_ecounts_rew-tuned_n3_S2500K.p', 'rb') as pfile:
     tuned_rew_data = pickle.load(pfile)
 
     
 
-max_ecount = 22
+max_ecount = 6
 aniso_means, aniso_SEM = process_ecounts(aniso_data, aniso_rew_data,
                                          max_ecount)
 tuned_means, tuned_SEM = process_ecounts(tuned_data, tuned_rew_data,
@@ -55,7 +55,7 @@ fig.set_size_inches(6.46, 2.8*0.9)
 ax = fig.add_subplot(111)
 
 xmin, xmax = 0, max_ecount+1
-ymin, ymax = -0.5,4.75
+ymin, ymax = -0.5,4.1
 
 
 ax.set_ylim(ymin,ymax)
@@ -144,19 +144,19 @@ ytext2 = 0.7/yscale*(ymax-ymin)
 
 from matplotlib.patches import Rectangle
 
-fig.text(0.2, 0.735, r'8 neuron cluster', size=13)
+fig.text(0.2, 0.74, r'3 neuron cluster', size=13)
 
 ax.add_patch(Rectangle((xrect,yrect1), rect_len, rect_w, lw=1.25,
                        edgecolor=color['tuned'], facecolor='white')) 
 ax.add_patch(Rectangle((xrect,yrect1), rect_len, rect_w, alpha=opacity,
                        edgecolor=color['tuned'], facecolor=color['tuned']))
-fig.text(0.275,0.61, r'tuned anisotropic', color = 'black', fontsize=13) 
+fig.text(0.275,0.62, r'tuned anisotropic', color = 'black', fontsize=13) 
 
 ax.add_patch(Rectangle((xrect,yrect2), rect_len, rect_w, lw=1.25,
                        facecolor='white', edgecolor=color['aniso']))
 ax.add_patch(Rectangle((xrect,yrect2), rect_len, rect_w, alpha=opacity,
                        facecolor = color['aniso'], edgecolor=color['aniso']))
-fig.text(0.275,0.51, r'anisotropic', color = 'black', fontsize=13)
+fig.text(0.275,0.52, r'anisotropic', color = 'black', fontsize=13)
 
 
 ax.spines['bottom'].set_position(('data',0))

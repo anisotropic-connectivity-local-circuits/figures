@@ -14,21 +14,21 @@ from core.ecounts_process import process_ecounts
 
 dpath = '/home/lab/comp/data/'
 
-with open(dpath+'nmotif_ecounts_aniso_n8_S2500K.p', 'rb') as pfile:
+with open(dpath+'nmotif_ecounts_aniso_n6_S2500K.p', 'rb') as pfile:
     aniso_data = pickle.load(pfile)
 
-with open(dpath+'nmotif_ecounts_rew_n8_S2500K.p', 'rb') as pfile:
+with open(dpath+'nmotif_ecounts_rew_n6_S2500K.p', 'rb') as pfile:
     aniso_rew_data = pickle.load(pfile)
 
-with open(dpath+'nmotif_ecounts_tuned_n8_S2500K.p', 'rb') as pfile:
+with open(dpath+'nmotif_ecounts_tuned_n6_S2500K.p', 'rb') as pfile:
     tuned_data = pickle.load(pfile)
 
-with open(dpath+'nmotif_ecounts_rew-tuned_n8_S2500K.p', 'rb') as pfile:
+with open(dpath+'nmotif_ecounts_rew-tuned_n6_S2500K.p', 'rb') as pfile:
     tuned_rew_data = pickle.load(pfile)
 
     
 
-max_ecount = 22
+max_ecount = 15
 aniso_means, aniso_SEM = process_ecounts(aniso_data, aniso_rew_data,
                                          max_ecount)
 tuned_means, tuned_SEM = process_ecounts(tuned_data, tuned_rew_data,
@@ -61,8 +61,8 @@ ymin, ymax = -0.5,4.75
 ax.set_ylim(ymin,ymax)
 ax.set_yticks([0,1,2,3,4])
 
-ax.set_xticks([i+0.55 for i in range(0,xmax,2)])
-ax.set_xticklabels([str(i) for i in range(0,xmax,2)])
+ax.set_xticks([i+0.55 for i in range(0,xmax,1)])
+ax.set_xticklabels([str(i) for i in range(0,xmax,1)])
 ax.set_xlim(xmin,xmax)
 
 ax.set_ylabel(r'\LARGE$\frac{\mathrm{counts} - \mathrm{rewired}' +\
@@ -144,7 +144,7 @@ ytext2 = 0.7/yscale*(ymax-ymin)
 
 from matplotlib.patches import Rectangle
 
-fig.text(0.2, 0.735, r'8 neuron cluster', size=13)
+fig.text(0.2, 0.735, r'6 neuron cluster', size=13)
 
 ax.add_patch(Rectangle((xrect,yrect1), rect_len, rect_w, lw=1.25,
                        edgecolor=color['tuned'], facecolor='white')) 
