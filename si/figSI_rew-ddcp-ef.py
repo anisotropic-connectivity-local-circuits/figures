@@ -53,7 +53,7 @@ for eps_frac in efracs:
 
     pl.clf()
     fig = pl.figure()
-    fig.set_size_inches(2.6,2.)
+    fig.set_size_inches(2.6*1.2,2.*1.2)
     pl.title(r'$\bm{\varepsilon} / E ='+'{:.2f}'.format(eps_frac)+'$')
     ax = fig.add_subplot(111)
 
@@ -82,6 +82,11 @@ for eps_frac in efracs:
     pl.subplots_adjust(left=0.15, right=0.85,
                        top=0.85, bottom=0.15)
     pl.xticks([0,100,200,300,400])
+
+    ax.spines['right'].set_color('none')
+    ax.spines['top'].set_color('none')
+    ax.xaxis.set_ticks_position('bottom')
+    ax.yaxis.set_ticks_position('left')
     
     import os
     fname = os.path.splitext(os.path.basename(__file__))[0]

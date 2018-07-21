@@ -39,7 +39,7 @@ for eps_frac in efracs:
     nfail_sem.append(scipy.stats.sem(nfails))
 
 fig = pl.figure()    
-fig.set_size_inches(2.3*2.25*0.5/0.66,1.9)
+fig.set_size_inches(2.3*2.25*0.5/0.66*1.2,1.9*1.2)
 ax = fig.add_subplot(111)
 
 (_, caps, _) = pl.errorbar(efracs, nfail_mu, yerr=nfail_sem,
@@ -58,6 +58,11 @@ pl.subplots_adjust(left=0.25, right=0.925,
                    top=0.925, bottom=0.30)
 
 pl.yticks(np.linspace(0,1200,5))
+
+ax.spines['right'].set_color('none')
+ax.spines['top'].set_color('none')
+ax.xaxis.set_ticks_position('bottom')
+ax.yaxis.set_ticks_position('left')
 
 import os
 fname = os.path.splitext(os.path.basename(__file__))[0]
