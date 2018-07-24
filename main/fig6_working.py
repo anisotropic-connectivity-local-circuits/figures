@@ -21,7 +21,7 @@ from utils.colors import color
 
 def extract(nb, bins):
 
-    counts, bins = np.histogram(nb, bins)
+    counts, bins = np.histogram(nb, bins, density=True)
 
     # occ = np.zeros(1000)
     # nb = np.array(nb)
@@ -40,17 +40,56 @@ ngraphs, binw = 5,1
 bins = np.arange(0,1000+binw,binw)
 centers = 0.5*(bins[1:]+bins[:-1])
 
-in_aniso  = np.zeros((ngraphs, len(bins)-1))
-in_r025    = np.zeros((ngraphs, len(bins)-1))
-in_rew    = np.zeros((ngraphs, len(bins)-1))
+in_aniso_all  = np.zeros((ngraphs, len(bins)-1))
+in_r025aniso_all  = np.zeros((ngraphs, len(bins)-1))
+in_raniso_all  = np.zeros((ngraphs, len(bins)-1))
 
-in_dist   = np.zeros((ngraphs, len(bins)-1))
-in_r025dist  = np.zeros((ngraphs, len(bins)-1))
-in_rdist  = np.zeros((ngraphs, len(bins)-1))
+in_aniso_unc      = np.zeros((ngraphs, len(bins)-1))
+in_r025aniso_unc  = np.zeros((ngraphs, len(bins)-1))
+in_raniso_unc     = np.zeros((ngraphs, len(bins)-1))
 
-in_tuned  = np.zeros((ngraphs, len(bins)-1))
-in_r025tuned  = np.zeros((ngraphs, len(bins)-1))
-in_rtuned  = np.zeros((ngraphs, len(bins)-1))
+in_aniso_sng      = np.zeros((ngraphs, len(bins)-1))
+in_r025aniso_sng  = np.zeros((ngraphs, len(bins)-1))
+in_raniso_sng     = np.zeros((ngraphs, len(bins)-1))
+
+in_aniso_bdr      = np.zeros((ngraphs, len(bins)-1))
+in_r025aniso_bdr  = np.zeros((ngraphs, len(bins)-1))
+in_raniso_bdr     = np.zeros((ngraphs, len(bins)-1))
+
+
+in_dist_all  = np.zeros((ngraphs, len(bins)-1))
+in_r025dist_all  = np.zeros((ngraphs, len(bins)-1))
+in_rdist_all  = np.zeros((ngraphs, len(bins)-1))
+
+in_dist_unc      = np.zeros((ngraphs, len(bins)-1))
+in_r025dist_unc  = np.zeros((ngraphs, len(bins)-1))
+in_rdist_unc     = np.zeros((ngraphs, len(bins)-1))
+
+in_dist_sng      = np.zeros((ngraphs, len(bins)-1))
+in_r025dist_sng  = np.zeros((ngraphs, len(bins)-1))
+in_rdist_sng     = np.zeros((ngraphs, len(bins)-1))
+
+in_dist_bdr      = np.zeros((ngraphs, len(bins)-1))
+in_r025dist_bdr  = np.zeros((ngraphs, len(bins)-1))
+in_rdist_bdr     = np.zeros((ngraphs, len(bins)-1))
+
+in_tuned_all  = np.zeros((ngraphs, len(bins)-1))
+in_r025tuned_all  = np.zeros((ngraphs, len(bins)-1))
+in_rtuned_all  = np.zeros((ngraphs, len(bins)-1))
+
+in_tuned_unc      = np.zeros((ngraphs, len(bins)-1))
+in_r025tuned_unc  = np.zeros((ngraphs, len(bins)-1))
+in_rtuned_unc     = np.zeros((ngraphs, len(bins)-1))
+
+in_tuned_sng      = np.zeros((ngraphs, len(bins)-1))
+in_r025tuned_sng  = np.zeros((ngraphs, len(bins)-1))
+in_rtuned_sng     = np.zeros((ngraphs, len(bins)-1))
+
+in_tuned_bdr      = np.zeros((ngraphs, len(bins)-1))
+in_r025tuned_bdr  = np.zeros((ngraphs, len(bins)-1))
+in_rtuned_bdr     = np.zeros((ngraphs, len(bins)-1))
+
+
 
 in_r10    = np.zeros((ngraphs, len(bins)-1))
 
@@ -69,57 +108,86 @@ for gid in range(ngraphs):
             '_w37.3_ed-l296_4GX7-{:02d}.gt'.format(gid)
     g = gt.load_graph(gpath)
     pairs, cn, in_nb, out_nb = get_common_neighbours(g)
-    in_aniso[gid,:]+=extract(in_nb, bins)[0]/10.**3
+    in_aniso_all[gid,:]+=extract(in_nb       , bins)[0]
+    in_aniso_unc[gid,:]+=extract(in_nb[cn==0], bins)[0]
+    in_aniso_sng[gid,:]+=extract(in_nb[cn==1], bins)[0]
+    in_aniso_bdr[gid,:]+=extract(in_nb[cn==2], bins)[0]
 
     gpath = '/home/lab/comp/data/rew_aniso_netw_rfrac0.25' +\
             '_efrac0.05-{:02d}.gt'.format(gid)
     g = gt.load_graph(gpath)
     pairs, cn, in_nb, out_nb = get_common_neighbours(g)
-    in_r025[gid,:]+=extract(in_nb, bins)[0]/10.**3
+    in_r025aniso_all[gid,:]+=extract(in_nb       , bins)[0]
+    in_r025aniso_unc[gid,:]+=extract(in_nb[cn==0], bins)[0]
+    in_r025aniso_sng[gid,:]+=extract(in_nb[cn==1], bins)[0]
+    in_r025aniso_bdr[gid,:]+=extract(in_nb[cn==2], bins)[0]
 
     gpath = '/home/lab/comp/data/rew-netw_rfrac1.00' +\
             '_efrac0.05_4FU2-{:02d}.gt'.format(gid)
     g = gt.load_graph(gpath)
     pairs, cn, in_nb, out_nb = get_common_neighbours(g)
-    in_rew[gid,:]+=extract(in_nb, bins)[0]/10.**3
+    in_raniso_all[gid,:]+=extract(in_nb       , bins)[0]
+    in_raniso_unc[gid,:]+=extract(in_nb[cn==0], bins)[0]
+    in_raniso_sng[gid,:]+=extract(in_nb[cn==1], bins)[0]
+    in_raniso_bdr[gid,:]+=extract(in_nb[cn==2], bins)[0]
 
     
     gpath = '/home/lab/comp/data/dist-an-netw_N1000_w37.3' +\
             '_ed-l296_8CY2-{:02d}.gt'.format(gid)
     g = gt.load_graph(gpath)
     pairs, cn, in_nb, out_nb = get_common_neighbours(g)
-    in_dist[gid,:]+=extract(in_nb, bins)[0]/10.**3
+    in_dist_all[gid,:]+=extract(in_nb       , bins)[0]
+    in_dist_unc[gid,:]+=extract(in_nb[cn==0], bins)[0]
+    in_dist_sng[gid,:]+=extract(in_nb[cn==1], bins)[0]
+    in_dist_bdr[gid,:]+=extract(in_nb[cn==2], bins)[0]
 
     gpath = '/home/lab/comp/data/rew_dist_netw_rfrac0.25' +\
             '_efrac0.05-{:02d}.gt'.format(gid)
     g = gt.load_graph(gpath)
     pairs, cn, in_nb, out_nb = get_common_neighbours(g)
-    in_r025dist[gid,:]+=extract(in_nb, bins)[0]/10.**3
+    in_r025dist_all[gid,:]+=extract(in_nb       , bins)[0]
+    in_r025dist_unc[gid,:]+=extract(in_nb[cn==0], bins)[0]
+    in_r025dist_sng[gid,:]+=extract(in_nb[cn==1], bins)[0]
+    in_r025dist_bdr[gid,:]+=extract(in_nb[cn==2], bins)[0]
     
     gpath = '/home/lab/comp/data/rew_dist_netw_rfrac1.00' +\
             '_efrac0.05-{:02d}.gt'.format(gid)
     g = gt.load_graph(gpath)
     pairs, cn, in_nb, out_nb = get_common_neighbours(g)
-    in_rdist[gid,:]+=extract(in_nb, bins)[0]/10.**3
+    in_rdist_all[gid,:]+=extract(in_nb       , bins)[0]
+    in_rdist_unc[gid,:]+=extract(in_nb[cn==0], bins)[0]
+    in_rdist_sng[gid,:]+=extract(in_nb[cn==1], bins)[0]
+    in_rdist_bdr[gid,:]+=extract(in_nb[cn==2], bins)[0]
 
     
     gpath = '/home/lab/comp/data/tuned-an-netw_N1000' +\
             '_ed-l296_XY51-{:02d}.gt'.format(gid)
     g = gt.load_graph(gpath)
     pairs, cn, in_nb, out_nb = get_common_neighbours(g)
-    in_tuned[gid,:]+=extract(in_nb, bins)[0]/10.**3
+    in_tuned_all[gid,:]+=extract(in_nb       , bins)[0]
+    in_tuned_unc[gid,:]+=extract(in_nb[cn==0], bins)[0]
+    in_tuned_sng[gid,:]+=extract(in_nb[cn==1], bins)[0]
+    in_tuned_bdr[gid,:]+=extract(in_nb[cn==2], bins)[0]
     
     gpath = '/home/lab/comp/data/rew_tuned_netw' +\
             '_rfrac0.25_efrac0.05-{:02d}.gt'.format(gid)
     g = gt.load_graph(gpath)
     pairs, cn, in_nb, out_nb = get_common_neighbours(g)
-    in_r025tuned[gid,:]+=extract(in_nb, bins)[0]/10.**3
+    in_r025tuned_all[gid,:]+=extract(in_nb       , bins)[0]
+    in_r025tuned_unc[gid,:]+=extract(in_nb[cn==0], bins)[0]
+    in_r025tuned_sng[gid,:]+=extract(in_nb[cn==1], bins)[0]
+    in_r025tuned_bdr[gid,:]+=extract(in_nb[cn==2], bins)[0]
+
 
     gpath = '/home/lab/comp/data/rew_tuned_netw' +\
             '_rfrac1.00_efrac0.05-{:02d}.gt'.format(gid)
     g = gt.load_graph(gpath)
     pairs, cn, in_nb, out_nb = get_common_neighbours(g)
-    in_rtuned[gid,:]+=extract(in_nb, bins)[0]/10.**3
+    in_rtuned_all[gid,:]+=extract(in_nb       , bins)[0]
+    in_rtuned_unc[gid,:]+=extract(in_nb[cn==0], bins)[0]
+    in_rtuned_sng[gid,:]+=extract(in_nb[cn==1], bins)[0]
+    in_rtuned_bdr[gid,:]+=extract(in_nb[cn==2], bins)[0]
+
 
     
     # gpath = '/home/lab/comp/data/rew-netw-repeat_rfrac1.00' +\
@@ -146,65 +214,160 @@ pl.rcParams['text.latex.preamble'] = [
 
 
 
-fig, axs = pl.subplots(nrows=1, ncols=3)
-ax1, ax2, ax3 = axs
-fig.set_size_inches(12.4,2.25)
+fig, axs = pl.subplots(nrows=4, ncols=3)
+fig.set_size_inches(10.4,2.25*4)
 
 
-ax1.errorbar(centers, np.mean(in_aniso, axis=0),
-             yerr=stats.sem(in_aniso,axis=0), capsize=0,
-             color=color['aniso'])
-ax1.errorbar(centers, np.mean(in_r025, axis=0),
-             yerr=stats.sem(in_r025,axis=0), capsize=0,
-             color=color['rew'], linestyle='dashed')
-ax1.errorbar(centers, np.mean(in_rew, axis=0),
-             yerr=stats.sem(in_rew,axis=0), capsize=0,
-             color=color['rew'])
+axs[0,0].errorbar(centers, np.mean(in_aniso_all, axis=0),
+                  yerr=stats.sem(in_aniso_all,axis=0), capsize=0,
+                  color=color['aniso'], fmt='-', markersize=0, lw=2, zorder=-0)
+axs[0,0].errorbar(centers, np.mean(in_r025aniso_all, axis=0),
+                  yerr=stats.sem(in_r025aniso_all,axis=0), capsize=0,
+                  color='grey', fmt='-', markersize=0, lw=2, zorder=-1)
+axs[0,0].errorbar(centers, np.mean(in_raniso_all, axis=0),
+                  yerr=stats.sem(in_raniso_all,axis=0), capsize=0,
+                  color=color['rew'], fmt='-', markersize=0, lw=2, zorder=-2)
+
+axs[1,0].errorbar(centers, np.mean(in_aniso_unc, axis=0),
+                  yerr=stats.sem(in_aniso_unc,axis=0), capsize=0,
+                  color=color['aniso'], fmt='-', markersize=0, lw=2, zorder=-0)
+axs[1,0].errorbar(centers, np.mean(in_r025aniso_unc, axis=0),
+                  yerr=stats.sem(in_r025aniso_unc,axis=0), capsize=0,
+                  color='grey', fmt='-', markersize=0, lw=2, zorder=-1)
+axs[1,0].errorbar(centers, np.mean(in_raniso_unc, axis=0),
+                  yerr=stats.sem(in_raniso_unc,axis=0), capsize=0,
+                  color=color['rew'], fmt='-', markersize=0, lw=2, zorder=-2)
+
+axs[2,0].errorbar(centers, np.mean(in_aniso_sng, axis=0),
+                  yerr=stats.sem(in_aniso_sng,axis=0), capsize=0,
+                  color=color['aniso'], fmt='-', markersize=0, lw=2, zorder=-0)
+axs[2,0].errorbar(centers, np.mean(in_r025aniso_sng, axis=0),
+                  yerr=stats.sem(in_r025aniso_sng,axis=0), capsize=0,
+                  color='grey', fmt='-', markersize=0, lw=2, zorder=-1)
+axs[2,0].errorbar(centers, np.mean(in_raniso_sng, axis=0),
+                  yerr=stats.sem(in_raniso_sng,axis=0), capsize=0,
+                  color=color['rew'], fmt='-', markersize=0, lw=2, zorder=-2)
+
+axs[3,0].errorbar(centers, np.mean(in_aniso_bdr, axis=0),
+                  yerr=stats.sem(in_aniso_bdr,axis=0), capsize=0,
+                  color=color['aniso'], fmt='-', markersize=0, lw=2, zorder=-0)
+axs[3,0].errorbar(centers, np.mean(in_r025aniso_bdr, axis=0),
+                  yerr=stats.sem(in_r025aniso_bdr,axis=0), capsize=0,
+                  color='grey', fmt='-', markersize=0, lw=2, zorder=-1)
+axs[3,0].errorbar(centers, np.mean(in_raniso_bdr, axis=0),
+                  yerr=stats.sem(in_raniso_bdr,axis=0), capsize=0,
+                  color=color['rew'], fmt='-', markersize=0, lw=2, zorder=-2)
 
 
-ax2.errorbar(centers, np.mean(in_rdist, axis=0),
-             yerr=stats.sem(in_rdist,axis=0), capsize=0,
-             color='black')
-ax2.errorbar(centers, np.mean(in_r025dist, axis=0),
-             yerr=stats.sem(in_r025dist,axis=0), capsize=0,
-             color='black', linestyle='dashed')
-ax2.errorbar(centers, np.mean(in_dist, axis=0),
-             yerr=stats.sem(in_dist,axis=0), capsize=0,
-             color=color['dist'])
+
+axs[0,1].errorbar(centers, np.mean(in_dist_all, axis=0),
+                  yerr=stats.sem(in_dist_all,axis=0), capsize=0,
+                  color=color['dist'], fmt='-', markersize=0, lw=2, zorder=-0)
+axs[0,1].errorbar(centers, np.mean(in_r025dist_all, axis=0),
+                  yerr=stats.sem(in_r025dist_all,axis=0), capsize=0,
+                  color='grey', fmt='-', markersize=0, lw=2, zorder=-1)
+axs[0,1].errorbar(centers, np.mean(in_rdist_all, axis=0),
+                  yerr=stats.sem(in_rdist_all,axis=0), capsize=0,
+                  color='black', fmt='-', markersize=0, lw=2, zorder=-2)
+
+axs[1,1].errorbar(centers, np.mean(in_dist_unc, axis=0),
+                  yerr=stats.sem(in_dist_unc,axis=0), capsize=0,
+                  color=color['dist'], fmt='-', markersize=0, lw=2, zorder=-0)
+axs[1,1].errorbar(centers, np.mean(in_r025dist_unc, axis=0),
+                  yerr=stats.sem(in_r025dist_unc,axis=0), capsize=0,
+                  color='grey', fmt='-', markersize=0, lw=2, zorder=-1)
+axs[1,1].errorbar(centers, np.mean(in_rdist_unc, axis=0),
+                  yerr=stats.sem(in_rdist_unc,axis=0), capsize=0,
+                  color='black', fmt='-', markersize=0, lw=2, zorder=-2)
+
+axs[2,1].errorbar(centers, np.mean(in_dist_sng, axis=0),
+                  yerr=stats.sem(in_dist_sng,axis=0), capsize=0,
+                  color=color['dist'], fmt='-', markersize=0, lw=2, zorder=-0)
+axs[2,1].errorbar(centers, np.mean(in_r025dist_sng, axis=0),
+                  yerr=stats.sem(in_r025dist_sng,axis=0), capsize=0,
+                  color='grey', fmt='-', markersize=0, lw=2, zorder=-1)
+axs[2,1].errorbar(centers, np.mean(in_rdist_sng, axis=0),
+                  yerr=stats.sem(in_rdist_sng,axis=0), capsize=0,
+                  color='black', fmt='-', markersize=0, lw=2, zorder=-2)
+
+axs[3,1].errorbar(centers, np.mean(in_dist_bdr, axis=0),
+                  yerr=stats.sem(in_dist_bdr,axis=0), capsize=0,
+                  color=color['dist'], fmt='-', markersize=0, lw=2, zorder=-0)
+axs[3,1].errorbar(centers, np.mean(in_r025dist_bdr, axis=0),
+                  yerr=stats.sem(in_r025dist_bdr,axis=0), capsize=0,
+                  color='grey', fmt='-', markersize=0, lw=2, zorder=-1)
+axs[3,1].errorbar(centers, np.mean(in_rdist_bdr, axis=0),
+                  yerr=stats.sem(in_rdist_bdr,axis=0), capsize=0,
+                  color='black', fmt='-', markersize=0, lw=2, zorder=-2)
 
 
-ax3.errorbar(centers, np.mean(in_tuned, axis=0),
-             yerr=stats.sem(in_tuned,axis=0), capsize=0,
-             color=color['tuned'])
-ax3.errorbar(centers, np.mean(in_r025tuned, axis=0),
-             yerr=stats.sem(in_r025tuned,axis=0), capsize=0,
-             color='black', linestyle='dashed')
-ax3.errorbar(centers, np.mean(in_rtuned, axis=0),
-             yerr=stats.sem(in_rtuned,axis=0), capsize=0,
-             color='black')
+
+axs[0,2].errorbar(centers, np.mean(in_tuned_all, axis=0),
+                  yerr=stats.sem(in_tuned_all,axis=0), capsize=0,
+                  color=color['tuned'], fmt='-', markersize=0, lw=2, zorder=-0)
+axs[0,2].errorbar(centers, np.mean(in_r025tuned_all, axis=0),
+                  yerr=stats.sem(in_r025tuned_all,axis=0), capsize=0,
+                  color='grey', fmt='-', markersize=0, lw=2, zorder=-1)
+axs[0,2].errorbar(centers, np.mean(in_rtuned_all, axis=0),
+                  yerr=stats.sem(in_rtuned_all,axis=0), capsize=0,
+                  color='black', fmt='-', markersize=0, lw=2, zorder=-2)
+
+axs[1,2].errorbar(centers, np.mean(in_tuned_unc, axis=0),
+                  yerr=stats.sem(in_tuned_unc,axis=0), capsize=0,
+                  color=color['tuned'], fmt='-', markersize=0, lw=2, zorder=-0)
+axs[1,2].errorbar(centers, np.mean(in_r025tuned_unc, axis=0),
+                  yerr=stats.sem(in_r025tuned_unc,axis=0), capsize=0,
+                  color='grey', fmt='-', markersize=0, lw=2, zorder=-1)
+axs[1,2].errorbar(centers, np.mean(in_rtuned_unc, axis=0),
+                  yerr=stats.sem(in_rtuned_unc,axis=0), capsize=0,
+                  color='black', fmt='-', markersize=0, lw=2, zorder=-2)
+
+axs[2,2].errorbar(centers, np.mean(in_tuned_sng, axis=0),
+                  yerr=stats.sem(in_tuned_sng,axis=0), capsize=0,
+                  color=color['tuned'], fmt='-', markersize=0, lw=2, zorder=-0)
+axs[2,2].errorbar(centers, np.mean(in_r025tuned_sng, axis=0),
+                  yerr=stats.sem(in_r025tuned_sng,axis=0), capsize=0,
+                  color='grey', fmt='-', markersize=0, lw=2, zorder=-1)
+axs[2,2].errorbar(centers, np.mean(in_rtuned_sng, axis=0),
+                  yerr=stats.sem(in_rtuned_sng,axis=0), capsize=0,
+                  color='black', fmt='-', markersize=0, lw=2, zorder=-2)
+
+axs[3,2].errorbar(centers, np.mean(in_tuned_bdr, axis=0),
+                  yerr=stats.sem(in_tuned_bdr,axis=0), capsize=0,
+                  color=color['tuned'], fmt='-', markersize=0, lw=2, zorder=-0)
+axs[3,2].errorbar(centers, np.mean(in_r025tuned_bdr, axis=0),
+                  yerr=stats.sem(in_r025tuned_bdr,axis=0), capsize=0,
+                  color='grey', fmt='-', markersize=0, lw=2, zorder=-1)
+axs[3,2].errorbar(centers, np.mean(in_rtuned_bdr, axis=0),
+                  yerr=stats.sem(in_rtuned_bdr,axis=0), capsize=0,
+                  color='black', fmt='-', markersize=0, lw=2, zorder=-2)
 
 
 
-# ax.errorbar(centers, np.mean(in_r10, axis=0),
-#             yerr=stats.sem(in_r10,axis=0), capsize=0)
+axs[0,0].set_ylabel('relative occurrence')
+axs[1,0].set_ylabel('relative occurrence')
+axs[2,0].set_ylabel('relative occurrence')
+axs[3,0].set_ylabel('relative occurrence')
 
+axs[3,0].set_xlabel('number of common inputs')
+axs[3,1].set_xlabel('number of common inputs')
+axs[3,2].set_xlabel('number of common inputs')
 
-
-ax1.set_ylabel('occurrence $10^3$')
-
-for ax in axs:
+for ax in axs.reshape(-1):
 
     ax.set_xlim(0,75)
+    ax.set_ylim(bottom=0., top=0.10)
 
     ax.spines['right'].set_color('none')
     ax.spines['top'].set_color('none')
     ax.xaxis.set_ticks_position('bottom')
     ax.yaxis.set_ticks_position('left')
 
-    ax.set_xlabel('number of common inputs')
+    # ax.text(-15, 0.12, r'\textbf{A}', clip_on=False)
 
 
 import os
 fname = os.path.splitext(os.path.basename(__file__))[0]
 
+pl.tight_layout()
 pl.savefig('{:s}.pdf'.format(fname), dpi=600, bbox_inches='tight')
