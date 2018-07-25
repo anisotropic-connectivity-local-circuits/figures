@@ -93,22 +93,22 @@ else:
             zorder=-2, label='rewired')
 
 
-ax.set_xlim(0,80)
+ax.set_xlim(0,100)
 ax.set_ylim(0,0.075)
-ax.set_xticks([0,20,40,60,80])
+ax.set_xticks([0,20,40,60,80,100])
 ax.set_yticks([0,0.02,0.04,0.06])
 
 #          
 #    o <---> 0
 #
-x1, x2 = 47.5,62.5
+x1, x2 = 47.5*1.25,62.5*1.25
 ypos = 0.075
 mew_set = 1
 msize = 5
 
-arrow_xpad = 2.75
+arrow_xpad = 2.75*1.25
 arrow_ypad = 0.0015
-arrow_headlength = 2.5
+arrow_headlength = 2.5*1.25
 arrow_width = 0.0001
 arrow_hwidth = 0.0025
 

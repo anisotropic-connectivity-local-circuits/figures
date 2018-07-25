@@ -98,7 +98,7 @@ ax.legend(loc='lower left', frameon=False, fontsize=12,
 #          
 #    o     o
 #
-x1, x2 = 47.5,62.5
+x1, x2 = 47.5*1.25,62.5*1.25
 ypos = 0.075
 mew_set = 1
 msize = 5

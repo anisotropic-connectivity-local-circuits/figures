@@ -85,9 +85,9 @@ if plot:
 
    
 
-ax.set_xlim(0,100)
+ax.set_xlim(0,80)
 ax.set_ylim(0,0.075)
-ax.set_xticks([0,20,40,60,80,100])
+ax.set_xticks([0,20,40,60,80])
 ax.set_yticks([0,0.02,0.04,0.06])
 
 fig.tight_layout()
