@@ -35,21 +35,21 @@ for gid in range(ngraphs):
                 '_ed-l296_XY51-{:02d}.gt'.format(gid)
         g = gt.load_graph(gpath)
         pairs, cn, in_nb, out_nb = get_common_neighbours(g)
-        in_tuned_bdr[gid,:]+=np.histogram(in_nb[cn==2], bins,
+        in_tuned_bdr[gid,:]+=np.histogram(in_nb[cn==0], bins,
                                           density=True)[0]
 
         gpath = '/home/lab/comp/data/rew_tuned_netw' +\
                 '_rfrac0.25_efrac0.05-{:02d}.gt'.format(gid)
         g = gt.load_graph(gpath)
         pairs, cn, in_nb, out_nb = get_common_neighbours(g)
-        in_r025tuned_bdr[gid,:]+=np.histogram(in_nb[cn==2], bins,
+        in_r025tuned_bdr[gid,:]+=np.histogram(in_nb[cn==0], bins,
                                               density=True)[0]
 
         gpath = '/home/lab/comp/data/rew_tuned_netw' +\
                 '_rfrac1.00_efrac0.05-{:02d}.gt'.format(gid)
         g = gt.load_graph(gpath)
         pairs, cn, in_nb, out_nb = get_common_neighbours(g)
-        in_rtuned_bdr[gid,:]+=np.histogram(in_nb[cn==2], bins,
+        in_rtuned_bdr[gid,:]+=np.histogram(in_nb[cn==0], bins,
                                            density=True)[0]
         
 
@@ -124,23 +124,23 @@ msize = 5
 arrow_xpad = 2.75
 arrow_ypad = 0.0015
 arrow_headlength = 2.5
-arrow_width = 0.0001
-arrow_hwidth = 0.0025
+arrow_width = 0.
+arrow_hwidth = 0.
 
 ax.plot(x1, ypos, 'o', markersize=msize,
         color='white', mew=mew_set, clip_on=False) 
 ax.plot(x2, ypos,'o',markersize=msize,
         color='white', mew=mew_set, clip_on=False)
-ax.arrow(x=x1+arrow_xpad, y=ypos+arrow_ypad,
-         dx=x2-x1-2*arrow_xpad, dy=0, 
-         width=arrow_width, head_width=arrow_hwidth,
-         head_length=arrow_headlength, fc='k', ec='k',
-         length_includes_head=True, clip_on=False)
-ax.arrow(x=x2-arrow_xpad, y=ypos-arrow_ypad,
-         dx=-(x2-x1-2*arrow_xpad), dy=0, 
-         width=arrow_width, head_width=arrow_hwidth,
-         head_length=arrow_headlength, fc='k', ec='k',
-         length_includes_head=True, clip_on=False)
+# ax.arrow(x=x1+arrow_xpad, y=ypos+arrow_ypad,
+#          dx=x2-x1-2*arrow_xpad, dy=0, 
+#          width=arrow_width, head_width=arrow_hwidth,
+#          head_length=arrow_headlength, fc='grey', ec='grey',
+#          length_includes_head=True, clip_on=False)
+# ax.arrow(x=x2-arrow_xpad, y=ypos-arrow_ypad,
+#          dx=-(x2-x1-2*arrow_xpad), dy=0, 
+#          width=arrow_width, head_width=arrow_hwidth,
+#          head_length=arrow_headlength, fc='grey', ec='grey',
+#          length_includes_head=True, clip_on=False)
 
 
 fig.tight_layout()
