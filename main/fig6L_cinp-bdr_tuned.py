@@ -35,21 +35,21 @@ for gid in range(ngraphs):
                 '_ed-l296_XY51-{:02d}.gt'.format(gid)
         g = gt.load_graph(gpath)
         pairs, cn, in_nb, out_nb = get_common_neighbours(g)
-        in_tuned_bdr[gid,:]+=np.histogram(in_nb[cn==1], bins,
+        in_tuned_bdr[gid,:]+=np.histogram(in_nb[cn==2], bins,
                                           density=True)[0]
 
         gpath = '/home/lab/comp/data/rew_tuned_netw' +\
                 '_rfrac0.25_efrac0.05-{:02d}.gt'.format(gid)
         g = gt.load_graph(gpath)
         pairs, cn, in_nb, out_nb = get_common_neighbours(g)
-        in_r025tuned_bdr[gid,:]+=np.histogram(in_nb[cn==1], bins,
+        in_r025tuned_bdr[gid,:]+=np.histogram(in_nb[cn==2], bins,
                                               density=True)[0]
 
         gpath = '/home/lab/comp/data/rew_tuned_netw' +\
                 '_rfrac1.00_efrac0.05-{:02d}.gt'.format(gid)
         g = gt.load_graph(gpath)
         pairs, cn, in_nb, out_nb = get_common_neighbours(g)
-        in_rtuned_bdr[gid,:]+=np.histogram(in_nb[cn==1], bins,
+        in_rtuned_bdr[gid,:]+=np.histogram(in_nb[cn==2], bins,
                                            density=True)[0]
         
 
@@ -93,21 +93,6 @@ else:
             zorder=-2, label='rewired')
 
 
-show_errors=False
-if show_errors:
-    ax.errorbar(centers, np.mean(in_tuned_bdr, axis=0),
-                yerr=stats.sem(in_tuned_bdr,axis=0), capsize=0,
-                color=color['tuned'], fmt='.', markersize=0, lw=2,
-                zorder=-0)
-    ax.errorbar(centers, np.mean(in_r025tuned_bdr, axis=0),
-                yerr=stats.sem(in_r025tuned_bdr,axis=0), capsize=0,
-                color='grey', fmt='.', markersize=0, lw=2, zorder=-1)
-    ax.errorbar(centers, np.mean(in_rtuned_bdr, axis=0),
-                yerr=stats.sem(in_rtuned_bdr,axis=0), capsize=0,
-                color=color['rew'], fmt='.', markersize=0, lw=2,
-                zorder=-2)    
-    
-
 ax.set_xlim(0,80)
 ax.set_ylim(0,0.075)
 ax.set_xticks([0,20,40,60,80])
@@ -131,16 +116,16 @@ ax.plot(x1, ypos, 'o', markersize=msize,
         color='white', mew=mew_set, clip_on=False) 
 ax.plot(x2, ypos,'o',markersize=msize,
         color='white', mew=mew_set, clip_on=False)
-ax.arrow(x=x1+arrow_xpad, y=ypos,
+ax.arrow(x=x1+arrow_xpad, y=ypos+arrow_ypad,
          dx=x2-x1-2*arrow_xpad, dy=0, 
          width=arrow_width, head_width=arrow_hwidth,
          head_length=arrow_headlength, fc='k', ec='k',
          length_includes_head=True, clip_on=False)
-# ax.arrow(x=x2-arrow_xpad, y=ypos-arrow_ypad,
-#          dx=-(x2-x1-2*arrow_xpad), dy=0, 
-#          width=arrow_width, head_width=arrow_hwidth,
-#          head_length=arrow_headlength, fc='k', ec='k',
-#          length_includes_head=True, clip_on=False)
+ax.arrow(x=x2-arrow_xpad, y=ypos-arrow_ypad,
+         dx=-(x2-x1-2*arrow_xpad), dy=0, 
+         width=arrow_width, head_width=arrow_hwidth,
+         head_length=arrow_headlength, fc='k', ec='k',
+         length_includes_head=True, clip_on=False)
 
 
 fig.tight_layout()
@@ -165,3 +150,20 @@ fname = os.path.splitext(os.path.basename(__file__))[0]
 pl.savefig('{:s}.pdf'.format(fname), dpi=600, bbox_inches='tight')
 
 
+
+
+ax.errorbar(centers, np.mean(in_tuned_bdr, axis=0),
+            yerr=stats.sem(in_tuned_bdr,axis=0), capsize=1,
+            color=color['tuned'], fmt='.', markersize=0, lw=1,
+            zorder=-0)
+ax.errorbar(centers, np.mean(in_r025tuned_bdr, axis=0),
+            yerr=stats.sem(in_r025tuned_bdr,axis=0), capsize=1,
+            color='grey', fmt='.', markersize=0, lw=1, zorder=-1)
+ax.errorbar(centers, np.mean(in_rtuned_bdr, axis=0),
+            yerr=stats.sem(in_rtuned_bdr,axis=0), capsize=1,
+            color=color['rew'], fmt='.', markersize=0, lw=1,
+            zorder=-2)    
+
+pl.savefig('{:s}_{:s}.pdf'.format(fname,'errors'), dpi=600,
+           bbox_inches='tight')
+    
