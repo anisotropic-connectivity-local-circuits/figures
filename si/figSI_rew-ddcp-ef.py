@@ -53,7 +53,7 @@ for eps_frac in efracs:
 
     pl.clf()
     fig = pl.figure()
-    fig.set_size_inches(2.6*1.2,2.*1.2)
+    fig.set_size_inches(2.6*1.2,2.*1.2*0.75)
     pl.title(r'$\bm{\varepsilon} / E ='+'{:.2f}'.format(eps_frac)+'$')
     ax = fig.add_subplot(111)
 

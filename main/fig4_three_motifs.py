@@ -76,14 +76,15 @@ rlc_dist, errs_dist = rel_counts_from_data(dist_2motifs, dist_3motifs)
 
 
 from matplotlib import rc
- 
-rc('text', usetex=True)
+
+matplotlib.rc('text', usetex=True)
 pl.rcParams['text.latex.preamble'] = [
-    r'\usepackage{tgheros}',    # helvetica font
-    r'\usepackage{sansmath}',   # math-font matching  helvetica
-    r'\sansmath'                # actually tell tex to use it!
-    r'\usepackage{siunitx}',    # micro symbols
-    r'\sisetup{detect-all}',    # force siunitx to use the fonts
+    r'\usepackage{tgheros}',    
+    r'\usepackage[eulergreek]{sansmath}',   
+    r'\sansmath',
+    r'\usepackage{siunitx}',    
+    r'\sisetup{detect-all}',
+    r'\usepackage{color}'       
 ]  
 
 pl.rcParams['xtick.major.pad']=+45.5
@@ -229,7 +230,8 @@ ax1.axvline(15.18, 0.025,0.92, color='k',
 
 
 ax1.set_xticks(range(1,18))
-ax1.set_xticklabels(range(1,15)+['',15,16])
+ax1.set_xticklabels(['1','2','3',r'\ 4*','5','6','7','8','9','$\quad$10*','11','$\quad$12*','13','$\quad$14*','','15','16'])
+#    range(1,15)+['',15,16])
 
 ax1.tick_params(axis='both', which='major', labelsize=tick_fntsz)
 ax1.set_ylabel('relative counts', size=lbl_fntsz)

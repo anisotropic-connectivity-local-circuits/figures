@@ -1,4 +1,3 @@
-
 # overall p
 
 x_0   = (412.5, 151.5)
@@ -54,5 +53,9 @@ yvals_data = [(dp[1]-y_0[1])/(y_03[1]-y_0[1])*0.3 for dp in dps_pix]
 
 yerrs_data = [((dps_up_pix[i][1]-dps_dw_pix[i][1])/2.)/(y_03[1]-y_0[1])*0.3 for i in range(9)]
 
-print(yerrs_data)
+
+if __name__ == "__main__":
+    print(xvals_data)
+    print(yvals_data)
+    print(yerrs_data)
 

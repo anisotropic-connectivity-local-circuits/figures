@@ -85,21 +85,23 @@ aniso_fill = ax.bar([i+0.15+0.225 for i in range(xmax)], aniso_means,
 
 _, caplines, _ = ax.errorbar([i+0.15+0.225+0.3 for i in range(xmax)],
                              aniso_means, fmt='none', yerr=aniso_SEM,
-                             ecolor=color['aniso'], lw=1.5, capsize=2.75,
+                             ecolor=color['aniso'], lw=1.5, capsize=3.75,
                              mew = 1.5, zorder=3)
 
-
-tuned_patches = ax.bar([i+0.15 for i in range(xmax)], tuned_means,
+# tuned_means[-1] = -1
+# --> no tuned aniso fully connected triplets found
+# excluding it from graph
+tuned_patches = ax.bar([i+0.15 for i in range(xmax-1)], tuned_means[:-1],
                        width=0.6, edgecolor=color['tuned'],
                        facecolor='white', linewidth=lw, zorder=5)
 
-tuned_fill = ax.bar([i+0.15 for i in range(xmax)], tuned_means,
+tuned_fill = ax.bar([i+0.15 for i in range(xmax-1)], tuned_means[:-1],
                     width=0.6, edgecolor=color['tuned'],
                     facecolor=color['tuned'], alpha = opacity, zorder = 6)
 
-ax.errorbar([i+0.15+0.3 for i in range(xmax)], tuned_means,
-            fmt='none', yerr=tuned_SEM, ecolor=color['tuned'],
-            lw=1.5, capsize=2.75, mew = 1.5, zorder=7)
+ax.errorbar([i+0.15+0.3 for i in range(xmax-1)], tuned_means[:-1],
+            fmt='none', yerr=tuned_SEM[:-1], ecolor=color['tuned'],
+            lw=1.5, capsize=3.75, mew = 1.5, zorder=7)
 
 
 for capline in caplines:
