@@ -40,35 +40,41 @@ fig.set_size_inches(2.8, 1.95)
 ax = fig.add_subplot(111)
 
 
-ax.errorbar(tuned_cinpv['rew_stages'],
-            np.mean(tuned_cinpv['all'], axis=0),
-            color=color['tuned'], markersize=0, lw=2,
-            zorder=-0, label='tuned',
-            yerr=stats.sem(tuned_cinpv['all'],axis=0), capsize=1)
-ax.errorbar(dist_cinpv['rew_stages'],
-            np.mean(dist_cinpv['all'], axis=0),
-            color=color['dist'], markersize=0, lw=2,
-            zorder=-0, label='dist.~dep.',
-            yerr=stats.sem(dist_cinpv['all'],axis=0), capsize=1)
 
-# ax.plot(centers, np.mean(in_r025dist_all, axis=0),
-#         color='grey', markersize=0, lw=2, zorder=-1,
-#         label=r'$\nicefrac{1}{4}$ rewired', dashes=[3,2])
-# ax.plot(centers, np.mean(in_rdist_all, axis=0),
-#         color='grey', markersize=0, lw=2,
-#         zorder=-2, label='rewired')    
+ax.plot(tuned_cinpv['rew_stages'],
+        np.mean(tuned_cinpv['all'], axis=0),
+        color=color['tuned'], markersize=0, lw=2,
+        zorder=-0, label='tuned')
+ax.plot(dist_cinpv['rew_stages'],
+        np.mean(dist_cinpv['all'], axis=0),
+        color=color['dist'], markersize=0, lw=2,
+        zorder=-0, label='dist.~dep.')
+
+
+# ax.errorbar(tuned_cinpv['rew_stages'],
+#             np.mean(tuned_cinpv['all'], axis=0),
+#             color=color['tuned'], markersize=0, lw=2,
+#             zorder=-0, label='tuned',
+#             yerr=stats.sem(tuned_cinpv['all'],axis=0), capsize=1)
+# ax.errorbar(dist_cinpv['rew_stages'],
+#             np.mean(dist_cinpv['all'], axis=0),
+#             color=color['dist'], markersize=0, lw=2,
+#             zorder=-0, label='dist.~dep.',
+#             yerr=stats.sem(dist_cinpv['all'],axis=0), capsize=1)
+
 
 
 
 # ax.set_xlim(0,80)
 # ax.set_ylim(0,0.1)
 # ax.set_xticks([0,20,40,60,80])
-# ax.set_yticks([0,0.03,0.06,0.09])
+ax.set_yticks([0,200,400,600])
 
 fig.tight_layout()
 
 ax.legend(loc='lower left', frameon=False, fontsize=12,
-          bbox_to_anchor=(0.31,0.3), handlelength=1.65,
+          # bbox_to_anchor=(0.31,0.55), handlelength=1.65,
+          bbox_to_anchor=(0.31,0.43), handlelength=1.65,
           handletextpad=0.6)
 
 
@@ -77,7 +83,7 @@ ax.spines['top'].set_visible(False)
 ax.yaxis.set_ticks_position('left')
 ax.xaxis.set_ticks_position('bottom')
 
-pl.ylabel("common input variance", fontsize=12, labelpad=11.5)
+pl.ylabel("variance of common\n input distribution", fontsize=12, labelpad=11.5)
 pl.xlabel(r'rewiring fraction $\eta$', fontsize=12, labelpad=8)
 
 
