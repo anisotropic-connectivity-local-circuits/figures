@@ -53,7 +53,7 @@ ax.plot(data['bin_vals'], data['in']['dist_tuned']['mean'],
 
 
 ax.set_xlim(0,375)
-ax.set_ylim(0,25)
+ax.set_ylim(0,24)
 ax.set_xticks([0,100,200,300])
 
 
