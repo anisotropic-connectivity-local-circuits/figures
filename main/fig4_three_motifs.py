@@ -230,11 +230,15 @@ ax1.axvline(15.18, 0.025,0.92, color='k',
 
 
 ax1.set_xticks(range(1,18))
-ax1.set_xticklabels(['1','2','3',r'\ 4*','5','6','7','8','9','$\quad$10*','11','$\quad$12*','13','$\quad$14*','','15','16'])
+ax1.set_xticklabels(['1','2','3',r'\ 4*','5','6','7',
+                     '8','9','$\quad$10*','11','$\quad$12*',
+                     '13','$\quad$14*','','15','16'])
 #    range(1,15)+['',15,16])
 
 ax1.tick_params(axis='both', which='major', labelsize=tick_fntsz)
-ax1.set_ylabel('relative counts', size=lbl_fntsz)
+ax1.set_ylabel(r'$\frac{\text{observed counts}}' +\
+               r'{\text{expected counts}}$',
+               size=13)#lbl_fntsz)
 
 for tick_label in ax2.get_yticklabels():
     tick_label.set_fontsize(tick_fntsz)
@@ -255,6 +259,8 @@ for i in range(1,18):
     draw_motifs(ax1, i, ymin, ymax, highlight=False)
 
 
-path='fig4_three_motifs.png'
-fig.savefig(path, dpi=300, bbox_inches='tight')
+import os
+fname = os.path.splitext(os.path.basename(__file__))[0]
+
+pl.savefig('{:s}.png'.format(fname), dpi=600)
 
