@@ -87,7 +87,7 @@ pl.rcParams['text.latex.preamble'] = [
     r'\usepackage{color}'       
 ]  
 
-pl.rcParams['xtick.major.pad']=+45.5
+pl.rcParams['xtick.major.pad']=+57.5
 
 fig = pl.figure(facecolor="white")
 fig.set_size_inches(7.4,2.25)
@@ -172,33 +172,45 @@ plot_data(rlc_dist, errs_dist, color['dist'],
 
 
 
+ax1.set_xlim(0.,17+1.25)
+ymin, ymax = 0, 3.5
+yscale = (ymax-ymin)/5.
+ax1.set_ylim(ymin, ymax)
+ax1.yaxis.set_ticks(range(0,4,1))
+
+ax2.set_ylim(top=7.2) 
+ax2.yaxis.set_ticks(range(0,7,1))
+
+
+
+
 # legend - not currently independent of axis vals
 lbl_fntsz = 10
 tick_fntsz = 9
 
 xrect=0.9225
-ystart=4.685
-ydist=0.605
+ystart=4.685*yscale
+ydist=0.605*yscale
 
-ax1.add_patch(Rectangle((xrect,ystart), 0.75, 0.2,
+ax1.add_patch(Rectangle((xrect,ystart), 0.75, 0.2*yscale,
                         facecolor='white', edgecolor=color['tuned'])) 
-ax1.add_patch(Rectangle((xrect,ystart), 0.75, 0.2,
+ax1.add_patch(Rectangle((xrect,ystart), 0.75, 0.2*yscale,
                         facecolor=color['tuned'], edgecolor=color['tuned'],
                         alpha=opacity_tuned)) 
 fig.text(0.225,0.85, r'tuned', color = 'k',
          fontsize=lbl_fntsz)
 
-ax1.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2,
+ax1.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2*yscale,
                         facecolor='white', edgecolor='grey'))
-ax1.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2,
+ax1.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2*yscale,
                         facecolor='grey', edgecolor='grey',
                         alpha=opacity))
 fig.text(0.225,0.75, r'tuned rewired', color = 'black',
          fontsize=lbl_fntsz)
 
-ax1.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2,
+ax1.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2*yscale,
                         facecolor='white', edgecolor=color['dist']))
-ax1.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2,
+ax1.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2*yscale,
                         facecolor=color['dist'], edgecolor=color['dist'],
                         alpha=opacity))
 fig.text(0.225,0.65, r'distance-dependent', color = 'black',
@@ -244,17 +256,11 @@ for tick_label in ax2.get_yticklabels():
     tick_label.set_fontsize(tick_fntsz)
 
 
-ax1.set_xlim(0.,17+1.25)
-ymin, ymax = 0, 3.5 
-ax1.set_ylim(ymin, ymax)
-ax1.yaxis.set_ticks(range(0,4,1))
-
-ax2.set_ylim(top=6) 
-ax2.yaxis.set_ticks(range(0,6,1))
 
 # make sure that y=1 is aligned
 #between ax1 and ax2
 align_yaxis(ax1, 1, ax2, 1)
+
 
 for i in range(1,18):
     draw_motifs(ax1, i, ymin, ymax, highlight=False)
@@ -263,4 +269,4 @@ for i in range(1,18):
 import os
 fname = os.path.splitext(os.path.basename(__file__))[0]
 
-pl.savefig('{:s}.pdf'.format(fname), dpi=600)
+pl.savefig('{:s}.pdf'.format(fname), dpi=600,  bbox_inches='tight')

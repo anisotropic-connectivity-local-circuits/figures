@@ -262,5 +262,6 @@ for i in range(1,18):
 import os
 fname = os.path.splitext(os.path.basename(__file__))[0]
 
-pl.savefig('{:s}.pdf'.format(fname), dpi=600)
+
+pl.savefig('{:s}.pdf'.format(fname), dpi=600, bbox_inches='tight')
 

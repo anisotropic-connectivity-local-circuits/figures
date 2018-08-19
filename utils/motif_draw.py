@@ -20,8 +20,10 @@ def draw_motifs(ax, i, ymin, ymax,  highlight = False):
     hwidth = 0.025/1.75*(ymax-ymin)
     yoffset = 0.025/1.75*(ymax-ymin)
 
+    yscale=(ymax-ymin)/5.
+
     xpos = 1.
-    ypos = -0.6
+    ypos = -0.6*yscale
 
     frac = 0.3
     alpha = np.arctan(ydist/xdist)
@@ -38,7 +40,7 @@ def draw_motifs(ax, i, ymin, ymax,  highlight = False):
 
     arrow_properties = {'length_includes_head': True,
                         'width': awidth,
-                        'head_length': 0.1}
+                        'head_length': 0.1*yscale}
 
     bar_gray =         {'head_width': 0,
                         'fc': a_gray,
