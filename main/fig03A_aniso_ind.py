@@ -60,11 +60,21 @@ ax.plot(data['bin_vals'], data['in']['dist_aniso']['mean'],
             color=color['dist'], markersize=0, lw=2,
             zorder=-8, label='dist.~dep.', alpha=1, dashes=[3,4])
 
+
+# dpath = '/home/lab/comp/this.p'
+# with open(dpath, 'rb') as pfile:
+#     data = pickle.load(pfile)
+
+# ax.plot(data['bin_vals'], data['in']['random']['mean'],
+#             color='black', markersize=0, lw=2,
+#             zorder=-8, label='random', alpha=1, dashes=[3,4])
+
+
 x = data['bin_vals']
 y = [999*stats.binom.pmf(k, n=999,
                      p=0.116) for k in data['bin_vals']]
 ax.plot(x, y, markersize=0, lw=2, zorder=-11,
-        color='grey', label='random', alpha=1)
+        color='grey', label='random', alpha=0.85)
 
 
 ax.set_xlim(0,375)
