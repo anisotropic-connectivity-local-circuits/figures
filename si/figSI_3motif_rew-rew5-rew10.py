@@ -21,30 +21,30 @@ from core.motif_methods import motif_count_dict_to_p_array, \
 
 
 # loads the the 2-neuron and 3-neuron motif
-# counts  for tuned, rew and dist networks
+# counts  for aniso, rew and dist networks
 
-fpath = '/home/lab/comp/data/two_motif_counts_tuned.p'
+fpath = '/home/lab/comp/data/two_motif_counts_aniso.p'
 with open(fpath, 'rb') as pfile:
-    tuned_2motifs = pickle.load(pfile)
+    aniso_2motifs = pickle.load(pfile)
 
-fpath = '/home/lab/comp/data/two_motif_counts_rew_tuned.p'
+fpath = '/home/lab/comp/data/two_motif_counts_rew-r5.p'
 with open(fpath, 'rb') as pfile:
     rew_2motifs = pickle.load(pfile)
 
-fpath = '/home/lab/comp/data/two_motif_counts_dist_tuned.p'
+fpath = '/home/lab/comp/data/two_motif_counts_rew-r10.p'
 with open(fpath, 'rb') as pfile:
     dist_2motifs = pickle.load(pfile)
 
 
-fpath = '/home/lab/comp/data/three_motif_counts_tuned_S300000.p'
+fpath = '/home/lab/comp/data/three_motif_counts_rew_S300000.p'
 with open(fpath, 'rb') as pfile:
-    tuned_3motifs = pickle.load(pfile)
+    aniso_3motifs = pickle.load(pfile)
 
-fpath = '/home/lab/comp/data/three_motif_counts_rew_tuned_S300000.p'
+fpath = '/home/lab/comp/data/three_motif_counts_rew-r5_S300000.p'
 with open(fpath, 'rb') as pfile:
     rew_3motifs = pickle.load(pfile)
 
-fpath = '/home/lab/comp/data/three_motif_counts_dist_tuned_S300000.p'
+fpath = '/home/lab/comp/data/three_motif_counts_rew-r10_S300000.p'
 with open(fpath, 'rb') as pfile:
     dist_3motifs = pickle.load(pfile)
 
@@ -69,7 +69,7 @@ def rel_counts_from_data(net_2motifs, net_3motifs):
     return np.mean(rel_counts,axis=0), stats.sem(rel_counts, axis=0)
                    
 
-rlc_tuned, errs_tuned = rel_counts_from_data(tuned_2motifs, tuned_3motifs)
+rlc_aniso, errs_aniso = rel_counts_from_data(aniso_2motifs, aniso_3motifs)
 rlc_rew, errs_rew = rel_counts_from_data(rew_2motifs, rew_3motifs)
 rlc_dist, errs_dist = rel_counts_from_data(dist_2motifs, dist_3motifs)
 
@@ -87,7 +87,7 @@ pl.rcParams['text.latex.preamble'] = [
     r'\usepackage{color}'       
 ]  
 
-pl.rcParams['xtick.major.pad']=+54.
+pl.rcParams['xtick.major.pad']=+45.5
 
 fig = pl.figure(facecolor="white")
 fig.set_size_inches(7.4,2.25)
@@ -103,7 +103,7 @@ errlw = 1.5
 mew = 1.5
 lw = 3.
 opacity = 0.25
-opacity_tuned = 0.6
+opacity_aniso = 0.6
 bwidth = 0.5
 
 
@@ -160,30 +160,15 @@ def plot_data(rlcs, errs, color, xshift, z_init, opacity=opacity):
 
 
 
-plot_data(rlc_tuned, errs_tuned, color['tuned'],
+plot_data(rlc_aniso, errs_aniso, color['rew'],
           xshift=0.250, z_init=12,
-          opacity=opacity_tuned)
+          opacity=opacity_aniso)
 
 plot_data(rlc_rew, errs_rew, 'grey',
           xshift=0.125, z_init=6)    
 
-plot_data(rlc_dist, errs_dist, color['dist'],
+plot_data(rlc_dist, errs_dist, 'magenta',
           xshift=0, z_init=0)
-
-
-
-ax1.set_xlim(0.,17+1.25)
-ymin, ymax = 0, 3.8
-yscale = (ymax-ymin)/5.
-ax1.set_ylim(ymin, ymax)
-ax1.yaxis.set_ticks(range(0,4,1))
-
-ax2.set_ylim(top=8) 
-ax2.yaxis.set_ticks(range(0,8,2))
-
-# ax2.set_ylim(top=7.2) 
-# ax2.yaxis.set_ticks(range(0,7,1))
-
 
 
 
@@ -192,31 +177,31 @@ lbl_fntsz = 10
 tick_fntsz = 9
 
 xrect=0.9225
-ystart=4.685*yscale
-ydist=0.605*yscale
+ystart=4.685
+ydist=0.605
 
-ax1.add_patch(Rectangle((xrect,ystart), 0.75, 0.2*yscale,
-                        facecolor='white', edgecolor=color['tuned'])) 
-ax1.add_patch(Rectangle((xrect,ystart), 0.75, 0.2*yscale,
-                        facecolor=color['tuned'], edgecolor=color['tuned'],
-                        alpha=opacity_tuned)) 
-fig.text(0.225,0.85, r'tuned', color = 'k',
+ax1.add_patch(Rectangle((xrect,ystart), 0.75, 0.2,
+                        facecolor='white', edgecolor=color['rew'])) 
+ax1.add_patch(Rectangle((xrect,ystart), 0.75, 0.2,
+                        facecolor=color['rew'], edgecolor=color['rew'],
+                        alpha=opacity_aniso)) 
+fig.text(0.225,0.85, r'rewired', color = 'k',
          fontsize=lbl_fntsz)
 
-ax1.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2*yscale,
+ax1.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2,
                         facecolor='white', edgecolor='grey'))
-ax1.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2*yscale,
+ax1.add_patch(Rectangle((xrect,ystart-ydist), 0.75, 0.2,
                         facecolor='grey', edgecolor='grey',
                         alpha=opacity))
-fig.text(0.225,0.75, r'tuned rewired', color = 'black',
+fig.text(0.225,0.75, r'rewired x5', color = 'black',
          fontsize=lbl_fntsz)
 
-ax1.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2*yscale,
-                        facecolor='white', edgecolor=color['dist']))
-ax1.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2*yscale,
-                        facecolor=color['dist'], edgecolor=color['dist'],
+ax1.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2,
+                        facecolor='white', edgecolor='magenta'))
+ax1.add_patch(Rectangle((xrect,ystart-2*ydist), 0.75, 0.2,
+                        facecolor='magenta', edgecolor='magenta',
                         alpha=opacity))
-fig.text(0.225,0.65, r'distance-dependent', color = 'black',
+fig.text(0.225,0.65, r'rewired x10', color = 'black',
          fontsize=lbl_fntsz)
 
 
@@ -259,17 +244,23 @@ for tick_label in ax2.get_yticklabels():
     tick_label.set_fontsize(tick_fntsz)
 
 
+ax1.set_xlim(0.,17+1.25)
+ymin, ymax = 0, 5 
+ax1.set_ylim(ymin, ymax)
+
+ax2.set_ylim(top=10) 
+ax2.yaxis.set_ticks(range(0,10,2))
 
 # make sure that y=1 is aligned
 #between ax1 and ax2
 align_yaxis(ax1, 1, ax2, 1)
 
-
 for i in range(1,18):
-    draw_motifs(ax1, i, ymin, ymax, ypos=-0.6*(ymax-ymin)/5., highlight=False)
+    draw_motifs(ax1, i, ymin, ymax, highlight=False)
 
 
 import os
 fname = os.path.splitext(os.path.basename(__file__))[0]
 
-pl.savefig('{:s}.pdf'.format(fname), dpi=600,  bbox_inches='tight')
+pl.savefig('{:s}.pdf'.format(fname), dpi=600, bbox_inches='tight')
+

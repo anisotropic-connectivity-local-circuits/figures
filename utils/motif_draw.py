@@ -2,7 +2,7 @@
 import numpy as np
 
 
-def draw_motifs(ax, i, ymin, ymax,  highlight = False):
+def draw_motifs(ax, i, ymin, ymax, ypos=-0.6, highlight = False):
 
     xdist = 0.275
     ydist = 2.4/30.*(ymax-ymin)
@@ -23,7 +23,6 @@ def draw_motifs(ax, i, ymin, ymax,  highlight = False):
     yscale=(ymax-ymin)/5.
 
     xpos = 1.
-    ypos = -0.6*yscale
 
     frac = 0.3
     alpha = np.arctan(ydist/xdist)
